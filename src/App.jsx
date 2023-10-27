@@ -6,6 +6,7 @@ import { PageNotFound } from './components/Home/PageNotFound'
 import { ListMaterial } from './components/Movie/ListMaterial'
 import TableMovies from './components/Movie/TableMovies'
 import { DetailMaterial } from './components/Movie/DetailMaterial'
+import {NextUIProvider} from "@nextui-org/react";
 
 const router= createBrowserRouter([
   {
@@ -32,8 +33,10 @@ const router= createBrowserRouter([
 
 export default function App(){
   return (
+    <NextUIProvider>
     <Layout>
         <RouterProvider router={router} />
     </Layout>
+    </NextUIProvider>
   )
 }

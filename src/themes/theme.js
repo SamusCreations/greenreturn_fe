@@ -3,10 +3,10 @@ export const appTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#455a64',
+      main: '#4caf50',
     },
     secondary: {
-      main: '#03a9f4',
+      main: '#4caf50',
     },
   },
 });
