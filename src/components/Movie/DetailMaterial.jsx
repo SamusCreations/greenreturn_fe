@@ -11,7 +11,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Grid } from '@mui/material';
-import ticket from '../../assets/ticket.jpg'
 
 export function DetailMaterial() {
   const routeParams= useParams();
@@ -55,7 +54,7 @@ export function DetailMaterial() {
             height: 'auto',
           }}
           alt="Ticket pelicula"
-          src={ticket}/>  
+          src="{ticket}"/>  
             
           </Grid>
           <Grid item={true} xs={7}>

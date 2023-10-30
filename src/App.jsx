@@ -1,42 +1,42 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import './App.css'
-import { Layout } from './components/Layout/Layout'
-import { Home } from './components/Home/Home'
-import { PageNotFound } from './components/Home/PageNotFound'
-import { ListMaterial } from './components/Movie/ListMaterial'
-import TableMovies from './components/Movie/TableMovies'
-import { DetailMaterial } from './components/Movie/DetailMaterial'
-import {NextUIProvider} from "@nextui-org/react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
+import { Layout } from "./components/Layout/Layout";
+import { Home } from "./components/Home/Home";
+import { PageNotFound } from "./components/Home/PageNotFound";
+import { ListMaterial } from "./components/Movie/ListMaterial";
+import TableMovies from "./components/Movie/TableMovies";
+import { DetailMaterial } from "./components/Movie/DetailMaterial";
+import { NextUIProvider } from "@nextui-org/react";
 
-const router= createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:'/',
-    element: <Home />
+    path: "/",
+    element: <Home />,
   },
   {
-    path: '*',
-    element: <PageNotFound />
+    path: "*",
+    element: <PageNotFound />,
   },
   {
-    path: '/material',
-    element: <ListMaterial />
+    path: "/material",
+    element: <ListMaterial />,
   },
   {
-    path: '/movie-table',
-    element: <TableMovies />
+    path: "/movie-table",
+    element: <TableMovies />,
   },
   {
-    path: '/material/:id',
-    element: <DetailMaterial />
-  }
-])
+    path: "/material/:id",
+    element: <DetailMaterial />,
+  },
+]);
 
-export default function App(){
+export default function App() {
   return (
     <NextUIProvider>
-    <Layout>
+      <Layout>
         <RouterProvider router={router} />
-    </Layout>
+      </Layout>
     </NextUIProvider>
-  )
+  );
 }
