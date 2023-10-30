@@ -5,7 +5,7 @@ import recycling from "../../assets/recycling_icon.png";
 
 export function Home() {
   return (
-    <Container sx={{ p: 2 }} maxWidth="sm">
+    <Container sx={{ p: 2 }} maxWidth="auto" >
       <Image
         width={300}
         alt="Green Return Logo"
