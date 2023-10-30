@@ -79,7 +79,7 @@ export default function Header() {
           className="lg:hidden"
         />
         <NavbarBrand>
-          <Link href="#">
+          <Link href="/">
             <Image
               width={300}
               alt="Green Return Logo"
@@ -92,7 +92,7 @@ export default function Header() {
 
       <NavbarContent className="hidden lg:flex gap-4" justify="center">
         <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+          <Link href="/" aria-current="page">
             Home
           </Link>
         </NavbarItem>
