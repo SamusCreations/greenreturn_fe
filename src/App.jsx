@@ -7,6 +7,7 @@ import { ListMaterial } from "./components/Movie/ListMaterial";
 import TableMovies from "./components/Movie/TableMovies";
 import { DetailMaterial } from "./components/Movie/DetailMaterial";
 import { NextUIProvider } from "@nextui-org/react";
+import { Container } from "postcss";
 
 const router = createBrowserRouter([
   {
@@ -33,10 +34,10 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <NextUIProvider>
-      <Layout>
-        <RouterProvider router={router} />
+    <div className="flex flex-col min-h-screen">
+      <Layout>        
+        <RouterProvider router={router} />       
       </Layout>
-    </NextUIProvider>
+      </div>
   );
 }

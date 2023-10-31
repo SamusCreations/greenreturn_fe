@@ -4,8 +4,10 @@ import logo from "../../assets/greenreturn_logo.png";
 
 export function Footer() {
   return (
-    <div className="flex flex-col max-w-6xl mx-auto items-center">
-      <Divider className="my-8 " />
+    <footer className="flex flex-col max-w-8xl mx-auto items-center sticky bottom-0 w-full flex-wrap justify-center
+     gap-y-6 gap-x-12 border-t border-blue-gray-50 text-center md:justify-between">
+   
+      <Divider className="my- " />
       <Image
         width={200}
         alt="Green Return Logo"
@@ -18,6 +20,7 @@ export function Footer() {
           © 2023 Green Return. All rights reserved.
         </p>
       </div>
-    </div>
+   
+    </footer>
   );
 }
