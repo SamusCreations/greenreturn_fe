@@ -118,10 +118,16 @@ export default function Header() {
               base: "gap-4",
             }}
           >
+           
+           
             <DropdownItem key="materials" startContent={icons.scale}>
+            <Link href="/material">
               Materials
+              </Link>
             </DropdownItem>
+            
             <DropdownItem key="collection_centers" startContent={icons.server}>
+              
               Collection Centers
             </DropdownItem>
             <DropdownItem key="coupons" startContent={icons.flash}>
