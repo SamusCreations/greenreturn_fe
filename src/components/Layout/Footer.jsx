@@ -1,13 +1,12 @@
 import React from "react";
-import { Divider, Image } from "@nextui-org/react";
+import {  Image } from "@nextui-org/react";
 import logo from "../../assets/greenreturn_logo.png";
 
 export function Footer() {
   return (
-    <footer className="flex flex-col max-w-8xl mx-auto items-center sticky bottom-0 w-full flex-wrap justify-center
-     gap-y-6 gap-x-12 border-t border-blue-gray-50 text-center md:justify-between">
-   
-      <Divider className="my- " />
+    <footer className="flex flex-col  mx-auto mt-32 w-full max-w-container px-4 sm:px-6 lg:px-8 justify-center md:justify-between">
+    <div className="flex flex-col border-t borderslate-900/5 items-center">
+      
       <Image
         width={200}
         alt="Green Return Logo"
@@ -20,7 +19,7 @@ export function Footer() {
           © 2023 Green Return. All rights reserved.
         </p>
       </div>
-   
+      </div>
     </footer>
   );
 }

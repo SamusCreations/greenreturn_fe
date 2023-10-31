@@ -15,7 +15,9 @@ import { Info } from "@mui/icons-material";
 import {Card, CardHeader, CardBody, CardFooter, Image, Button} from "@nextui-org/react";
 import * as images from "../../assets/images"
 import logo from "../../assets/paper.png";
-
+function getImgUrl(name) {
+  return new URL(`${name}`, import.meta.url).href
+}
 export function ListMaterial() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
@@ -48,34 +50,22 @@ export function ListMaterial() {
         data.map((item) => (
           console.log("Ruta de imagen:", item.image_url),
           <Grid item xs={4} key={item.id_material}>
-            <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7">
-      <CardHeader className="absolute z-10 top-1 flex-col items-start">
-        <p className="text-tiny text-black/60 uppercase font-bold">{item.name}</p>
-        <h4 className="text-green/90 font-medium text-xl">{item.description}</h4>
-      </CardHeader>
-      <Image
-        removeWrapper
-        alt="Relaxing app background"
-        className="z-0 w-full h-full object-cover"
-        src={import(`../../assets/${item.id_material}`).default}
-      />
-      <CardFooter className="absolute bg-black bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-        <div className="flex flex-grow gap-2 items-center">
-          <Image
-            alt="Breathing app icon"
-            className="rounded-full w-10 h-11 bg-black"
-            src= {item.image_url}
-            
-          />
-          
-          <div className="flex flex-col">
-            <p className="text-tiny text-white/60">Unit Cost: {item.unit_cost}</p>
-            
-          </div>
-        </div>
-        <Button radius="full" size="sm">Detalles</Button>
-      </CardFooter>
-    </Card>
+            <Card shadow="sm" className="w-full h-[300px]" isPressable onPress={() => console.log("item pressed")}>
+          <CardBody className="overflow-visible p-0">
+            <Image
+              shadow="sm"
+              radius="lg"
+              width="100%"
+              alt={item.title}
+              className=" w-full h-full"
+              src={ getImgUrl(item.image_url) }
+            />
+          </CardBody>
+          <CardFooter className="text-small justify-between">
+            <b>{item.name}</b>
+            <p className="text-default-500">{item.price}</p>
+          </CardFooter>
+        </Card>
           </Grid>
         ))}
     </Grid>
