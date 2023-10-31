@@ -11,7 +11,7 @@ import AccessTime from "@mui/icons-material/AccessTime";
 import Language from "@mui/icons-material/Language";
 import { Link } from "react-router-dom";
 import { Info } from "@mui/icons-material";
-import {Card, CardFooter, Image, Button} from "@nextui-org/react";
+// import {Card, CardFooter, Image, Button} from "@nextui-org/react";
 
 
 export function ListMaterial() {
