@@ -42,8 +42,8 @@ export function ListCC() {
       {data &&
         data.map((item) => (
           console.log("Ruta de imagen:", item.image_url),
-          <Grid item xs={4} key={item.id_material}>
-            <Link to={`/material/${item.id_material}`}> 
+          <Grid item xs={4} key={item.id_collection_center}>
+             
             <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-5">
       <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
         <p className="text-tiny text-black uppercase font-bold">{item.name}</p>
@@ -72,7 +72,7 @@ export function ListCC() {
         </Link>
       </CardFooter>
     </Card>
-        </Link>
+        
           </Grid>
         ))}
     </Grid>
