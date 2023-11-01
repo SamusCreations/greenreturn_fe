@@ -6,8 +6,6 @@ import { PageNotFound } from "./components/Home/PageNotFound";
 import { ListMaterial } from "./components/Movie/ListMaterial";
 import TableMovies from "./components/Movie/TableMovies";
 import { DetailMaterial } from "./components/Movie/DetailMaterial";
-import { NextUIProvider } from "@nextui-org/react";
-import { Container } from "postcss";
 
 const router = createBrowserRouter([
   {

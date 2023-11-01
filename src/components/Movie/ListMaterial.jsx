@@ -21,6 +21,7 @@ function getImgUrl(name) {
 export function ListMaterial() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
+
   //Error del API
   const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
@@ -30,7 +31,7 @@ export function ListMaterial() {
     MaterialService.getMaterials()
       .then((response) => {
         setData(response.data.results);
-        console.log(response.data);
+      console.log(response.data);
         setError(response.error);
         setLoaded(true);
       })
@@ -41,6 +42,7 @@ export function ListMaterial() {
       });
   }, []);
 
+
   if (!loaded) return <p>Cargando...</p>;
   if (error) return <p>Error: {error.message}</p>;
  
@@ -50,14 +52,16 @@ export function ListMaterial() {
         data.map((item) => (
           console.log("Ruta de imagen:", item.image_url),
           <Grid item xs={4} key={item.id_material}>
-            <Card shadow="sm" className="w-full h-[300px]" isPressable onPress={() => console.log("item pressed")}>
-          <CardBody className="overflow-visible p-0">
+            <Link to={`/material/${item.id_material}`}> 
+            <Card shadow="sm" className=" flex flex-col w-full max-h-auto" isPressable onPress={() => console.log("a")}>
+          <CardBody id="a" className="overflow-visible p-0 ">
             <Image
               shadow="sm"
               radius="lg"
               width="100%"
+              id="aa"
               alt={item.title}
-              className=" w-full h-full"
+              className="flex flex-col justify-center "
               src={ getImgUrl(item.image_url) }
             />
           </CardBody>
@@ -66,6 +70,7 @@ export function ListMaterial() {
             <p className="text-default-500">{item.price}</p>
           </CardFooter>
         </Card>
+        </Link>
           </Grid>
         ))}
     </Grid>

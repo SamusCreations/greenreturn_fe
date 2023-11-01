@@ -11,13 +11,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Grid } from '@mui/material';
-
+import ColorService from '../../services/ColorService';
+function getImgUrl(name) {
+  return new URL(`${name}`, import.meta.url).href
+}
 export function DetailMaterial() {
   const routeParams= useParams();
   console.log(routeParams)
 
    //Resultado de consumo del API, respuesta
  const[data,setData]=useState(null);
+ 
+ 
  //Error del API
  const[error,setError]=useState('');
  //Booleano para establecer sí se ha recibido respuesta
@@ -28,16 +33,22 @@ export function DetailMaterial() {
     .then( response=>{
       setData(response.data.results)
       console.log(response.data)
+      console.log(response.data.id_color)
       setError(response.error)
       setLoaded(true)
+      
     }
     ).catch( error=>{
       console.log(error)
       setError(error)
       throw new Error("Respuesta no válida del servidor")
     }      
-    )
-  },[routeParams.id])
+    )    
+  },
+   
+  [routeParams.id]);
+
+  
 
   if(!loaded) return <p>Cargando...</p>
   if(error) return <p>Error: {error.message}</p>
@@ -54,7 +65,7 @@ export function DetailMaterial() {
             height: 'auto',
           }}
           alt="Ticket pelicula"
-          src="{ticket}"/>  
+          src={ getImgUrl(data.image_url) }/>  
             
           </Grid>
           <Grid item={true} xs={7}>
