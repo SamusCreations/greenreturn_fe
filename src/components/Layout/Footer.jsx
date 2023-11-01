@@ -1,32 +1,25 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
+import React from "react";
+import {  Image } from "@nextui-org/react";
+import logo from "../../assets/greenreturn_logo.png";
 
-export function Footer () {
+export function Footer() {
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-        height: '4.5rem',
-        backgroundColor: 'primary.main',
-        paddingTop: '1rem',
-        paddingBottom: '1rem',
-      }}
-    >
-      <Container maxWidth='lg'>
-        <Grid container direction='column' alignItems='center'>
-          <Grid item xs={12}>
-            <Typography color='white' variant='subtitle1'>
-              ISW-613
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography color='secondary.main' variant='body1'>
-              {`${new Date().getFullYear()}`}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
-  )
+    <footer className="flex flex-col  mx-auto  w-full max-w-container px-4 sm:px-6 lg:px-8 justify-center md:justify-between">
+    <div className="flex flex-col border-t borderslate-900/5 items-center">
+      
+      <Image
+        width={200}
+        alt="Green Return Logo"
+        src={logo}
+        radius="none"
+        className="mx-auto my-4"
+      />
+      <div className="justify-center items-center text-center">
+        <p className="text-small text-default-400 my-4">
+          © 2023 Green Return. All rights reserved.
+        </p>
+      </div>
+      </div>
+    </footer>
+  );
 }

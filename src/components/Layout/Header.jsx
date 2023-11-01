@@ -1,211 +1,205 @@
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import { Avatar, MenuList } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import { useState } from "react";
-import MovieIcon from "@mui/icons-material/Movie";
-import SettingsIcon from "@mui/icons-material/Settings";
+import React from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Image,
+} from "@nextui-org/react";
+import {
+  ChevronDown,
+  Lock,
+  Activity,
+  Flash,
+  Server,
+  TagUser,
+  Scale,
+} from "../../assets/Icons.jsx";
+import logo from "../../assets/greenreturn_logo.png";
 
-function Header() {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+  const icons = {
+    chevron: <ChevronDown fill="currentColor" size={16} />,
+    scale: <Scale className="text-warning" fill="currentColor" size={30} />,
+    lock: <Lock className="text-success" fill="currentColor" size={30} />,
+    activity: (
+      <Activity className="text-secondary" fill="currentColor" size={30} />
+    ),
+    flash: <Flash className="text-primary" fill="currentColor" size={30} />,
+    server: <Server className="text-success" fill="currentColor" size={30} />,
+    user: <TagUser className="text-danger" fill="currentColor" size={30} />,
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const menuItems = [
+    { label: "Home", route: "/" },
+    { label: "Materials", route: "/material" },
+    { label: "Collection Centers", route: "/CC" },
+    { label: "Coupons", route: "/coupons" },
+    { label: "User History", route: "/user-history" },
+    { label: "Collection C. History", route:"/cc-history" },
+    { label: "Login", route: "/login" },
+    { label: "Sign up", route: "/signup" },
+  ];
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: "primary.main",
+    <Navbar
+      maxWidth="2xl"
+      onMenuOpenChange={setIsMenuOpen}
+      shouldHideOnScroll
+      classNames={{
+        item: [
+          "flex",
+          "relative",
+          "h-full",
+          "items-center",
+          "data-[active=true]:after:content-['']",
+          "data-[active=true]:after:absolute",
+          "data-[active=true]:after:bottom-5",
+          "data-[active=true]:after:left-0",
+          "data-[active=true]:after:right-0",
+          "data-[active=true]:after:h-[2px]",
+          "data-[active=true]:after:rounded-[2px]",
+          "data-[active=true]:after:bg-primary",
+        ],
       }}
     >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <MovieIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+      <NavbarContent justify="center">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="lg:hidden"
+        />
+        <NavbarBrand>
+          <Link href="/">
+            <Image
+              width={300}
+              alt="Green Return Logo"
+              src={logo}
+              radius="none"
+            />
+          </Link>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden lg:flex gap-4" justify="center">
+        <NavbarItem isActive>
+          <Link href="/" aria-current="page">
+            Home
+          </Link>
+        </NavbarItem>
+        <Dropdown>
+          <NavbarItem>
+            <DropdownTrigger>
+              <Button
+                disableRipple
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                endContent={icons.chevron}
+                radius="sm"
+                variant="light"
+                color="foreground"
+              >
+                Features
+              </Button>
+            </DropdownTrigger>
+          </NavbarItem>
+          <DropdownMenu
+            aria-label="Green_Return features"
+            className="w-[340px]"
+            itemClasses={{
+              base: "gap-4",
             }}
           >
-            Materials
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
+            <DropdownItem
+              className="text-black"
+              key="materials"
+              startContent={icons.scale}
+              as={Link}
+              href="/material"
             >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
+              Materials
+            </DropdownItem>
+
+            <DropdownItem key="collection_centers" startContent={icons.server}>
+            <Link href="/CC">
+              Collection Centers
+              </Link>
+            </DropdownItem>
+            <DropdownItem key="coupons" startContent={icons.flash}>
+              Coupons
+            </DropdownItem>
+            <DropdownItem
+              className="text-black"
+              key="user_history"
+              startContent={icons.activity}
+              as={Link}
+              href="/user-history"
             >
-              <MenuItem component="a" href="/material/">
-                <Typography textAlign="center">Materials</Typography>
-              </MenuItem>
-              <MenuItem component="a" href="/movie-table/">
-                <Typography textAlign="center">
-                  Mantenimiento Peliculas
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-          <MovieIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-
-          <Typography
-            variant="p"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 500,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Materials
-          </Typography>
-
-          {/* Menu de Matenimientos */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Tooltip title="Mantenimientos">
-              <IconButton onClick={handleOpenNavMenu} sx={{ p: 0 }}>
-                <Avatar variant="rounded">
-                  <SettingsIcon />
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              User History
+            </DropdownItem>
+            <DropdownItem
+              className="text-black"
+              key="cc_history"
+              startContent={icons.activity}
+              as={Link}
+              href="/cc-history"
             >
-              <MenuItem component="a" href="/material/">
-                <Typography textAlign="center">Materials</Typography>
-              </MenuItem>
-              <MenuItem component="a" href="/movie-table/">
-                <Typography textAlign="center">
-                  Mantenimiento Peliculas
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-          {/* Menu de Matenimientos */}
-
-          {/* Menu Usuarios */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Usuario">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <PersonIcon style={{ fill: "white" }} />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuList>
-                <MenuItem component="a" href="/user/login">
-                  <Typography textAlign="center">Login</Typography>
-                </MenuItem>
-                <MenuItem component="a" href="/user/create">
-                  <Typography textAlign="center">Registrarse</Typography>
-                </MenuItem>
-              </MenuList>
-
-              <MenuList>
-                <MenuItem>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Email usuario
-                  </Typography>
-                </MenuItem>
-                <MenuItem color="secondary" component="a" href="/user/logout">
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Box>
-          {/* Menu Usuarios */}
-        </Toolbar>
-      </Container>
-    </AppBar>
+              Collection Center History
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            About Us
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            Contact Us
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="center" className="hidden lg:flex">
+        <NavbarItem>
+          <Button as={Link} color="primary" href="#" variant="bordered">
+            Login
+          </Button>
+        </NavbarItem>
+        <NavbarItem>
+          <Button as={Link} color="primary" href="#" variant="solid">
+            Sign Up
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarMenu>
+  {menuItems.map((item, index) => (
+    <NavbarMenuItem key={`${item.label}-${index}`}>
+      <Link
+        color={
+          index === 2
+            ? "primary"
+            : index === menuItems.length - 1
+            ? "danger"
+            : "foreground"
+        }
+        className="w-full"
+        href={item.route} // Usar item.route en lugar de menuItems.route
+        size="lg"
+      >
+        {item.label}
+      </Link>
+    </NavbarMenuItem>
+  ))}
+</NavbarMenu>
+    </Navbar>
   );
 }
-export default Header;

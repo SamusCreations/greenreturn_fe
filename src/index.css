@@ -1,4 +1,10 @@
-body{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  font-family: "Poppins", sans-serif;
+}
+body {
   margin: 0 auto;
   padding: 0;
   min-height: 100vh;
