@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Navbar,
   NavbarBrand,
@@ -14,7 +14,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Image,
-} from "@nextui-org/react";
+} from '@nextui-org/react';
 import {
   ChevronDown,
   Lock,
@@ -23,8 +23,8 @@ import {
   Server,
   TagUser,
   Scale,
-} from "../../assets/Icons.jsx";
-import logo from "../../assets/greenreturn_logo.png";
+} from '../../assets/Icons.jsx';
+import logo from '../../assets/greenreturn_logo.png';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -42,14 +42,14 @@ export default function Header() {
   };
 
   const menuItems = [
-    { label: "Home", route: "/" },
-    { label: "Materials", route: "/material" },
-    { label: "Collection Centers", route: "/CC" },
-    { label: "Coupons", route: "/coupons" },
-    { label: "User History", route: "/user-history" },
-    { label: "Collection C. History", route:"/cc-history" },
-    { label: "Login", route: "/login" },
-    { label: "Sign up", route: "/signup" },
+    { label: 'Home', route: '/' },
+    { label: 'Materials', route: '/material' },
+    { label: 'Collection Centers', route: '/CC' },
+    { label: 'Coupons', route: '/coupons' },
+    { label: 'User History', route: '/user-history' },
+    { label: 'Collection C. History', route: '/cc-history' },
+    { label: 'Login', route: '/login' },
+    { label: 'Sign up', route: '/signup' },
   ];
 
   return (
@@ -59,24 +59,24 @@ export default function Header() {
       shouldHideOnScroll
       classNames={{
         item: [
-          "flex",
-          "relative",
-          "h-full",
-          "items-center",
+          'flex',
+          'relative',
+          'h-full',
+          'items-center',
           "data-[active=true]:after:content-['']",
-          "data-[active=true]:after:absolute",
-          "data-[active=true]:after:bottom-5",
-          "data-[active=true]:after:left-0",
-          "data-[active=true]:after:right-0",
-          "data-[active=true]:after:h-[2px]",
-          "data-[active=true]:after:rounded-[2px]",
-          "data-[active=true]:after:bg-primary",
+          'data-[active=true]:after:absolute',
+          'data-[active=true]:after:bottom-5',
+          'data-[active=true]:after:left-0',
+          'data-[active=true]:after:right-0',
+          'data-[active=true]:after:h-[2px]',
+          'data-[active=true]:after:rounded-[2px]',
+          'data-[active=true]:after:bg-primary',
         ],
       }}
     >
       <NavbarContent justify="center">
         <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           className="lg:hidden"
         />
         <NavbarBrand>
@@ -93,7 +93,7 @@ export default function Header() {
 
       <NavbarContent className="hidden lg:flex gap-4" justify="center">
         <NavbarItem isActive>
-          <Link href="/" aria-current="page">
+          <Link href="/" aria-current="page" className="font-medium text-base">
             Home
           </Link>
         </NavbarItem>
@@ -102,7 +102,7 @@ export default function Header() {
             <DropdownTrigger>
               <Button
                 disableRipple
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent font-medium text-base"
                 endContent={icons.chevron}
                 radius="sm"
                 variant="light"
@@ -116,11 +116,11 @@ export default function Header() {
             aria-label="Green_Return features"
             className="w-[340px]"
             itemClasses={{
-              base: "gap-4",
+              base: 'gap-4',
             }}
           >
             <DropdownItem
-              className="text-black"
+              style={{ color: '#11181C' }}
               key="materials"
               startContent={icons.scale}
               as={Link}
@@ -129,16 +129,20 @@ export default function Header() {
               Materials
             </DropdownItem>
 
-            <DropdownItem key="collection_centers" startContent={icons.server}>
-            <Link href="/CC">
+            <DropdownItem
+              style={{ color: '#11181C' }}
+              key="collection_centers"
+              startContent={icons.server}
+              as={Link}
+              href="/CC"
+            >
               Collection Centers
-              </Link>
             </DropdownItem>
             <DropdownItem key="coupons" startContent={icons.flash}>
               Coupons
             </DropdownItem>
             <DropdownItem
-              className="text-black"
+              style={{ color: '#11181C' }}
               key="user_history"
               startContent={icons.activity}
               as={Link}
@@ -147,7 +151,7 @@ export default function Header() {
               User History
             </DropdownItem>
             <DropdownItem
-              className="text-black"
+              style={{ color: '#11181C' }}
               key="cc_history"
               startContent={icons.activity}
               as={Link}
@@ -158,48 +162,60 @@ export default function Header() {
           </DropdownMenu>
         </Dropdown>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="#" className="font-medium text-base">
             About Us
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="#" className="font-medium text-base">
             Contact Us
           </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="center" className="hidden lg:flex">
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="bordered">
+          <Button
+            as={Link}
+            color="primary"
+            href="#"
+            variant="bordered"
+            className="font-medium text-base max-h-8 rounded-lg"
+          >
             Login
           </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="solid">
+          <Button
+            as={Link}
+            color="primary"
+            href="#"
+            variant="solid"
+            className="font-medium text-base max-h-8 rounded-lg"
+          >
             Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-  {menuItems.map((item, index) => (
-    <NavbarMenuItem key={`${item.label}-${index}`}>
-      <Link
-        color={
-          index === 2
-            ? "primary"
-            : index === menuItems.length - 1
-            ? "danger"
-            : "foreground"
-        }
-        className="w-full"
-        href={item.route} // Usar item.route en lugar de menuItems.route
-        size="lg"
-      >
-        {item.label}
-      </Link>
-    </NavbarMenuItem>
-  ))}
-</NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item.label}-${index}`}>
+            <Link
+              color={
+                index === 2
+                  ? 'primary'
+                  : index === menuItems.length - 1
+                  ? 'danger'
+                  : 'foreground'
+              }
+              className="w-full"
+              href={item.route} // Usar item.route en lugar de menuItems.route
+              size="lg"
+            >
+              {item.label}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }

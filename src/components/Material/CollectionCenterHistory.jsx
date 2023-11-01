@@ -64,7 +64,7 @@ export default function CollectionCenterHistory() {
   return (
     <div className="flex flex-col gap-3">
       <div className="font-bold text-4xl py-8">
-        <h1 className="capitalize">Collection Center History</h1>
+        <h1 className="uppercase">Collection Center History</h1>
       </div>
       <Table aria-label="History dynamic table">
         <TableHeader columns={columns}>
