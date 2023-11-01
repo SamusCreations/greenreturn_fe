@@ -10,7 +10,7 @@ export function Layout({ children }) {
   return (
     <>
       <Header />
-      <div className="flex-1 container mx-auto">{children}</div>
+      <div className="flex-1 container mx-auto h-full">{children}</div>
       <Footer />
     </>
   );
