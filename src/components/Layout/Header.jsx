@@ -42,13 +42,13 @@ export default function Header() {
   };
 
   const menuItems = [
-    "Home",
-    "Materials",
-    "Collection Centers",
-    "Coupons",
-    "History",
-    "Login",
-    "Sign up",
+    { label: "Home", route: "/" },
+    { label: "Materials", route: "/material" },
+    { label: "Collection Centers", route: "/CC" },
+    { label: "Coupons", route: "/coupons" },
+    { label: "History", route: "/user-history" },
+    { label: "Login", route: "/login" },
+    { label: "Sign up", route: "/signup" },
   ];
 
   return (
@@ -180,25 +180,25 @@ export default function Header() {
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className="w-full"
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
+  {menuItems.map((item, index) => (
+    <NavbarMenuItem key={`${item.label}-${index}`}>
+      <Link
+        color={
+          index === 2
+            ? "primary"
+            : index === menuItems.length - 1
+            ? "danger"
+            : "foreground"
+        }
+        className="w-full"
+        href={item.route} // Usar item.route en lugar de menuItems.route
+        size="lg"
+      >
+        {item.label}
+      </Link>
+    </NavbarMenuItem>
+  ))}
+</NavbarMenu>
     </Navbar>
   );
 }

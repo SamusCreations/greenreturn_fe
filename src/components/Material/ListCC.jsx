@@ -50,7 +50,7 @@ export function ListCC() {
         <h4 className="text-black font-light text-xs">{item.address}</h4>
       </CardHeader>
 
-      <CardBody className="overflow-visible p-0 ">
+      <CardBody className="overflow-visible p-0 mx-auto">
       <Image 
         removeWrapper
         
