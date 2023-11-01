@@ -9,7 +9,7 @@ class CCService {
   }
 
 //localhost:81/greenreturn_api/material/1
-  getMaterialById(collection_center_id) {
+  getCCById(collection_center_id) {
     return axios.get(BASE_URL + "/" + collection_center_id);
   }
 
