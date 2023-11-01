@@ -127,8 +127,9 @@ export default function Header() {
             </DropdownItem>
             
             <DropdownItem key="collection_centers" startContent={icons.server}>
-              
+            <Link href="/CC">
               Collection Centers
+              </Link>
             </DropdownItem>
             <DropdownItem key="coupons" startContent={icons.flash}>
               Coupons

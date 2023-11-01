@@ -6,6 +6,7 @@ import { PageNotFound } from "./components/Home/PageNotFound";
 import { ListMaterial } from "./components/Movie/ListMaterial";
 import TableMovies from "./components/Movie/TableMovies";
 import { DetailMaterial } from "./components/Movie/DetailMaterial";
+import { ListCC } from "./components/Movie/ListCC";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/material/:id",
     element: <DetailMaterial />,
+  },
+  {
+   path: "/CC",
+   element: <ListCC />
   },
 ]);
 
