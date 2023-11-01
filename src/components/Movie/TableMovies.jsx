@@ -28,7 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { useState, useEffect } from "react";
-import MaterialService from "../../services/MaterialService";
+import MaterialExchangeService from "../../services/MaterialExchangeService";
 import EditIcon from "@mui/icons-material/Edit";
 
 function descendingComparator(a, b, orderBy) {
@@ -66,22 +66,28 @@ function stableSort(array, comparator) {
 //Fila de Encabezado - Títulos
 const headCells = [
   {
-    id: "name",
-    numeric: false,
+    id: "id_exchange",
+    numeric: true,
+    disablePadding: false,
+    label: "Id Exchange",
+  },
+  {
+    id: "total",
+    numeric: true,
     disablePadding: true,
-    label: "Name",
+    label: "Total",
   },
   {
-    id: "description",
-    numeric: false,
+    id: "id_collection_center",
+    numeric: true,
     disablePadding: false,
-    label: "Description",
+    label: "Id Collection Center",
   },
   {
-    id: "unit_cost",
+    id: "date_created",
     numeric: false,
     disablePadding: false,
-    label: "Cost",
+    label: "Date",
   },
 ];
 
@@ -222,7 +228,7 @@ export default function TableMovies() {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     //Llamar al API y obtener la lista de peliculas
-    MaterialService.getMaterials()
+    MaterialExchangeService.getMaterialExchange()
       .then((response) => {
         setData(response.data.results);
         console.log(response.data);
@@ -251,7 +257,7 @@ export default function TableMovies() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = data.map((n) => n.name);
+      const newSelected = data.map((n) => n.id_exchange);
       setSelected(newSelected);
       return;
     }

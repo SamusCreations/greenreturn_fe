@@ -53,7 +53,7 @@ export default function Header() {
 
   return (
     <Navbar
-    maxWidth="2xl"
+      maxWidth="2xl"
       onMenuOpenChange={setIsMenuOpen}
       shouldHideOnScroll
       classNames={{
@@ -118,14 +118,16 @@ export default function Header() {
               base: "gap-4",
             }}
           >
-           
-           
-            <DropdownItem key="materials" startContent={icons.scale}>
-            <Link href="/material">
+            <DropdownItem
+              className="text-black"
+              key="materials"
+              startContent={icons.scale}
+              as={Link}
+              href="/material"
+            >
               Materials
-              </Link>
             </DropdownItem>
-            
+
             <DropdownItem key="collection_centers" startContent={icons.server}>
             <Link href="/CC">
               Collection Centers
@@ -134,8 +136,23 @@ export default function Header() {
             <DropdownItem key="coupons" startContent={icons.flash}>
               Coupons
             </DropdownItem>
-            <DropdownItem key="history" startContent={icons.activity}>
-              History
+            <DropdownItem
+              className="text-black"
+              key="user_history"
+              startContent={icons.activity}
+              as={Link}
+              href="/user-history"
+            >
+              User History
+            </DropdownItem>
+            <DropdownItem
+              className="text-black"
+              key="cc_history"
+              startContent={icons.activity}
+              as={Link}
+              href="/cc-history"
+            >
+              Collection Center History
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -151,7 +168,7 @@ export default function Header() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="center" className="hidden lg:flex">
-        <NavbarItem >
+        <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="bordered">
             Login
           </Button>
