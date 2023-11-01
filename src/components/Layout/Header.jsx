@@ -46,7 +46,8 @@ export default function Header() {
     { label: "Materials", route: "/material" },
     { label: "Collection Centers", route: "/CC" },
     { label: "Coupons", route: "/coupons" },
-    { label: "History", route: "/user-history" },
+    { label: "User History", route: "/user-history" },
+    { label: "Collection C. History", route:"/cc-history" },
     { label: "Login", route: "/login" },
     { label: "Sign up", route: "/signup" },
   ];
