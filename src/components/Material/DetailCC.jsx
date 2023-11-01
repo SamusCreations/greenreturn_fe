@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import MaterialService from '../../services/MaterialService';
 import { Grid } from '@mui/material';
 import CCService from '../../services/CCService';
 
