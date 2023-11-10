@@ -1,27 +1,23 @@
-import { useEffect, useState } from 'react';
-// import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
-import Grid from '@mui/material/Grid';
-import { Link } from 'react-router-dom';
-// import {Card, CardFooter, Image, Button} from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import Grid from "@mui/material/Grid";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
   Button,
   CardFooter,
-  Image,
   CardBody,
-} from '@nextui-org/react';
-import CCService from '../../services/CCService';
-function getImgUrl(name) {
-  return new URL(`${name}`, import.meta.url).href;
-}
-export function ListCC() {
+  Spinner,
+} from "@nextui-org/react";
+import CCService from "../../services/CollectionCenterService";
+import { Store } from "../../assets/Icons";
+
+export function ListCollectionCenter() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
 
   //Error del API
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -36,60 +32,55 @@ export function ListCC() {
       .catch((error) => {
         console.log(error);
         setError(error);
-        throw new Error('Respuesta no válida del servidor');
+        throw new Error("Respuesta no válida del servidor");
       });
   }, []);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">Collections Center</h1>
+        <h1 className="uppercase">Collection Centers</h1>
       </div>
       <Grid container sx={{ p: 2 }} spacing={3}>
         {data &&
           data.map(
             (item) => (
-              console.log('Ruta de imagen:', item.image_url),
               (
                 <Grid item xs={4} key={item.id_collection_center}>
-                  <Card
-                    isFooterBlurred
-                    className="w-full h-[300px] col-span-12 sm:col-span-5"
-                  >
+                  <Card className="w-full h-[300px] col-span-12 sm:col-span-5">
                     <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
-                      <p className="text-tiny text-black uppercase font-bold">
+                      <p className="text-sm text-black uppercase font-bold">
                         {item.name}
                       </p>
-                      <h4 className="text-black font-light text-xs">
+                      <h4 className="text-black font-light text-sm">
                         {item.address}
                       </h4>
                     </CardHeader>
 
                     <CardBody className="overflow-visible p-0 mx-auto">
-                      <Image
-                        removeWrapper
-                        alt="Card example background"
-                        className="flex justify-center z-0 mx-auto my-auto max-w-xs max-h-xs  object-cover"
-                        src={getImgUrl('../../assets/Store.png')}
+                      <Store
+                        className="flex justify-center z-0 mx-auto my-auto max-w-xs max-h-xs  object-cover text-primary"
+                        fill="currentColor"
+                        size={225}
                       />
                     </CardBody>
-
-                    <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-                      <div>
-                        <p className="text-black text-tiny">see more</p>
-                        <p className="text-black text-tiny">Info</p>
-                      </div>
+                    <CardFooter className="absolute bottom-0 z-10 justify-between">
                       <Link to={`/CC/${item.id_collection_center}`}>
                         <Button
                           className="text-tiny"
                           color="primary"
-                          radius="full"
+                          radius="sm"
                           size="sm"
                         >
-                          More
+                          View More
                         </Button>
                       </Link>
                     </CardFooter>

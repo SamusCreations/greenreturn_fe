@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MaterialService from '../../services/MaterialService';
 import { Grid } from '@mui/material';
+import { Spinner } from '@nextui-org/react';
 
 function getImgUrl(name) {
   return new URL(`${name}`, import.meta.url).href;
@@ -36,8 +37,14 @@ export function DetailMaterial() {
       });
   }, [routeParams.id]);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div>
       <div className="font-bold text-4xl py-8">

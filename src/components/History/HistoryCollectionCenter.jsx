@@ -10,6 +10,7 @@ import {
   Button,
   Link,
   Tooltip,
+  Spinner,
 } from "@nextui-org/react";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
 import { EyeIcon } from "../../assets/Icons";
@@ -37,7 +38,7 @@ const columns = [
   },
 ];
 
-export default function CollectionCenterHistory() {
+export default function HistoryCollectionCenter() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
   //Error del API
@@ -59,8 +60,14 @@ export default function CollectionCenterHistory() {
       });
   }, []);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="flex flex-col gap-3">
       <div className="font-bold text-4xl py-8">

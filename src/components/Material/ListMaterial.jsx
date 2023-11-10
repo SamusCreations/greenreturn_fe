@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import MaterialService from '../../services/MaterialService';
-// import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
-import Grid from '@mui/material/Grid';
-import { Link } from 'react-router-dom';
-// import {Card, CardFooter, Image, Button} from "@nextui-org/react";
-import { Card, CardBody, CardFooter, Image } from '@nextui-org/react';
+import { useEffect, useState } from "react";
+import MaterialService from "../../services/MaterialService";
+import Grid from "@mui/material/Grid";
+import { Link } from "react-router-dom";
+import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
+
 function getImgUrl(name) {
   return new URL(`${name}`, import.meta.url).href;
 }
+
 export function ListMaterial() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
 
   //Error del API
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
+  
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
     MaterialService.getMaterials()
@@ -29,11 +29,16 @@ export function ListMaterial() {
       .catch((error) => {
         console.log(error);
         setError(error);
-        throw new Error('Respuesta no válida del servidor');
+        throw new Error("Respuesta no válida del servidor");
       });
   }, []);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -45,7 +50,7 @@ export function ListMaterial() {
         {data &&
           data.map(
             (item) => (
-              console.log('Ruta de imagen:', item.image_url),
+              console.log("Ruta de imagen:", item.image_url),
               (
                 <Grid item xs={4} key={item.id_material}>
                   <Link to={`/material/${item.id_material}`}>
@@ -53,7 +58,6 @@ export function ListMaterial() {
                       shadow="sm"
                       className=" flex flex-col w-full max-h-auto"
                       isPressable
-                      onPress={() => console.log('a')}
                     >
                       <CardBody
                         id="a"
@@ -73,7 +77,7 @@ export function ListMaterial() {
                       <CardFooter className="text-small justify-between">
                         <b>{item.name}</b>
                         <p className="text-default-500">
-                           {item.unit_cost} Ecocoins
+                          {item.unit_cost} Ecocoins
                         </p>
                       </CardFooter>
                     </Card>
