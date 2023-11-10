@@ -5,11 +5,13 @@ import { Home } from "./components/Home/Home";
 import { PageNotFound } from "./components/Home/PageNotFound";
 import { ListMaterial } from "./components/Material/ListMaterial";
 import { DetailMaterial } from "./components/Material/DetailMaterial";
-import { ListCC } from "./components/Material/ListCC";
-import UserHistory from "./components/Material/UserHistory";
-import CollectionCenterHistory from "./components/Material/CollectionCenterHistory";
-import { HistoryDetail } from "./components/Material/HistoryDetail";
-import { DetailCC } from "./components/Material/DetailCC";
+import { ListCollectionCenter } from "./components/Collection Center/ListCollectionCenter";
+import HistoryUser from "./components/History/HistoryUser";
+import HistoryCollectionCenter from "./components/History/HistoryCollectionCenter";
+import { DetailHistory } from "./components/History/DetailHistory";
+import { DetailCollectionCenter } from "./components/Collection Center/DetailCollectionCenter";
+import Dashboard from "./components/Dashboard/Dashboard";
+import TableMaterial from "./components/Material/TableMaterial";
 
 const router = createBrowserRouter([
   {
@@ -26,28 +28,36 @@ const router = createBrowserRouter([
   },
   {
     path: "/user-history",
-    element: <UserHistory />,
+    element: <HistoryUser />,
   },
   {
     path: "/cc-history",
-    element: <CollectionCenterHistory />,
+    element: <HistoryCollectionCenter />,
   },
   {
     path: "/material/:id",
     element: <DetailMaterial />,
   },
-{
-path: "/history-detail/:id",
-element: <HistoryDetail />,
-},
   {
-   path: "/CC",
-   element: <ListCC />
+    path: "/history-detail/:id",
+    element: <DetailHistory />,
+  },
+  {
+    path: "/CC",
+    element: <ListCollectionCenter />,
   },
   {
     path: "/CC/:id",
-    element: <DetailCC />
-   },
+    element: <DetailCollectionCenter />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
+  {
+    path: "/table-material",
+    element: <TableMaterial />,
+  },
 ]);
 
 export default function App() {

@@ -1,11 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 * {
   font-family: "Poppins", sans-serif;
+  transition: .3s ;
 }
+
 body {
   margin: 0 auto;
   padding: 0;
-  min-height: 100vh;
 }

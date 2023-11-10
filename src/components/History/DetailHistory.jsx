@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
 import {
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +31,7 @@ const columns = [
   },
 ];
 
-export function HistoryDetail() {
+export function DetailHistory() {
   const routeParams = useParams();
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
@@ -53,8 +54,14 @@ export function HistoryDetail() {
       });
   }, []);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="flex flex-col">
       <div className="font-bold text-4xl py-8">

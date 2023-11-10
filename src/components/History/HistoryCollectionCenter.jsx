@@ -10,6 +10,7 @@ import {
   Button,
   Link,
   Tooltip,
+  Spinner,
 } from "@nextui-org/react";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
 import { EyeIcon } from "../../assets/Icons";
@@ -37,7 +38,7 @@ const columns = [
   },
 ];
 
-export default function UserHistory() {
+export default function HistoryCollectionCenter() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
   //Error del API
@@ -45,7 +46,7 @@ export default function UserHistory() {
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    MaterialExchangeService.getUserHistory(5)
+    MaterialExchangeService.getCollectionCenterHistory(1)
       .then((response) => {
         setData(response.data.results);
         console.log(response.data);
@@ -59,17 +60,25 @@ export default function UserHistory() {
       });
   }, []);
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="flex flex-col gap-3">
       <div className="font-bold text-4xl py-8">
-        <h1 className="capitalize">User History</h1>
+        <h1 className="uppercase">Collection Center History</h1>
       </div>
       <Table aria-label="History dynamic table">
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn className="text-center" key={column.key}>{column.label}</TableColumn>
+            <TableColumn className="text-center" key={column.key}>
+              {column.label}
+            </TableColumn>
           )}
         </TableHeader>
         <TableBody items={data}>

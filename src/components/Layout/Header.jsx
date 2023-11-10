@@ -23,6 +23,7 @@ import {
   Server,
   TagUser,
   Scale,
+  Store,
 } from "../../assets/Icons.jsx";
 import logo from "../../assets/greenreturn_logo.png";
 
@@ -39,6 +40,7 @@ export default function Header() {
     flash: <Flash className="text-primary" fill="currentColor" size={30} />,
     server: <Server className="text-success" fill="currentColor" size={30} />,
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
+    store: <Store className="text-primary" fill="currentColor" size={30} />,
   };
 
   const menuItems = [
@@ -47,7 +49,7 @@ export default function Header() {
     { label: "Collection Centers", route: "/CC" },
     { label: "Coupons", route: "/coupons" },
     { label: "User History", route: "/user-history" },
-    { label: "Collection C. History", route:"/cc-history" },
+    { label: "Collection C. History", route: "/cc-history" },
     { label: "Login", route: "/login" },
     { label: "Sign up", route: "/signup" },
   ];
@@ -93,7 +95,7 @@ export default function Header() {
 
       <NavbarContent className="hidden lg:flex gap-4" justify="center">
         <NavbarItem isActive>
-          <Link href="/" aria-current="page">
+          <Link href="/" aria-current="page" className="font-medium text-base">
             Home
           </Link>
         </NavbarItem>
@@ -102,7 +104,7 @@ export default function Header() {
             <DropdownTrigger>
               <Button
                 disableRipple
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent font-medium text-base"
                 endContent={icons.chevron}
                 radius="sm"
                 variant="light"
@@ -120,7 +122,7 @@ export default function Header() {
             }}
           >
             <DropdownItem
-              className="text-black"
+              style={{ color: "#11181C" }}
               key="materials"
               startContent={icons.scale}
               as={Link}
@@ -129,16 +131,20 @@ export default function Header() {
               Materials
             </DropdownItem>
 
-            <DropdownItem key="collection_centers" startContent={icons.server}>
-            <Link href="/CC">
+            <DropdownItem
+              style={{ color: "#11181C" }}
+              key="collection_centers"
+              startContent={icons.store}
+              as={Link}
+              href="/CC"
+            >
               Collection Centers
-              </Link>
             </DropdownItem>
             <DropdownItem key="coupons" startContent={icons.flash}>
               Coupons
             </DropdownItem>
             <DropdownItem
-              className="text-black"
+              style={{ color: "#11181C" }}
               key="user_history"
               startContent={icons.activity}
               as={Link}
@@ -147,7 +153,7 @@ export default function Header() {
               User History
             </DropdownItem>
             <DropdownItem
-              className="text-black"
+              style={{ color: "#11181C" }}
               key="cc_history"
               startContent={icons.activity}
               as={Link}
@@ -155,51 +161,83 @@ export default function Header() {
             >
               Collection Center History
             </DropdownItem>
+            <DropdownItem
+              style={{ color: "#11181C" }}
+              key="table_material"
+              startContent={icons.scale}
+              as={Link}
+              href="/table-material"
+            >
+              Material Table
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="#" className="font-medium text-base">
             About Us
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="#" className="font-medium text-base">
             Contact Us
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            color="foreground"
+            href="/dashboard"
+            className="font-medium text-base"
+          >
+            Dashboard
           </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="center" className="hidden lg:flex">
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="bordered">
+          <Button
+            as={Link}
+            color="primary"
+            href="#"
+            variant="bordered"
+            className="font-medium text-base max-h-8"
+            radius="sm"
+          >
             Login
           </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="solid">
+          <Button
+            as={Link}
+            color="primary"
+            href="#"
+            variant="solid"
+            className="font-medium text-base max-h-8"
+            radius="sm"
+          >
             Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-  {menuItems.map((item, index) => (
-    <NavbarMenuItem key={`${item.label}-${index}`}>
-      <Link
-        color={
-          index === 2
-            ? "primary"
-            : index === menuItems.length - 1
-            ? "danger"
-            : "foreground"
-        }
-        className="w-full"
-        href={item.route} // Usar item.route en lugar de menuItems.route
-        size="lg"
-      >
-        {item.label}
-      </Link>
-    </NavbarMenuItem>
-  ))}
-</NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item.label}-${index}`}>
+            <Link
+              color={
+                index === 2
+                  ? "primary"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
+              }
+              className="w-full"
+              href={item.route}
+              size="lg"
+            >
+              {item.label}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }
