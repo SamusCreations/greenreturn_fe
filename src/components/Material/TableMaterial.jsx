@@ -155,7 +155,7 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/form-material/${user.id_material}`}
+              href={`/update-material/${user.id_material}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
@@ -168,10 +168,10 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/form-material/${user.id_material}`}
+              href={`/update-material/${user.id_material}`}
               isIconOnly
             >
-              <Tooltip content="Details" closeDelay={0}>
+              <Tooltip content="Edit" closeDelay={0}>
                 <span className="text-lg text-default-400 cursor-pointer">
                   <EditIcon />
                 </span>
@@ -185,7 +185,7 @@ export default function TableMaterial() {
               href={`#`}
               isIconOnly
             >
-              <Tooltip color="danger" content="Details" closeDelay={0}>
+              <Tooltip color="danger" content="Delete" closeDelay={0}>
                 <span className="text-lg text-danger cursor-pointer">
                   <DeleteIcon />
                 </span>
@@ -267,7 +267,8 @@ export default function TableMaterial() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
+            <Button color="primary" endContent={<PlusIcon />} as={Link} 
+              href={`/create-material`}>
               Add New
             </Button>
           </div>
@@ -357,7 +358,7 @@ export default function TableMaterial() {
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         classNames={{
-          wrapper: "max-h-[382px]",
+          wrapper: "max-h-[500px]",
         }}
         selectedKeys={selectedKeys}
         selectionMode="multiple"

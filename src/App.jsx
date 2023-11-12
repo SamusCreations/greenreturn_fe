@@ -12,6 +12,7 @@ import { DetailHistory } from "./components/History/DetailHistory";
 import { DetailCollectionCenter } from "./components/Collection Center/DetailCollectionCenter";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TableMaterial from "./components/Material/TableMaterial";
+import { CreateMaterial } from "./components/Material/CreateMaterial";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/table-material",
     element: <TableMaterial />,
+  },
+  {
+    path: "/create-material",
+    element: <CreateMaterial />,
   },
 ]);
 
