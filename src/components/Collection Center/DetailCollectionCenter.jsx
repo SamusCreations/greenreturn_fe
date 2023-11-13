@@ -76,7 +76,7 @@ export function DetailCollectionCenter() {
                   <Box fontWeight="bold" display="inline">
                     Location:
                   </Box>{" "}
-                  {data.address}
+                  {`${data.address}, ${data.district.name}, ${data.canton.name}, ${data.province.name}`}
                 </Typography>
                 <Typography
                   component="span"

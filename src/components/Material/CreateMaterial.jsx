@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +11,7 @@ import ColorService from "../../services/ColorService";
 import { SelectMeasurement } from "./Form/SelectMeasurement";
 import { SelectColor } from "./Form/SelectColor";
 import MaterialService from "../../services/MaterialService";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function CreateMaterial() {
@@ -32,7 +31,8 @@ export function CreateMaterial() {
     unit_cost: yup
       .number()
       .typeError("Price is required")
-      .required("Price is required"),
+      .required("Price is required")
+      .positive("Price must be a positive number"),
     id_color: yup
       .number()
       .typeError("Color is required")
@@ -62,23 +62,6 @@ export function CreateMaterial() {
     // Asignación de validaciones
     resolver: yupResolver(materialSchema),
   });
-
-  /*   //Seguimiento de la variable actores Watch
-  const watchActores = watch("actors");
-  //On change para realizar los calculos
-  const handleInputChange = (index, name, value) => {
-    //asignar valor en el formulario al control indicado
-    setValue(name, value);
-    //Obtienes todos los valores del formulario
-    const valores = getValues();
-    console.log(valores.actors[index]);
-    let total = "Reparto: ";
-    valores.actors.map((item) => {
-      //Acordarse castear o convertir a número
-      total += `${item.role} `;
-    });
-    setValue("total", total);
-  }; */
 
   const [error, setError] = useState("");
 
@@ -160,202 +143,180 @@ export function CreateMaterial() {
       });
   }, []);
 
+  if (!loadedColor && !loadedMeasurement)
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="flex flex-col">
-          <div className="font-bold text-4xl py-8">
-            <h1 className="uppercase">Create material</h1>
+          <div className="py-8">
+            <h1 className="font-bold text-4xl uppercase">Create material</h1>
+            <p className="text-sm">
+              This information will be displayed publicly so be careful what you
+              write.
+            </p>
           </div>
 
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              <Controller
-                name="name"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="name"
-                    label="Name"
-                    isInvalid={Boolean(errors.name)}
-                    errorMessage={errors.name ? errors.name.message : " "}
-                    isRequired
-                  />
-                )}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="description"
-                    label="Description"
-                    isInvalid={Boolean(errors.description)}
-                    errorMessage={
-                      errors.description ? errors.description.message : " "
-                    }
-                    isRequired
-                  />
-                )}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              <Controller
-                name="image_url"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="image_url"
-                    label="Image"
-                    isInvalid={Boolean(errors.image_url)}
-                    errorMessage={
-                      errors.image_url ? errors.image_url.message : " "
-                    }
-                    isRequired
-                  />
-                )}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              <Controller
-                name="unit_cost"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="unit_cost"
-                    type="number"
-                    label="Price"
-                    placeholder="0"
-                    isInvalid={Boolean(errors.unit_cost)}
-                    errorMessage={
-                      errors.unit_cost ? errors.unit_cost.message : " "
-                    }
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                    isRequired
-                  />
-                )}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              {/* Lista de colores */}
-              {loadedColor && (
-                <Controller
-                  name="id_color"
-                  control={control}
-                  render={({ field }) => (
-                    <SelectColor
-                      field={field}
-                      data={dataColor}
-                      isInvalid={Boolean(errors.id_color)}
-                      errorMessage={
-                        errors.id_color ? errors.id_color.message : " "
-                      }
-                      onChange={(e) =>
-                        setValue("id_color", e.target.value, {
-                          shouldValidate: true,
-                        })
-                      }
-                    />
-                  )}
+          <div className="m-2">
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="name"
+                  label="Name"
+                  isInvalid={Boolean(errors.name)}
+                  errorMessage={errors.name ? errors.name.message : " "}
+                  isRequired
+                  labelPlacement="outside"
+                  placeholder="Enter a name for the material"
                 />
               )}
-            </FormControl>
-          </Grid>
+            />
+          </div>
 
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
-              {/* Lista de unidades de medida */}
-              {loadedMeasurement && (
-                <Controller
-                  name="id_measurement"
-                  control={control}
-                  render={({ field }) => (
-                    <SelectMeasurement
-                      field={field}
-                      data={dataMeasurement}
-                      isInvalid={Boolean(errors.id_measurement)}
-                      errorMessage={
-                        errors.id_measurement
-                          ? errors.id_measurement.message
-                          : " "
-                      }
-                      onChange={(e) =>
-                        setValue("id_measurement", e.target.value, {
-                          shouldValidate: true,
-                        })
-                      }
-                    />
-                  )}
+          <div className="m-2">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  id="description"
+                  label="Description"
+                  isInvalid={Boolean(errors.description)}
+                  errorMessage={
+                    errors.description ? errors.description.message : " "
+                  }
+                  isRequired
+                  labelPlacement="outside"
+                  placeholder="Enter a description for the material (Min. 15 characters)"
+                  disableAutosize
+                  disableAnimation
                 />
               )}
-            </FormControl>
-          </Grid>
+            />
+          </div>
 
-          {/*           <Grid item xs={12} sm={4}>
-            <FormControl variant="standard" fullWidth sx={{ m: 1 }}>
+          <div className="m-2">
+            <Controller
+              name="image_url"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="image_url"
+                  label="Image"
+                  isInvalid={Boolean(errors.image_url)}
+                  errorMessage={
+                    errors.image_url ? errors.image_url.message : " "
+                  }
+                  isRequired
+                  labelPlacement="outside"
+                  placeholder="Enter image URL"
+                />
+              )}
+            />
+          </div>
+
+          <div className="m-2">
+            <Controller
+              name="unit_cost"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="unit_cost"
+                  type="number"
+                  label="Price"
+                  placeholder="0"
+                  isInvalid={Boolean(errors.unit_cost)}
+                  errorMessage={
+                    errors.unit_cost ? errors.unit_cost.message : " "
+                  }
+                  startContent={
+                    <div className="pointer-events-none flex items-center">
+                      <span className="text-default-400 text-small">$</span>
+                    </div>
+                  }
+                  isRequired
+                  labelPlacement="outside"
+                />
+              )}
+            />
+          </div>
+
+          <div className="m-2">
+            {/* Lista de colores */}
+            {loadedColor && (
               <Controller
-                name="total"
+                name="id_color"
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    {...field}
-                    id="total"
-                    label="Total"
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                  <SelectColor
+                    field={field}
+                    data={dataColor}
+                    isInvalid={Boolean(errors.id_color)}
+                    errorMessage={
+                      errors.id_color ? errors.id_color.message : " "
+                    }
+                    onChange={(e) =>
+                      setValue("id_color", e.target.value, {
+                        shouldValidate: true,
+                      })
+                    }
                   />
                 )}
               />
-            </FormControl>
-          </Grid> */}
+            )}
+          </div>
 
-          <div className="flex justify-center items-center">
+          <div className="m-2">
+            {/* Lista de unidades de medida */}
+            {loadedMeasurement && (
+              <Controller
+                name="id_measurement"
+                control={control}
+                render={({ field }) => (
+                  <SelectMeasurement
+                    field={field}
+                    data={dataMeasurement}
+                    isInvalid={Boolean(errors.id_measurement)}
+                    errorMessage={
+                      errors.id_measurement
+                        ? errors.id_measurement.message
+                        : " "
+                    }
+                    onChange={(e) =>
+                      setValue("id_measurement", e.target.value, {
+                        shouldValidate: true,
+                      })
+                    }
+                  />
+                )}
+              />
+            )}
+          </div>
+
+          <div className="flex justify-center items-center m-6 border-t">
             <Button
               type="submit"
               color="primary"
               variant="shadow"
               radius="sm"
-              className="uppercase"
+              className="uppercase font-medium text-2xl m-4"
             >
               Save
             </Button>
           </div>
         </div>
       </form>
-      {/* <div>
-        <h3>Resultado Watch Actores</h3>
-        {watchActores.map((item, index) => {
-          return (
-            <p key={index}>
-              {index}. Actor: {item.actor_id} / Rol:{item.role}
-            </p>
-          );
-        })}
-      </div> */}
     </>
   );
 }

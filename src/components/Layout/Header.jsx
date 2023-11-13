@@ -170,6 +170,15 @@ export default function Header() {
             >
               Material Table
             </DropdownItem>
+            <DropdownItem
+              style={{ color: "#11181C" }}
+              key="table_material"
+              startContent={icons.store}
+              as={Link}
+              href="/table-collection-center"
+            >
+              Collection Center Table
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <NavbarItem>

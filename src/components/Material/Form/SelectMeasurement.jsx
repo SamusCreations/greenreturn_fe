@@ -21,6 +21,7 @@ export function SelectMeasurement({ field, data, isInvalid, errorMessage }) {
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired
+          labelPlacement="outside"
         >
           {(data) => (
             <SelectItem key={data.id_measurement} startContent={data.value}>

@@ -1,7 +1,7 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL + "collection_center";
 //localhost:81/greenreturn_api/material/
-class CCService {
+class CollectionCenterService {
   //Definición para Llamar al API y obtener el listado de materials
   //localhost:81/greenreturn_api/material
   getCollectionCenter() {
@@ -17,4 +17,4 @@ class CCService {
     return axios.get(BASE_URL + "/" + colorId);
   }
 }
-export default new CCService();
+export default new CollectionCenterService();

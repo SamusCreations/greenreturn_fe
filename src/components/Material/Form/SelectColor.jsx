@@ -21,6 +21,7 @@ export function SelectColor({ field, data, isInvalid, errorMessage }) {
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired
+          labelPlacement="outside"
         >
           {(data) => (
             <SelectItem
