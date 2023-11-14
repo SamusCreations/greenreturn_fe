@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useForm, Controller} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import MeasurementService from "../../services/MeasurementService";
-import ColorService from "../../services/ColorService";
-import { SelectMeasurement } from "./Form/SelectMeasurement";
-import { SelectColor } from "./Form/SelectColor";
-import MaterialService from "../../services/MaterialService";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
+import CollectionCenterService from "../../services/CollectionCenterService";
+import UserService from "../../services/UserService";
+import MaterialService from "../../services/MaterialService";
+import { SelectAdministrator } from "./Form/SelectAdministrator";
+import { SelectMaterial } from "./Form/SelectMaterial";
 //https://www.npmjs.com/package/@hookform/resolvers
 
-export function CreateMaterial() {
+export function CreateCollectionCenter() {
   const navigate = useNavigate();
 
   // Esquema de validación
@@ -21,24 +21,36 @@ export function CreateMaterial() {
       .string()
       .required("Name is required")
       .min(5, "Name needs to be at least of 5 characters"),
-    description: yup
+    id_province: yup
+      .number()
+      .typeError("Province is required")
+      .required("Province is required"),
+    id_canton: yup
+      .number()
+      .typeError("Canton is required")
+      .required("Canton is required"),
+    id_district: yup
+      .number()
+      .typeError("District is required")
+      .required("District is required"),
+    address: yup.string().required("Address is required"),
+    telephone: yup
+      .number()
+      .typeError("Telephone is required")
+      .required("Telephone is required")
+      .min(8, "Name needs to be at least of 8 numbers"),
+    schedule: yup
       .string()
-      .required("Description is required")
-      .min(15, "Description needs to be at least of 15 characters"),
-    image_url: yup.string().required("Image is required"),
-    unit_cost: yup
+      .required("Schedule is required")
+      .min(10, "Schedule needs to be at least of 10 characters"),
+    id_user: yup
       .number()
-      .typeError("Price is required")
-      .required("Price is required")
-      .positive("Price must be a positive number"),
-    id_color: yup
-      .number()
-      .typeError("Color is required")
-      .required("Color is required"),
-    id_measurement: yup
-      .number()
-      .typeError("Measurement unit is required")
-      .required("Measurement unit is required"),
+      .typeError("Administrator is required")
+      .required("Administrator is required"),
+    materials: yup
+      .array()
+      .required("Material is required")
+      .min(1, "Material is required"),
   });
 
   const {
@@ -49,11 +61,15 @@ export function CreateMaterial() {
   } = useForm({
     defaultValues: {
       name: "",
-      description: "",
-      image_url: "",
-      id_color: "",
-      id_measurement: "",
-      unit_cost: 0,
+      id_province: "",
+      id_canton: "",
+      id_district: "",
+      address: "",
+      telephone: "",
+      schedule: "",
+      id_user: "",
+      active: 1,
+      materials: [],
     },
     // Asignación de validaciones
     resolver: yupResolver(materialSchema),
@@ -69,7 +85,7 @@ export function CreateMaterial() {
     try {
       if (materialSchema.isValid()) {
         //Crear pelicula
-        MaterialService.createMaterial(DataForm)
+        CollectionCenterService.createCollectionCenter(DataForm)
           .then((response) => {
             console.log(response);
             setError(response.error);
@@ -80,7 +96,7 @@ export function CreateMaterial() {
                 position: "top-center",
               });
               // Redireccion a la tabla
-              return navigate("/table-material");
+              return navigate("/table-collection-center");
             }
           })
           .catch((error) => {
@@ -99,47 +115,47 @@ export function CreateMaterial() {
   // Si ocurre error al realizar el submit
   const onError = (errors, e) => console.log(errors, e);
 
-  //Lista de Colores
-  const [dataColor, setDataColor] = useState({});
-  const [loadedColor, setLoadedColor] = useState(false);
+  //Lista de Administradores
+  const [dataAdmin, setDataAdmin] = useState({});
+  const [loadedAdmin, setLoadedAdmin] = useState(false);
   useEffect(() => {
-    ColorService.getAvailables()
+    UserService.getAvailableAdministrators()
       .then((response) => {
         console.log(response);
-        setDataColor(response.data.results);
-        setLoadedColor(true);
+        setDataAdmin(response.data.results);
+        setLoadedAdmin(true);
       })
       .catch((error) => {
         if (error instanceof SyntaxError) {
           console.log(error);
           setError(error);
-          setLoadedColor(false);
+          setLoadedAdmin(false);
           throw new Error("Invalid response from server");
         }
       });
   }, []);
 
-  //Lista de Unidades de medida
-  const [dataMeasurement, setDataMeasurement] = useState({});
-  const [loadedMeasurement, setLoadedMeasurement] = useState(false);
+  //Lista de Materiales
+  const [dataMatrerial, setDataMaterial] = useState({});
+  const [loadedMaterial, setLoadedMaterial] = useState(false);
   useEffect(() => {
-    MeasurementService.getMeasurements()
+    MaterialService.getMaterials()
       .then((response) => {
         console.log(response);
-        setDataMeasurement(response.data.results);
-        setLoadedMeasurement(true);
+        setDataMaterial(response.data.results);
+        setLoadedMaterial(true);
       })
       .catch((error) => {
         if (error instanceof SyntaxError) {
           console.log(error);
           setError(error);
-          setLoadedMeasurement(false);
+          setLoadedMaterial(false);
           throw new Error("Invalid response from server");
         }
       });
   }, []);
 
-  if (!loadedColor && !loadedMeasurement)
+  if (!loadedAdmin && !loadedMaterial)
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
         <Spinner />
@@ -151,7 +167,9 @@ export function CreateMaterial() {
       <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="flex flex-col">
           <div className="py-8">
-            <h1 className="font-bold text-4xl uppercase">Create material</h1>
+            <h1 className="font-bold text-4xl uppercase">
+              Create collection center
+            </h1>
             <p className="text-sm">
               This information will be displayed publicly so be careful what you
               write.
@@ -171,7 +189,7 @@ export function CreateMaterial() {
                   errorMessage={errors.name ? errors.name.message : " "}
                   isRequired
                   labelPlacement="outside"
-                  placeholder="Enter a name for the material"
+                  placeholder="Enter a name for the collection center"
                 />
               )}
             />
@@ -179,20 +197,58 @@ export function CreateMaterial() {
 
           <div className="m-2">
             <Controller
-              name="description"
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="address"
+                  label="Address"
+                  isInvalid={Boolean(errors.address)}
+                  errorMessage={errors.address ? errors.address.message : " "}
+                  isRequired
+                  labelPlacement="outside"
+                  placeholder="Enter the address of the collection center"
+                />
+              )}
+            />
+          </div>
+
+          <div className="m-2">
+            <Controller
+              name="telephone"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="telephone"
+                  label="Telephone"
+                  isInvalid={Boolean(errors.telephone)}
+                  errorMessage={
+                    errors.telephone ? errors.telephone.message : " "
+                  }
+                  isRequired
+                  labelPlacement="outside"
+                  placeholder="Enter the telephone number of the collection center"
+                />
+              )}
+            />
+          </div>
+
+          <div className="m-2">
+            <Controller
+              name="schedule"
               control={control}
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  id="description"
-                  label="Description"
-                  isInvalid={Boolean(errors.description)}
-                  errorMessage={
-                    errors.description ? errors.description.message : " "
-                  }
+                  id="schedule"
+                  label="Schedule"
+                  isInvalid={Boolean(errors.schedule)}
+                  errorMessage={errors.schedule ? errors.schedule.message : " "}
                   isRequired
                   labelPlacement="outside"
-                  placeholder="Enter a description for the material (Min. 15 characters)"
+                  placeholder="Enter the schedule of the collection center (Min. 10 characters)"
                   disableAutosize
                   disableAnimation
                 />
@@ -201,69 +257,19 @@ export function CreateMaterial() {
           </div>
 
           <div className="m-2">
-            <Controller
-              name="image_url"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  id="image_url"
-                  label="Image"
-                  isInvalid={Boolean(errors.image_url)}
-                  errorMessage={
-                    errors.image_url ? errors.image_url.message : " "
-                  }
-                  isRequired
-                  labelPlacement="outside"
-                  placeholder="Enter image URL"
-                />
-              )}
-            />
-          </div>
-
-          <div className="m-2">
-            <Controller
-              name="unit_cost"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  id="unit_cost"
-                  type="number"
-                  label="Price"
-                  placeholder="0"
-                  isInvalid={Boolean(errors.unit_cost)}
-                  errorMessage={
-                    errors.unit_cost ? errors.unit_cost.message : " "
-                  }
-                  startContent={
-                    <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">$</span>
-                    </div>
-                  }
-                  isRequired
-                  labelPlacement="outside"
-                />
-              )}
-            />
-          </div>
-
-          <div className="m-2">
-            {/* Lista de colores */}
-            {loadedColor && (
+            {/* Lista de administradores */}
+            {loadedAdmin && (
               <Controller
-                name="id_color"
+                name="id_user"
                 control={control}
                 render={({ field }) => (
-                  <SelectColor
+                  <SelectAdministrator
                     field={field}
-                    data={dataColor}
-                    isInvalid={Boolean(errors.id_color)}
-                    errorMessage={
-                      errors.id_color ? errors.id_color.message : " "
-                    }
+                    data={dataAdmin}
+                    isInvalid={Boolean(errors.id_user)}
+                    errorMessage={errors.id_user ? errors.id_user.message : " "}
                     onChange={(e) =>
-                      setValue("id_color", e.target.value, {
+                      setValue("id_user", e.target.value, {
                         shouldValidate: true,
                       })
                     }
@@ -274,23 +280,21 @@ export function CreateMaterial() {
           </div>
 
           <div className="m-2">
-            {/* Lista de unidades de medida */}
-            {loadedMeasurement && (
+            {/* Lista de materiales */}
+            {loadedMaterial && (
               <Controller
-                name="id_measurement"
+                name="materials"
                 control={control}
                 render={({ field }) => (
-                  <SelectMeasurement
+                  <SelectMaterial
                     field={field}
-                    data={dataMeasurement}
-                    isInvalid={Boolean(errors.id_measurement)}
+                    data={dataMatrerial}
+                    isInvalid={Boolean(errors.materials)}
                     errorMessage={
-                      errors.id_measurement
-                        ? errors.id_measurement.message
-                        : " "
+                      errors.materials ? errors.materials.message : " "
                     }
                     onChange={(e) =>
-                      setValue("id_measurement", e.target.value, {
+                      setValue("materials", e.target.value, {
                         shouldValidate: true,
                       })
                     }
