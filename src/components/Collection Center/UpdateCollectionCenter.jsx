@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Spinner,
+  Textarea,
+} from "@nextui-org/react";
 import CollectionCenterService from "../../services/CollectionCenterService";
 import UserService from "../../services/UserService";
 import MaterialService from "../../services/MaterialService";
 import { SelectAdministrator } from "./Form/SelectAdministrator";
-import { SelectMaterial } from "./Form/SelectMaterial";
 import ProvinceService from "../../services/ProvinceService";
 import { SelectProvince } from "./Form/SelectProvince";
 import CantonService from "../../services/CantonService";
@@ -18,8 +24,34 @@ import DistrictService from "../../services/DistrictService";
 import { SelectDistrict } from "./Form/SelectDistrict";
 //https://www.npmjs.com/package/@hookform/resolvers
 
-export function CreateCollectionCenter() {
+export function UpdateCollectionCenter() {
   const navigate = useNavigate();
+
+  const routeParams = useParams();
+
+  const id = routeParams.id || null;
+  console.log(id);
+  //Valores a precargar en el formulario, vienen del API
+  const [values, setValores] = useState(null);
+  //Obtener la pelicula del API
+  useEffect(() => {
+    if (id != undefined && !isNaN(Number(id))) {
+      CollectionCenterService.getCollectionCenterById(Number(id))
+        .then((response) => {
+          console.log(response);
+          setValores(response.data.results);
+          setError(response.error);
+        })
+        .catch((error) => {
+          if (error instanceof SyntaxError) {
+            console.log(error);
+            setError(error);
+
+            throw new Error("Respuesta no válida del servidor");
+          }
+        });
+    }
+  }, [id]);
 
   // Esquema de validación
   const materialSchema = yup.object({
@@ -77,6 +109,7 @@ export function CreateCollectionCenter() {
       active: 1,
       materials: [],
     },
+    values,
     // Asignación de validaciones
     resolver: yupResolver(materialSchema),
   });
@@ -91,7 +124,7 @@ export function CreateCollectionCenter() {
     try {
       if (materialSchema.isValid()) {
         //Crear pelicula
-        CollectionCenterService.createCollectionCenter(DataForm)
+        CollectionCenterService.updateCollectionCenter(DataForm)
           .then((response) => {
             console.log(response);
             setError(response.error);
@@ -131,21 +164,23 @@ export function CreateCollectionCenter() {
   const [dataAdmin, setDataAdmin] = useState({});
   const [loadedAdmin, setLoadedAdmin] = useState(false);
   useEffect(() => {
-    UserService.getAvailableAdministrators(-1)
-      .then((response) => {
-        console.log(response);
-        setDataAdmin(response.data.results);
-        setLoadedAdmin(true);
-      })
-      .catch((error) => {
-        if (error instanceof SyntaxError) {
-          console.log(error);
-          setError(error);
-          setLoadedAdmin(false);
-          throw new Error("Invalid response from server");
-        }
-      });
-  }, []);
+    if (values) {
+      UserService.getAvailableAdministrators(values.id_collection_center)
+        .then((response) => {
+          console.log(response);
+          setDataAdmin(response.data.results);
+          setLoadedAdmin(true);
+        })
+        .catch((error) => {
+          if (error instanceof SyntaxError) {
+            console.log(error);
+            setError(error);
+            setLoadedAdmin(false);
+            throw new Error("Invalid response from server");
+          }
+        });
+    }
+  }, [values]);
 
   //Lista de Materiales
   const [dataMaterial, setDataMaterial] = useState({});
@@ -189,6 +224,24 @@ export function CreateCollectionCenter() {
 
   const [dataCanton, setDataCanton] = useState({});
   const [loadedCanton, setLoadedCanton] = useState(false);
+  useEffect(() => {
+    if (values) {
+      CantonService.getCantonByProvince(values.id_province)
+        .then((response) => {
+          console.log(response);
+          setDataCanton(response.data.results);
+          setLoadedCanton(true);
+        })
+        .catch((error) => {
+          if (error instanceof SyntaxError) {
+            console.log(error);
+            setError(error);
+            setLoadedCanton(false);
+            throw new Error("Invalid response from server");
+          }
+        });
+    }
+  }, [values]);
 
   const handleSelectionProvince = (e) => {
     setValue("id_province", e.target.value, {
@@ -219,6 +272,24 @@ export function CreateCollectionCenter() {
 
   const [dataDistrict, setDataDistrict] = useState({});
   const [loadedDistrict, setLoadedDistrict] = useState(false);
+  useEffect(() => {
+    if (values) {
+      DistrictService.getDistrictByCanton(values.id_canton)
+        .then((response) => {
+          console.log(response);
+          setDataDistrict(response.data.results);
+          setLoadedDistrict(true);
+        })
+        .catch((error) => {
+          if (error instanceof SyntaxError) {
+            console.log(error);
+            setError(error);
+            setLoadedDistrict(false);
+            throw new Error("Invalid response from server");
+          }
+        });
+    }
+  }, [values]);
 
   const handleSelectionCanton = (e) => {
     setValue("id_canton", e.target.value, {
@@ -243,7 +314,28 @@ export function CreateCollectionCenter() {
       });
   };
 
-  if (!loadedAdmin && !loadedMaterial && !loadedProvince)
+  const [SelectedValues, setSelectedValues] = useState(new Set([]));
+  useEffect(() => {
+    if (values) {
+      const selectedIds = values.materials.map((item) => item.id_material);
+      setSelectedValues(selectedIds);
+      setValue("materials", selectedIds);
+    }
+  }, [values]);
+  
+
+  const handleSelectionMaterials = (e) => {
+    setSelectedValues(new Set(e.target.value.split(",")));
+    setValue("materials", e.target.value.split(","));
+  };
+
+  if (
+    !loadedAdmin &&
+    !loadedMaterial &&
+    !loadedProvince &&
+    !loadedCanton &&
+    !loadedDistrict
+  )
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
         <Spinner />
@@ -256,7 +348,7 @@ export function CreateCollectionCenter() {
         <div className="flex flex-col">
           <div className="py-8">
             <h1 className="font-bold text-4xl uppercase">
-              Create collection center
+              Update collection center
             </h1>
             <p className="text-sm">
               This information will be displayed publicly so be careful what you
@@ -443,19 +535,34 @@ export function CreateCollectionCenter() {
                 name="materials"
                 control={control}
                 render={({ field }) => (
-                  <SelectMaterial
-                    field={field}
-                    data={dataMaterial}
-                    isInvalid={Boolean(errors.materials)}
-                    errorMessage={
-                      errors.materials ? errors.materials.message : " "
-                    }
-                    onChange={(e) =>
-                      setValue("materials", e.target.value.split(","), {
-                        shouldValidate: true,
-                      })
-                    }
-                  />
+                  <>
+                    <>
+                      <Select
+                        {...field}
+                        items={dataMaterial}
+                        label="Materials"
+                        placeholder="Select a material"
+                        isInvalid={Boolean(errors.materials)}
+                        errorMessage={
+                          errors.materials ? errors.materials.message : " "
+                        }
+                        isRequired
+                        labelPlacement="outside"
+                        selectionMode="multiple"
+                        onChange={handleSelectionMaterials}
+                        selectedKeys={SelectedValues}
+                      >
+                        {(data) => (
+                          <SelectItem
+                            key={data.id_material}
+                            value={data.id_material}
+                          >
+                            {data.name}
+                          </SelectItem>
+                        )}
+                      </Select>
+                    </>
+                  </>
                 )}
               />
             )}

@@ -14,8 +14,8 @@ class UserService {
   }
 
   //localhost:81/greenreturn_api/user/getAvailableAdministrators/1
-  getAvailableAdministrators(user_id) {
-    return axios.get(BASE_URL + "/getAvailableAdministrators/" + user_id);
+  getAvailableAdministrators(id_collection_center) {
+    return axios.get(BASE_URL + "/getAvailableAdministrators/" + id_collection_center);
   }
 
   createUser(User) {

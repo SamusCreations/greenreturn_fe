@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Select, SelectItem } from "@nextui-org/react";
 
-SelectMaterial.propTypes = {
+SelectProvince.propTypes = {
   data: PropTypes.array,
   field: PropTypes.object,
   isInvalid: PropTypes.bool,
@@ -9,30 +9,28 @@ SelectMaterial.propTypes = {
   onChange: PropTypes.func,
 };
 
-export function SelectMaterial({
-  field,
-  data,
-  isInvalid,
-  errorMessage,
-  onChange,
-}) {
+export function SelectProvince({ field, data, isInvalid, errorMessage, onChange }) {
+  const handleProvinceChange = (e) => {
+    onChange && onChange(e); // Llama a la función de retorno de llamada
+  };
+
   return (
     <>
       <>
         <Select
           {...field}
           items={data}
-          label="Materials"
-          placeholder="Select a material"
+          label="Province"
+          placeholder="Select a province"
+          selectedKeys={field.value}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired
           labelPlacement="outside"
-          selectionMode="multiple"
-          onChange={onChange}
+          onChange={handleProvinceChange}
         >
           {(data) => (
-            <SelectItem key={data.id_material} value={data.id_material}>
+            <SelectItem key={data.id_province}>
               {data.name}
             </SelectItem>
           )}
