@@ -72,6 +72,7 @@ export function CreateMaterial() {
       unit_cost: 0,
       fileToUpload: '',
     },
+    
     // Asignación de validaciones
     resolver: yupResolver(materialSchema),
   });
@@ -87,12 +88,10 @@ export function CreateMaterial() {
       if (materialSchema.isValid()) {
         const dataToSubmit = new FormData();
 
-        // Agrega las demás entradas al FormData
         Object.entries(DataForm).forEach(([key, value]) => {
           dataToSubmit.append(key, value);
         });
 
-        // Asegúrate de que el valor de 'Imagen' sea un Blob (archivo) en lugar de una cadena Base64
         
         dataToSubmit.set('fileToUpload', DataForm.fileToUpload);
         console.log(dataToSubmit)
