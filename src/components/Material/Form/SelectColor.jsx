@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
-import { Select, SelectItem } from "@nextui-org/react";
+import PropTypes from 'prop-types';
+import { Select, SelectItem } from '@nextui-org/react';
 
 SelectColor.propTypes = {
   data: PropTypes.array,
@@ -18,7 +18,7 @@ export function SelectColor({ field, data, isInvalid, errorMessage }) {
           label="Color"
           placeholder="Select a color"
           classNames={{
-            listboxWrapper: "max-h-[400px]",
+            listboxWrapper: 'max-h-[400px]',
           }}
           renderValue={(items) => {
             return items.map((item) => (
@@ -36,7 +36,7 @@ export function SelectColor({ field, data, isInvalid, errorMessage }) {
               </div>
             ));
           }}
-          selectedKeys={field.value}
+          selectedKeys={field.id}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired

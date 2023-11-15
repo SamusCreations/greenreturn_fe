@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import {
   Button,
   Input,
@@ -11,17 +11,17 @@ import {
   SelectItem,
   Spinner,
   Textarea,
-} from "@nextui-org/react";
-import CollectionCenterService from "../../services/CollectionCenterService";
-import UserService from "../../services/UserService";
-import MaterialService from "../../services/MaterialService";
-import { SelectAdministrator } from "./Form/SelectAdministrator";
-import ProvinceService from "../../services/ProvinceService";
-import { SelectProvince } from "./Form/SelectProvince";
-import CantonService from "../../services/CantonService";
-import { SelectCanton } from "./Form/SelectCanton";
-import DistrictService from "../../services/DistrictService";
-import { SelectDistrict } from "./Form/SelectDistrict";
+} from '@nextui-org/react';
+import CollectionCenterService from '../../services/CollectionCenterService';
+import UserService from '../../services/UserService';
+import MaterialService from '../../services/MaterialService';
+import { SelectAdministrator } from './Form/SelectAdministrator';
+import ProvinceService from '../../services/ProvinceService';
+import { SelectProvince } from './Form/SelectProvince';
+import CantonService from '../../services/CantonService';
+import { SelectCanton } from './Form/SelectCanton';
+import DistrictService from '../../services/DistrictService';
+import { SelectDistrict } from './Form/SelectDistrict';
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function UpdateCollectionCenter() {
@@ -41,13 +41,18 @@ export function UpdateCollectionCenter() {
           console.log(response);
           setValores(response.data.results);
           setError(response.error);
+          const selectedIds = response.data.results.materials.map(
+            (item) => item.id_material
+          );
+          setSelectedValues(selectedIds);
+          setValue('materials', selectedIds);
         })
         .catch((error) => {
           if (error instanceof SyntaxError) {
             console.log(error);
             setError(error);
 
-            throw new Error("Respuesta no válida del servidor");
+            throw new Error('Respuesta no válida del servidor');
           }
         });
     }
@@ -57,55 +62,56 @@ export function UpdateCollectionCenter() {
   const materialSchema = yup.object({
     name: yup
       .string()
-      .required("Name is required")
-      .min(5, "Name needs to be at least of 5 characters"),
+      .required('Name is required')
+      .min(5, 'Name needs to be at least of 5 characters'),
     id_province: yup
       .number()
-      .typeError("Province is required")
-      .required("Province is required"),
+      .typeError('Province is required')
+      .required('Province is required'),
     id_canton: yup
       .number()
-      .typeError("Canton is required")
-      .required("Canton is required"),
+      .typeError('Canton is required')
+      .required('Canton is required'),
     id_district: yup
       .number()
-      .typeError("District is required")
-      .required("District is required"),
-    address: yup.string().required("Address is required"),
+      .typeError('District is required')
+      .required('District is required'),
+    address: yup.string().required('Address is required'),
     telephone: yup
       .number()
-      .typeError("Telephone is required")
-      .required("Telephone is required")
-      .min(8, "Name needs to be at least of 8 numbers"),
+      .typeError('Telephone is required')
+      .required('Telephone is required')
+      .min(8, 'Name needs to be at least of 8 numbers'),
     schedule: yup
       .string()
-      .required("Schedule is required")
-      .min(10, "Schedule needs to be at least of 10 characters"),
+      .required('Schedule is required')
+      .min(10, 'Schedule needs to be at least of 10 characters'),
     id_user: yup
       .number()
-      .typeError("Administrator is required")
-      .required("Administrator is required"),
+      .typeError('Administrator is required')
+      .required('Administrator is required'),
     materials: yup
       .array()
-      .required("Material is required")
-      .min(1, "Material is required"),
+      .required('Material is required')
+      .min(1, 'Material is required'),
   });
 
   const {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
-      id_province: "",
-      id_canton: "",
-      id_district: "",
-      address: "",
-      telephone: "",
-      schedule: "",
-      id_user: "",
+      name: '',
+      id_province: '',
+      id_canton: '',
+      id_district: '',
+      address: '',
+      telephone: '',
+      schedule: '',
+      id_user: '',
       active: 1,
       materials: [],
     },
@@ -114,11 +120,11 @@ export function UpdateCollectionCenter() {
     resolver: yupResolver(materialSchema),
   });
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   // Accion submit
   const onSubmit = (DataForm) => {
-    console.log("Formulario:");
+    console.log('Formulario:');
     console.log(DataForm);
 
     try {
@@ -130,19 +136,19 @@ export function UpdateCollectionCenter() {
             setError(response.error);
             //Respuesta al usuario de creación
             if (response.data.results != null) {
-              toast.success(response.data.results, {
+              toast.success('Updated successfully', {
                 duration: 4000,
-                position: "top-center",
+                position: 'top-center',
               });
               // Redireccion a la tabla
-              return navigate("/table-collection-center");
+              return navigate('/table-collection-center');
             }
           })
           .catch((error) => {
             if (error instanceof SyntaxError) {
               console.log(error);
               setError(error);
-              throw new Error("Invalid response from server");
+              throw new Error('Invalid response from server');
             }
           });
       }
@@ -152,7 +158,7 @@ export function UpdateCollectionCenter() {
         console.log(error);
         setError(error);
         setLoadedAdmin(false);
-        throw new Error("Invalid response from server");
+        throw new Error('Invalid response from server');
       }
     }
   };
@@ -176,7 +182,7 @@ export function UpdateCollectionCenter() {
             console.log(error);
             setError(error);
             setLoadedAdmin(false);
-            throw new Error("Invalid response from server");
+            throw new Error('Invalid response from server');
           }
         });
     }
@@ -197,7 +203,7 @@ export function UpdateCollectionCenter() {
           console.log(error);
           setError(error);
           setLoadedMaterial(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   }, []);
@@ -217,7 +223,7 @@ export function UpdateCollectionCenter() {
           console.log(error);
           setError(error);
           setLoadedProvince(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   }, []);
@@ -237,20 +243,20 @@ export function UpdateCollectionCenter() {
             console.log(error);
             setError(error);
             setLoadedCanton(false);
-            throw new Error("Invalid response from server");
+            throw new Error('Invalid response from server');
           }
         });
     }
   }, [values]);
 
   const handleSelectionProvince = (e) => {
-    setValue("id_province", e.target.value, {
+    setValue('id_province', e.target.value, {
       shouldValidate: true,
     });
 
-    setValue("id_canton", "");
+    setValue('id_canton', '');
 
-    setValue("id_district", "");
+    setValue('id_district', '');
 
     setDataDistrict(undefined);
 
@@ -265,7 +271,7 @@ export function UpdateCollectionCenter() {
           console.log(error);
           setError(error);
           setLoadedCanton(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   };
@@ -285,18 +291,18 @@ export function UpdateCollectionCenter() {
             console.log(error);
             setError(error);
             setLoadedDistrict(false);
-            throw new Error("Invalid response from server");
+            throw new Error('Invalid response from server');
           }
         });
     }
   }, [values]);
 
   const handleSelectionCanton = (e) => {
-    setValue("id_canton", e.target.value, {
+    setValue('id_canton', e.target.value, {
       shouldValidate: true,
     });
 
-    setValue("id_district", "");
+    setValue('id_district', '');
 
     DistrictService.getDistrictByCanton(e.target.value)
       .then((response) => {
@@ -309,24 +315,17 @@ export function UpdateCollectionCenter() {
           console.log(error);
           setError(error);
           setLoadedDistrict(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   };
 
   const [SelectedValues, setSelectedValues] = useState(new Set([]));
-  useEffect(() => {
-    if (values) {
-      const selectedIds = values.materials.map((item) => item.id_material);
-      setSelectedValues(selectedIds);
-      setValue("materials", selectedIds);
-    }
-  }, [values]);
-  
 
   const handleSelectionMaterials = (e) => {
-    setSelectedValues(new Set(e.target.value.split(",")));
-    setValue("materials", e.target.value.split(","));
+    setSelectedValues(new Set(e.target.value.split(',')));
+    setValue('materials', e.target.value.split(','));
+    console.log(getValues());
   };
 
   if (
@@ -366,7 +365,7 @@ export function UpdateCollectionCenter() {
                   id="name"
                   label="Name"
                   isInvalid={Boolean(errors.name)}
-                  errorMessage={errors.name ? errors.name.message : " "}
+                  errorMessage={errors.name ? errors.name.message : ' '}
                   isRequired
                   labelPlacement="outside"
                   placeholder="Enter a name for the collection center"
@@ -388,7 +387,7 @@ export function UpdateCollectionCenter() {
                       data={dataProvince}
                       isInvalid={Boolean(errors.id_province)}
                       errorMessage={
-                        errors.id_province ? errors.id_province.message : " "
+                        errors.id_province ? errors.id_province.message : ' '
                       }
                       onChange={handleSelectionProvince}
                     />
@@ -409,7 +408,7 @@ export function UpdateCollectionCenter() {
                       data={dataCanton}
                       isInvalid={Boolean(errors.id_canton)}
                       errorMessage={
-                        errors.id_canton ? errors.id_canton.message : " "
+                        errors.id_canton ? errors.id_canton.message : ' '
                       }
                       onChange={handleSelectionCanton}
                       isDisabled={!loadedCanton || dataCanton === undefined}
@@ -431,10 +430,10 @@ export function UpdateCollectionCenter() {
                       data={dataDistrict}
                       isInvalid={Boolean(errors.id_district)}
                       errorMessage={
-                        errors.id_district ? errors.id_district.message : " "
+                        errors.id_district ? errors.id_district.message : ' '
                       }
                       onChange={(e) =>
-                        setValue("id_district", e.target.value, {
+                        setValue('id_district', e.target.value, {
                           shouldValidate: true,
                         })
                       }
@@ -456,7 +455,7 @@ export function UpdateCollectionCenter() {
                   id="address"
                   label="Address"
                   isInvalid={Boolean(errors.address)}
-                  errorMessage={errors.address ? errors.address.message : " "}
+                  errorMessage={errors.address ? errors.address.message : ' '}
                   isRequired
                   labelPlacement="outside"
                   placeholder="Enter the address of the collection center"
@@ -476,7 +475,7 @@ export function UpdateCollectionCenter() {
                   label="Telephone"
                   isInvalid={Boolean(errors.telephone)}
                   errorMessage={
-                    errors.telephone ? errors.telephone.message : " "
+                    errors.telephone ? errors.telephone.message : ' '
                   }
                   isRequired
                   labelPlacement="outside"
@@ -496,7 +495,7 @@ export function UpdateCollectionCenter() {
                   id="schedule"
                   label="Schedule"
                   isInvalid={Boolean(errors.schedule)}
-                  errorMessage={errors.schedule ? errors.schedule.message : " "}
+                  errorMessage={errors.schedule ? errors.schedule.message : ' '}
                   isRequired
                   labelPlacement="outside"
                   placeholder="Enter the schedule of the collection center (Min. 10 characters)"
@@ -516,9 +515,9 @@ export function UpdateCollectionCenter() {
                     field={field}
                     data={dataAdmin}
                     isInvalid={Boolean(errors.id_user)}
-                    errorMessage={errors.id_user ? errors.id_user.message : " "}
+                    errorMessage={errors.id_user ? errors.id_user.message : ' '}
                     onChange={(e) =>
-                      setValue("id_user", e.target.value, {
+                      setValue('id_user', e.target.value, {
                         shouldValidate: true,
                       })
                     }
@@ -544,7 +543,7 @@ export function UpdateCollectionCenter() {
                         placeholder="Select a material"
                         isInvalid={Boolean(errors.materials)}
                         errorMessage={
-                          errors.materials ? errors.materials.message : " "
+                          errors.materials ? errors.materials.message : ' '
                         }
                         isRequired
                         labelPlacement="outside"

@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
-import MaterialService from "../../services/MaterialService";
-import Grid from "@mui/material/Grid";
-import { Link } from "react-router-dom";
-import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
-import ImageShowService from "../../services/ImageShowService";
-
-function getImgUrl(name) {
-  return new URL(`${name}`, import.meta.url).href;
-}
+import { useEffect, useState } from 'react';
+import MaterialService from '../../services/MaterialService';
+import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
+import { Card, CardBody, CardFooter, Image, Spinner } from '@nextui-org/react';
 
 export function ListMaterial() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
 
   //Error del API
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
-  
+
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
     MaterialService.getMaterials()
@@ -30,23 +25,7 @@ export function ListMaterial() {
       .catch((error) => {
         console.log(error);
         setError(error);
-        throw new Error("Respuesta no válida del servidor");
-      });
-  }, []);
-
-  useEffect(() => {
-    //Llamar al API y obtener la lista de materiales
-    MaterialService.getImages()
-      .then((response) => {
-        setData(response.data.results);
-        console.log(response.data);
-        setError(response.error);
-        setLoaded(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error);
-        throw new Error("Respuesta no válida del servidor");
+        throw new Error('Respuesta no válida del servidor');
       });
   }, []);
 
@@ -67,7 +46,7 @@ export function ListMaterial() {
         {data &&
           data.map(
             (item) => (
-              console.log("Ruta de imagen:", item.image_url),
+              console.log('Ruta de imagen:', item.image_url),
               (
                 <Grid item xs={4} key={item.id_material}>
                   <Link to={`/material/${item.id_material}`}>
@@ -87,7 +66,7 @@ export function ListMaterial() {
                           width="100%"
                           alt={item.title}
                           className="flex flex-col justify-center "
-                          src={getImgUrl(item.image_url)}
+                          src={item.image_url}
                         />
                       </CardBody>
 

@@ -1,45 +1,48 @@
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import MeasurementService from "../../services/MeasurementService";
-import ColorService from "../../services/ColorService";
-import { SelectMeasurement } from "./Form/SelectMeasurement";
-import { SelectColor } from "./Form/SelectColor";
-import MaterialService from "../../services/MaterialService";
-import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
-import UploadFile from "./Form/uploadFile";
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import MeasurementService from '../../services/MeasurementService';
+import ColorService from '../../services/ColorService';
+import { SelectMeasurement } from './Form/SelectMeasurement';
+import { SelectColor } from './Form/SelectColor';
+import MaterialService from '../../services/MaterialService';
+import { Button, Input, Spinner, Textarea } from '@nextui-org/react';
+import UploadFile from './Form/uploadFile';
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function CreateMaterial() {
   const navigate = useNavigate();
-  
+
   // Esquema de validación
   const materialSchema = yup.object({
     name: yup
       .string()
-      .required("Name is required")
-      .min(5, "Name needs to be at least of 5 characters"),
+      .required('Name is required')
+      .min(5, 'Name needs to be at least of 5 characters'),
     description: yup
       .string()
-      .required("Description is required")
-      .min(15, "Description needs to be at least of 15 characters"),
+      .required('Description is required')
+      .min(15, 'Description needs to be at least of 15 characters'),
     unit_cost: yup
       .number()
-      .typeError("Price is required")
-      .required("Price is required")
-      .positive("Price must be a positive number"),
+      .typeError('Price is required')
+      .required('Price is required')
+      .positive('Price must be a positive number'),
     id_color: yup
       .number()
-      .typeError("Color is required")
-      .required("Color is required"),
+      .typeError('Color is required')
+      .required('Color is required'),
     id_measurement: yup
       .number()
-      .typeError("Measurement unit is required")
-      .required("Measurement unit is required"),
-      fileToUpload: yup.mixed().test('required', 'Image required', function (value) {
+      .typeError('Measurement unit is required')
+      .required('Measurement unit is required'),
+    fileToUpload: yup
+      .mixed()
+      .test('required', 'Image required', function (value) {
+        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
         return value instanceof File || (value && value[0] instanceof File);
       }),
   });
@@ -61,14 +64,14 @@ export function CreateMaterial() {
     control,
     handleSubmit,
     setValue,
-    
+
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      id_color: "",
-      id_measurement: "",
+      name: '',
+      description: '',
+      id_color: '',
+      id_measurement: '',
       unit_cost: 0,
       fileToUpload: '',
     },
@@ -77,13 +80,13 @@ export function CreateMaterial() {
     resolver: yupResolver(materialSchema),
   });
 
-  const [error, setError] = useState("");
- 
+  const [error, setError] = useState('');
+
   // Accion submit
   const onSubmit = (DataForm) => {
-    console.log("Formulario:");
+    console.log('Formulario:');
     console.log(DataForm);
-    
+
     try {
       if (materialSchema.isValid()) {
         const dataToSubmit = new FormData();
@@ -92,29 +95,29 @@ export function CreateMaterial() {
           dataToSubmit.append(key, value);
         });
 
-        
+
         dataToSubmit.set('fileToUpload', DataForm.fileToUpload);
-        console.log(dataToSubmit)
+        console.log(dataToSubmit);
         //Crear pelicula
         MaterialService.createMaterial(dataToSubmit)
           .then((response) => {
             console.log(response);
             setError(response.error);
             //Respuesta al usuario de creación
-            if (response.data.results != null) {
-              toast.success(response.data.results, {
+            if (response.status == 200) {
+              toast.success('Created successfully', {
                 duration: 4000,
-                position: "top-center",
+                position: 'top-center',
               });
               // Redireccion a la tabla
-              return navigate("/table-material");
+              return navigate('/table-material');
             }
           })
           .catch((error) => {
             if (error instanceof SyntaxError) {
               console.log(error);
               setError(error);
-              throw new Error("Invalid response from server");
+              throw new Error('Invalid response from server');
             }
           });
       }
@@ -141,7 +144,7 @@ export function CreateMaterial() {
           console.log(error);
           setError(error);
           setLoadedColor(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   }, []);
@@ -161,12 +164,10 @@ export function CreateMaterial() {
           console.log(error);
           setError(error);
           setLoadedMeasurement(false);
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid response from server');
         }
       });
   }, []);
-
-  
 
   if (!loadedColor && !loadedMeasurement)
     return (
@@ -202,7 +203,7 @@ export function CreateMaterial() {
                   id="name"
                   label="Name"
                   isInvalid={Boolean(errors.name)}
-                  errorMessage={errors.name ? errors.name.message : " "}
+                  errorMessage={errors.name ? errors.name.message : ' '}
                   isRequired
                   labelPlacement="outside"
                   placeholder="Enter a name for the material"
@@ -222,7 +223,7 @@ export function CreateMaterial() {
                   label="Description"
                   isInvalid={Boolean(errors.description)}
                   errorMessage={
-                    errors.description ? errors.description.message : " "
+                    errors.description ? errors.description.message : ' '
                   }
                   isRequired
                   labelPlacement="outside"
@@ -248,7 +249,7 @@ export function CreateMaterial() {
                   placeholder="0"
                   isInvalid={Boolean(errors.unit_cost)}
                   errorMessage={
-                    errors.unit_cost ? errors.unit_cost.message : " "
+                    errors.unit_cost ? errors.unit_cost.message : ' '
                   }
                   startContent={
                     <div className="pointer-events-none flex items-center">
@@ -274,10 +275,10 @@ export function CreateMaterial() {
                     data={dataColor}
                     isInvalid={Boolean(errors.id_color)}
                     errorMessage={
-                      errors.id_color ? errors.id_color.message : " "
+                      errors.id_color ? errors.id_color.message : ' '
                     }
                     onChange={(e) =>
-                      setValue("id_color", e.target.value, {
+                      setValue('id_color', e.target.value, {
                         shouldValidate: true,
                       })
                     }
@@ -301,10 +302,10 @@ export function CreateMaterial() {
                     errorMessage={
                       errors.id_measurement
                         ? errors.id_measurement.message
-                        : " "
+                        : ' '
                     }
                     onChange={(e) =>
-                      setValue("id_measurement", e.target.value, {
+                      setValue('id_measurement', e.target.value, {
                         shouldValidate: true,
                       })
                     }
@@ -333,13 +334,10 @@ export function CreateMaterial() {
                       control={control}
                       render={({ field }) => (
                         <>
-                        <UploadFile 
-                        field={field}  onChange={handleFileChange}
-                        
-                        
-                        />
-                         
-                          
+                          <UploadFile
+                            field={field}
+                            onChange={handleFileChange}
+                          />
                         </>
                       )}
                     />
