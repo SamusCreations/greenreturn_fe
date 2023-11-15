@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm, Controller} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,12 @@ import { SelectMeasurement } from "./Form/SelectMeasurement";
 import { SelectColor } from "./Form/SelectColor";
 import MaterialService from "../../services/MaterialService";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
+import UploadFile from "./Form/uploadFile";
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function CreateMaterial() {
   const navigate = useNavigate();
-
+  
   // Esquema de validación
   const materialSchema = yup.object({
     name: yup
@@ -25,7 +26,6 @@ export function CreateMaterial() {
       .string()
       .required("Description is required")
       .min(15, "Description needs to be at least of 15 characters"),
-    image_url: yup.string().required("Image is required"),
     unit_cost: yup
       .number()
       .typeError("Price is required")
@@ -39,37 +39,66 @@ export function CreateMaterial() {
       .number()
       .typeError("Measurement unit is required")
       .required("Measurement unit is required"),
+      fileToUpload: yup.mixed().test('required', 'Image required', function (value) {
+        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
+        return value instanceof File || (value && value[0] instanceof File);
+      }),
   });
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setValue('fileToUpload', reader.result);
+      };
+      reader.readAsDataURL(file);
+      console.log(file);
+    }
+  };
 
   const {
     control,
     handleSubmit,
     setValue,
+    
     formState: { errors },
   } = useForm({
     defaultValues: {
       name: "",
       description: "",
-      image_url: "",
       id_color: "",
       id_measurement: "",
       unit_cost: 0,
+      fileToUpload: '',
     },
     // Asignación de validaciones
     resolver: yupResolver(materialSchema),
   });
 
   const [error, setError] = useState("");
-
+ 
   // Accion submit
   const onSubmit = (DataForm) => {
     console.log("Formulario:");
     console.log(DataForm);
-
+    
     try {
       if (materialSchema.isValid()) {
+        const dataToSubmit = new FormData();
+
+        // Agrega las demás entradas al FormData
+        Object.entries(DataForm).forEach(([key, value]) => {
+          dataToSubmit.append(key, value);
+        });
+
+        // Asegúrate de que el valor de 'Imagen' sea un Blob (archivo) en lugar de una cadena Base64
+        
+        dataToSubmit.set('fileToUpload', DataForm.fileToUpload);
+        console.log(dataToSubmit)
         //Crear pelicula
-        MaterialService.createMaterial(DataForm)
+        MaterialService.createMaterial(dataToSubmit)
           .then((response) => {
             console.log(response);
             setError(response.error);
@@ -139,6 +168,8 @@ export function CreateMaterial() {
       });
   }, []);
 
+  
+
   if (!loadedColor && !loadedMeasurement)
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
@@ -148,7 +179,12 @@ export function CreateMaterial() {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+      <form
+        onSubmit={handleSubmit(onSubmit, onError)}
+        noValidate
+        method="POST"
+        encType="multipart/form-data"
+      >
         <div className="flex flex-col">
           <div className="py-8">
             <h1 className="font-bold text-4xl uppercase">Create material</h1>
@@ -202,33 +238,13 @@ export function CreateMaterial() {
 
           <div className="m-2">
             <Controller
-              name="image_url"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  id="image_url"
-                  label="Image"
-                  isInvalid={Boolean(errors.image_url)}
-                  errorMessage={
-                    errors.image_url ? errors.image_url.message : " "
-                  }
-                  isRequired
-                  labelPlacement="outside"
-                  placeholder="Enter image URL"
-                />
-              )}
-            />
-          </div>
-
-          <div className="m-2">
-            <Controller
               name="unit_cost"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
                   id="unit_cost"
+                  name="unit_cost"
                   type="number"
                   label="Price"
                   placeholder="0"
@@ -298,6 +314,43 @@ export function CreateMaterial() {
                 )}
               />
             )}
+          </div>
+          <div className="col-span-full">
+            <label
+              htmlFor="cover-photo"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Cover photo
+            </label>
+            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+              <div className="text-center">
+                <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                  >
+                    <span>Upload a file</span>
+                    <Controller
+                      name="fileToUpload"
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                        <UploadFile 
+                        field={field}  onChange={handleFileChange}
+                        
+                        
+                        />
+                         
+                          
+                        </>
+                      )}
+                    />
+                  </label>
+                  <p className="pl-1">or drag and drop</p>
+                </div>
+                <p className="text-xs leading-5 text-gray-600">PNG 5MB</p>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-center items-center m-6 border-t">

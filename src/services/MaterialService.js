@@ -24,5 +24,10 @@ class MaterialService {
   updateMaterial(Material) {
     return axios.put(BASE_URL, Material);
   }
+  
+  getImages() {
+    return axios.put(BASE_URL);
+  }
+
 }
 export default new MaterialService();

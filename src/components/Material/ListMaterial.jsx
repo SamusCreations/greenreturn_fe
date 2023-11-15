@@ -3,6 +3,7 @@ import MaterialService from "../../services/MaterialService";
 import Grid from "@mui/material/Grid";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
+import ImageShowService from "../../services/ImageShowService";
 
 function getImgUrl(name) {
   return new URL(`${name}`, import.meta.url).href;
@@ -23,6 +24,22 @@ export function ListMaterial() {
       .then((response) => {
         setData(response.data.results);
         console.log(response.data);
+        setError(response.error);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error);
+        throw new Error("Respuesta no válida del servidor");
+      });
+  }, []);
+
+  useEffect(() => {
+    //Llamar al API y obtener la lista de materiales
+    MaterialService.getImage()
+      .then((response) => {
+        setData(response.data.results);
+        console.log("image show" + response.data);
         setError(response.error);
         setLoaded(true);
       })
