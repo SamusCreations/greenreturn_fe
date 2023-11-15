@@ -25,7 +25,7 @@ export function DetailCollectionCenter() {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     //Llamar al API y obtener una pelicula
-    CCService.getCCById(routeParams.id)
+    CCService.getCollectionCenterById(routeParams.id)
       .then((response) => {
         setData(response.data.results);
         console.log(response.data);

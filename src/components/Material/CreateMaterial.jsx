@@ -131,7 +131,7 @@ export function CreateMaterial() {
   const [dataColor, setDataColor] = useState({});
   const [loadedColor, setLoadedColor] = useState(false);
   useEffect(() => {
-    ColorService.getAvailables()
+    ColorService.getAvailables(-1)
       .then((response) => {
         console.log(response);
         setDataColor(response.data.results);

@@ -16,6 +16,7 @@ import { CreateMaterial } from "./components/Material/CreateMaterial";
 import { UpdateMaterial } from "./components/Material/UpdateMaterial";
 import TableCollectionCenter from "./components/Collection Center/TableCollectionCenter";
 import { CreateCollectionCenter } from "./components/Collection Center/CreateCollectionCenter";
+import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
     element: <CreateMaterial />,
   },
   {
-    path: "/update-material",
+    path: "/update-material/:id",
     element: <UpdateMaterial />,
   },
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
   {
     path: "/create-collection-center",
     element: <CreateCollectionCenter />,
+  },
+  {
+    path: "/update-collection-center/:id",
+    element: <UpdateCollectionCenter />,
   },
 ]);
 

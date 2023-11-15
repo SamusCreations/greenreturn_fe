@@ -172,7 +172,7 @@ export default function Header() {
             </DropdownItem>
             <DropdownItem
               style={{ color: "#11181C" }}
-              key="table_material"
+              key="table_collection_center"
               startContent={icons.store}
               as={Link}
               href="/table-collection-center"

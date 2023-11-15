@@ -151,7 +151,7 @@ export default function TableCollectionCenter() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-collection-center/${item.id_material}`}
+              href={`/update-collection-center/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
@@ -164,7 +164,7 @@ export default function TableCollectionCenter() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-collection-center/${item.id_material}`}
+              href={`/update-collection-center/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Edit" closeDelay={0}>
