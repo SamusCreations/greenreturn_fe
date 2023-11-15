@@ -36,10 +36,10 @@ export function ListMaterial() {
 
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    MaterialService.getImage()
+    MaterialService.getImages()
       .then((response) => {
         setData(response.data.results);
-        console.log("image show" + response.data);
+        console.log(response.data);
         setError(response.error);
         setLoaded(true);
       })

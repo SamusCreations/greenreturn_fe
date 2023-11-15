@@ -40,7 +40,6 @@ export function CreateMaterial() {
       .typeError("Measurement unit is required")
       .required("Measurement unit is required"),
       fileToUpload: yup.mixed().test('required', 'Image required', function (value) {
-        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
         return value instanceof File || (value && value[0] instanceof File);
       }),
   });
