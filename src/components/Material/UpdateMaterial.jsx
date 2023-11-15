@@ -178,7 +178,7 @@ export function UpdateMaterial() {
       <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="flex flex-col">
           <div className="py-8">
-            <h1 className="font-bold text-4xl uppercase">Create material</h1>
+            <h1 className="font-bold text-4xl uppercase">Update material</h1>
             <p className="text-sm">
               This information will be displayed publicly so be careful what you
               write.

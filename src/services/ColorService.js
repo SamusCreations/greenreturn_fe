@@ -14,8 +14,8 @@ class ColorService {
   }
 
 //localhost:81/greenreturn_api/color/1
-  getAvailables() {
-    return axios.get(BASE_URL + "/getAvailables/" + 1);
+  getAvailables(MaterialId) {
+    return axios.get(BASE_URL + "/getAvailables/" + MaterialId);
   }
 
 }

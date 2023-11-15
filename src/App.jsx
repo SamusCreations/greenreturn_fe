@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     element: <CreateMaterial />,
   },
   {
-    path: "/update-material",
+    path: "/update-material/:id",
     element: <UpdateMaterial />,
   },
   {
