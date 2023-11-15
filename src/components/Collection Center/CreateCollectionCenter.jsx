@@ -97,7 +97,7 @@ export function CreateCollectionCenter() {
             setError(response.error);
             //Respuesta al usuario de creación
             if (response.data.results != null) {
-              toast.success(response.data.results, {
+              toast.success('Created successfully', {
                 duration: 4000,
                 position: "top-center",
               });

@@ -18,6 +18,7 @@ import TableCollectionCenter from "./components/Collection Center/TableCollectio
 import { CreateCollectionCenter } from "./components/Collection Center/CreateCollectionCenter";
 import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -89,7 +90,7 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Layout>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} />  
       </Layout>
     </div>
   );

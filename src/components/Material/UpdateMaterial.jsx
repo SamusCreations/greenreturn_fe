@@ -100,7 +100,7 @@ export function UpdateMaterial() {
             setError(response.error);
             //Respuesta al usuario de creación
             if (response.data.results != null) {
-              toast.success(response.data.results, {
+              toast.success('Updated successfully', {
                 duration: 4000,
                 position: "top-center",
               });
