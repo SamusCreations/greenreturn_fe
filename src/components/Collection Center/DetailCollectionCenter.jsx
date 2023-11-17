@@ -1,16 +1,8 @@
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Grid, Link } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
 import CCService from "../../services/CollectionCenterService";
 import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
-import { Store } from "../../assets/Icons";
-
-function getImgUrl(name) {
-  return new URL(`${name}`, import.meta.url).href;
-}
+import { HomeIcon } from "../../assets/Icons";
 
 export function DetailCollectionCenter() {
   const routeParams = useParams();
@@ -25,7 +17,7 @@ export function DetailCollectionCenter() {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     //Llamar al API y obtener una pelicula
-    CCService.getCCById(routeParams.id)
+    CCService.getCollectionCenterById(routeParams.id)
       .then((response) => {
         setData(response.data.results);
         console.log(response.data);
@@ -51,110 +43,73 @@ export function DetailCollectionCenter() {
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">Collection Center Detail</h1>
+        <h1 className="capitalize">Collection Center Detail</h1>
       </div>
-      <Container component="main" sx={{ mt: 8, mb: 2 }}>
+      <div>
         {data && (
-          <Grid container spacing={2}>
-            <Grid
-              item={true}
-              xs={5}
-              className="flex items-center justify-center"
-            >
-              <Store className="text-primary" fill="currentColor" size={300} />
-            </Grid>
-            <Grid
-              item={true}
-              xs={7}
-              className="flex flex-col items-center justify-center"
-            >
+          <div className="flex flex-col sm:flex-row">
+            <div className="flex-1">
+              <HomeIcon
+                className="text-primary mx-auto"
+                fill="currentColor"
+                size={300}
+              />
+            </div>
+            <div className="flex-1 items-center justify-center px-4">
               <div>
-                <Typography variant="h4" component="h1" gutterBottom>
+                <p className="text-4xl font-bold capitalize py-2">
                   {data.name}
-                </Typography>
-                <Typography variant="subtitle1" component="h1" gutterBottom>
-                  <Box fontWeight="bold" display="inline">
-                    Location:
-                  </Box>{" "}
-                  {data.address}
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  display="block"
-                >
-                  <Box fontWeight="bold" display="inline">
-                    Telephone:
-                  </Box>{" "}
+                </p>
+                <p className="py-2 text-lg font-medium">
+                  <span className="font-bold"> Location: </span>
+                  {`${data.address}, ${data.district.name}, ${data.canton.name}, ${data.province.name}`}
+                </p>
+                <p className="py-2 text-lg font-medium">
+                <span className="font-bold"> Telephone: </span>
                   {data.telephone}
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  display="block"
-                >
-                  <Box fontWeight="bold" display="inline">
-                    Schedule:
-                  </Box>{" "}
+                </p>
+                <p className="py-2 text-lg font-medium">
+                <span className="font-bold"> Schedule: </span>
                   {data.schedule}
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  display="block"
-                >
-                  <Box fontWeight="bold" display="inline">
-                    Admin:
-                  </Box>{" "}
+                </p>
+                <p className="py-2 text-lg font-medium">
+                <span className="font-bold"> Administrator: </span>
                   {data.administrator.name} {data.administrator.surname}
-                </Typography>
+                </p>
               </div>
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         )}
-        <Grid container sx={{ p: 2 }} spacing={3}>
-          {data &&
-            data.materials.map(
-              (item) => (
-                console.log("Ruta de imagen:", item.image_url),
-                (
-                  <Grid item xs={4} key={item.id_material}>
-                    <Link to={`/material/${item.id_material}`}>
-                      <Card
-                        shadow="sm"
-                        className=" flex flex-col w-full max-h-auto"
-                        isPressable
-                        onPress={() => console.log("a")}
-                      >
-                        <CardBody
-                          id="a"
-                          style={{ backgroundColor: item.color_value }}
-                          className={`overflow-visible p-0 rounded-lg`}
-                        >
-                          <Image
-                            shadow="sm"
-                            radius="lg"
-                            width="100%"
-                            alt={item.title}
-                            className="flex flex-col justify-center "
-                            src={getImgUrl(item.image_url)}
-                          />
-                        </CardBody>
-
-                        <CardFooter className="text-small justify-between">
-                          <b>{item.name}</b>
-                          <p className="text-default-500">
-                            {item.unit_cost} Ecocoins
-                          </p>
-                        </CardFooter>
-                      </Card>
-                    </Link>
-                  </Grid>
-                )
-              )
-            )}
-        </Grid>
-      </Container>
+        <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-4">
+          {data.materials.map((item, index) => (
+            <Link
+              to={`/material/${item.id_material}`}
+              key={index}
+              className="p-2 sm:p-0"
+            >
+              <Card shadow="sm" key={index} isPressable className="w-full">
+                <CardBody
+                  className="overflow-visible p-0 rounded-xl w-full"
+                  style={{ backgroundColor: item.color_value }}
+                >
+                  <Image
+                    shadow="sm"
+                    radius="lg"
+                    width="100%"
+                    alt={item.name}
+                    className="w-full object-cover h-[140px]"
+                    src={item.image_url}
+                  />
+                </CardBody>
+                <CardFooter className="text-small justify-between">
+                  <b>{item.name}</b>
+                  <p className="text-default-500">{item.unit_cost} Ecocoins</p>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

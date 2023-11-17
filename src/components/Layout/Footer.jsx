@@ -14,8 +14,24 @@ export function Footer() {
         />
         <div className="justify-center items-center text-center">
           <p className="text-small text-default-400 mb-4">
-            Developed by <a className="font-medium" href="https://github.com/SamusCreations">SamusCreations</a> &{" "}
-            <a className="font-medium" href="https://github.com/Luijaxx" >Luijaxx</a>
+            Developed by{" "}
+            <a
+              className="font-medium"
+              href="https://github.com/SamusCreations"
+              target="_blank"
+              rel="noreferrer"
+            >
+              SamusCreations
+            </a>{" "}
+            &{" "}
+            <a
+              className="font-medium"
+              href="https://github.com/Luijaxx"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Luijaxx
+            </a>
           </p>
         </div>
       </div>

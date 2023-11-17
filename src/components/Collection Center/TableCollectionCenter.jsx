@@ -16,6 +16,7 @@ import {
   Tooltip,
   Link,
   Spinner,
+  Chip,
 } from "@nextui-org/react";
 import {
   PlusIcon,
@@ -25,13 +26,14 @@ import {
   EditIcon,
   DeleteIcon,
 } from "../../assets/Icons";
-import MaterialService from "../../services/MaterialService";
+import CollectionCenterService from "../../services/CollectionCenterService";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
-  "color_name",
-  "measurement_name",
-  "unit_cost",
+  "admin_name",
+  "address",
+  "telephone",
+  "active",
   "actions",
 ];
 
@@ -40,20 +42,24 @@ function capitalize(str) {
 }
 
 const columns = [
-  { name: "ID", uid: "id_material", sortable: true },
+  { name: "ID", uid: "id_collection_center", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
-  { name: "DESCRIPTION", uid: "description" },
-  { name: "COLOR ID", uid: "id_color", sortable: true },
-  { name: "COLOR", uid: "color_name" },
-  { name: "COLOR VALUE", uid: "color_value" },
-  { name: "MEASUREMENT ID", uid: "id_measurement", sortable: true },
-  { name: "MEASUREMENT", uid: "measurement_name" },
-  { name: "MEASUREMENT VALUE", uid: "measurement_value" },
-  { name: "PRICE", uid: "unit_cost", sortable: true },
+  { name: "ADMIN", uid: "admin_name", sortable: true },
+  { name: "PROVINCE ID", uid: "id_province" },
+  { name: "CANTON ID", uid: "id_canton" },
+  { name: "DISTRICT ID", uid: "id_district" },
+  { name: "ADDRESS", uid: "address" },
+  { name: "TELEPHONE", uid: "telephone" },
+  { name: "SCHEDULE", uid: "schedule" },
+  { name: "ADMIN ID", uid: "id_user" },
+  { name: "PROVINCE", uid: "province_name", sortable: true },
+  { name: "CANTON", uid: "canton_name", sortable: true },
+  { name: "DISTRICT", uid: "district_name", sortable: true },
+  { name: "STATUS", uid: "active", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function TableMaterial() {
+export default function TableCollectionCenter() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -61,7 +67,7 @@ export default function TableMaterial() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "id_material",
+    column: "id_collection_center",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -75,7 +81,7 @@ export default function TableMaterial() {
 
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    MaterialService.getMaterials()
+    CollectionCenterService.getCollectionCenter()
       .then((response) => {
         const results = response.data.results;
 
@@ -138,15 +144,18 @@ export default function TableMaterial() {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "color_name":
+      case "address":
+        return `${item.address}, ${item.district_name}, ${item.canton_name}, ${item.province_name}`;
+      case "active":
         return (
-          <div className="flex">
-            <div
-              className="w-5 h-5 rounded-full mx-1"
-              style={{ backgroundColor: item.color_value }}
-            />
-            {item.color_name}
-          </div>
+          <Chip
+            className="capitalize"
+            color={item.active == 1? "primary" : "danger"}
+            size="sm"
+            variant="flat"
+          >
+            {item.active == 1? "Active" : "Paused"}
+          </Chip>
         );
       case "actions":
         return (
@@ -155,7 +164,7 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-material/${item.id_material}`}
+              href={`/update-collection-center/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
@@ -168,7 +177,7 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-material/${item.id_material}`}
+              href={`/update-collection-center/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Edit" closeDelay={0}>
@@ -267,15 +276,19 @@ export default function TableMaterial() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />} as={Link} 
-              href={`/create-material`}>
+            <Button
+              color="primary"
+              endContent={<PlusIcon />}
+              as={Link}
+              href={`/create-collection-center`}
+            >
               Add New
             </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {data.length} materials
+            Total {data.length} collection centers
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -350,7 +363,7 @@ export default function TableMaterial() {
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">Materials</h1>
+        <h1 className="uppercase">collection centers</h1>
       </div>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -381,7 +394,7 @@ export default function TableMaterial() {
         </TableHeader>
         <TableBody emptyContent={"No data found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id_material}>
+            <TableRow key={item.id_collection_center}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

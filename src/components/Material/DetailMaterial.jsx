@@ -1,15 +1,8 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import MaterialService from '../../services/MaterialService';
-import { Grid } from '@mui/material';
-import { Spinner } from '@nextui-org/react';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import MaterialService from "../../services/MaterialService";
+import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
 
-function getImgUrl(name) {
-  return new URL(`${name}`, import.meta.url).href;
-}
 export function DetailMaterial() {
   const routeParams = useParams();
   console.log(routeParams);
@@ -17,7 +10,7 @@ export function DetailMaterial() {
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);
   //Error del API
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -33,7 +26,7 @@ export function DetailMaterial() {
       .catch((error) => {
         console.log(error);
         setError(error);
-        throw new Error('Respuesta no válida del servidor');
+        throw new Error("Respuesta no válida del servidor");
       });
   }, [routeParams.id]);
 
@@ -50,50 +43,46 @@ export function DetailMaterial() {
       <div className="font-bold text-4xl py-8">
         <h1 className="uppercase">Material Detail</h1>
       </div>
-      <Container component="main" sx={{ mt: 8, mb: 2 }}>
+      <div>
         {data && (
-          <Grid container spacing={2}>
-            <Grid item={true} xs={5}>
-              <Box
-                component="img"
-                sx={{
-                  borderRadius: '4%',
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-                alt="Ticket pelicula"
-                src={getImgUrl(data.image_url)}
-              />
-            </Grid>
-            <Grid item={true} xs={7}>
-              <Typography variant="h4" component="h1" gutterBottom>
+          <div className="flex flex-col sm:flex-row">
+            <div className="flex-1 w-full">
+              <Card shadow="sm" className="w-1/2 mx-auto my-auto">
+                <CardBody
+                  className="overflow-visible p-0 rounded-xl w-full"
+                  style={{ backgroundColor: data.color.value }}
+                >
+                  <Image
+                    shadow="sm"
+                    radius="lg"
+                    width="100%"
+                    alt={data.name}
+                    className="w-full object-cover h-[140px]"
+                    src={data.image_url}
+                  />
+                </CardBody>
+                <CardFooter className="text-small justify-between"></CardFooter>
+              </Card>
+            </div>
+            <div className="flex-1  w-full p-2">
+              <p className="text-4xl font-bold capitalize py-2">
                 {data.name}
-              </Typography>
-              <Typography variant="subtitle1" component="h1" gutterBottom>
-                {data.measurement.name}
-              </Typography>
-              <Typography component="span" variant="subtitle1" display="block">
-                <Box fontWeight="bold" display="inline">
-                  Description:
-                </Box>{' '}
+              </p>
+              <p className="text-lg font-medium text-justify py-2">
                 {data.description}
-              </Typography>
-              <Typography component="span" variant="subtitle1" display="block">
-                <Box fontWeight="bold" display="inline">
-                  Unit cost:
-                </Box>{' '}
+              </p>
+              <p className="py-2 text-lg font-medium">
+                <span className="font-bold">Measurement: </span>
+                {data.measurement.name}
+              </p>
+              <p className="py-2 text-lg font-medium">
+                <span className="font-bold">Price: </span>
                 {data.unit_cost} ecocoins
-              </Typography>
-              <Typography component="span" variant="subtitle1" display="block">
-                <Box fontWeight="bold" display="inline">
-                  Color:
-                </Box>{' '}
-                {data.color.name} {data.color.value}
-              </Typography>
-            </Grid>
-          </Grid>
+              </p>
+            </div>
+          </div>
         )}
-      </Container>
+      </div>
     </div>
   );
 }

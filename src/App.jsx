@@ -12,6 +12,12 @@ import { DetailHistory } from "./components/History/DetailHistory";
 import { DetailCollectionCenter } from "./components/Collection Center/DetailCollectionCenter";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TableMaterial from "./components/Material/TableMaterial";
+import { CreateMaterial } from "./components/Material/CreateMaterial";
+import { UpdateMaterial } from "./components/Material/UpdateMaterial";
+import TableCollectionCenter from "./components/Collection Center/TableCollectionCenter";
+import { CreateCollectionCenter } from "./components/Collection Center/CreateCollectionCenter";
+import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
+
 
 const router = createBrowserRouter([
   {
@@ -43,11 +49,11 @@ const router = createBrowserRouter([
     element: <DetailHistory />,
   },
   {
-    path: "/CC",
+    path: "/collection-center",
     element: <ListCollectionCenter />,
   },
   {
-    path: "/CC/:id",
+    path: "/collection-center/:id",
     element: <DetailCollectionCenter />,
   },
   {
@@ -58,13 +64,33 @@ const router = createBrowserRouter([
     path: "/table-material",
     element: <TableMaterial />,
   },
+  {
+    path: "/create-material",
+    element: <CreateMaterial />,
+  },
+  {
+    path: "/update-material/:id",
+    element: <UpdateMaterial />,
+  },
+  {
+    path: "/table-collection-center",
+    element: <TableCollectionCenter />,
+  },
+  {
+    path: "/create-collection-center",
+    element: <CreateCollectionCenter />,
+  },
+  {
+    path: "/update-collection-center/:id",
+    element: <UpdateCollectionCenter />,
+  },
 ]);
 
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Layout>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} />  
       </Layout>
     </div>
   );

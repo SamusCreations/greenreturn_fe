@@ -8,7 +8,7 @@ class MaterialService {
     return axios.get(BASE_URL);
   }
 
-//localhost:81/greenreturn_api/material/1
+  //localhost:81/greenreturn_api/material/1
   getMaterialById(materialId) {
     return axios.get(BASE_URL + "/" + materialId);
   }
@@ -16,5 +16,18 @@ class MaterialService {
   getColorByMaterialId(colorId) {
     return axios.get(BASE_URL + "/" + colorId);
   }
+
+  createMaterial(Material) {
+    return axios.post(BASE_URL, Material);
+  }
+
+  updateMaterial(Material) {
+    return axios.put(BASE_URL, Material);
+  }
+  
+  getImages() {
+    return axios.put(BASE_URL);
+  }
+
 }
 export default new MaterialService();
