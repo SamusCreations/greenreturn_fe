@@ -49,11 +49,11 @@ const router = createBrowserRouter([
     element: <DetailHistory />,
   },
   {
-    path: "/CC",
+    path: "/collection-center",
     element: <ListCollectionCenter />,
   },
   {
-    path: "/CC/:id",
+    path: "/collection-center/:id",
     element: <DetailCollectionCenter />,
   },
   {

@@ -11,7 +11,7 @@ export function Home() {
           alt="recycling image"
           src={recycling}
           radius="none"
-          className="animate-float max-h-[350px] lg:max-h-[700px]"
+          className="animate-float max-h-[350px] max-w-[350px] lg:max-h-[700px] lg:max-w-[700px]"
         />
         <Image
           width={700}

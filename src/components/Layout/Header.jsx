@@ -23,7 +23,9 @@ import {
   Server,
   TagUser,
   Scale,
-  Store,
+  HomeIcon,
+  MaterialIcon,
+  CouponIcon,
 } from "../../assets/Icons.jsx";
 import logo from "../../assets/greenreturn_logo.png";
 
@@ -40,7 +42,9 @@ export default function Header() {
     flash: <Flash className="text-primary" fill="currentColor" size={30} />,
     server: <Server className="text-success" fill="currentColor" size={30} />,
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
-    store: <Store className="text-primary" fill="currentColor" size={30} />,
+    store: <HomeIcon className="text-primary" fill="currentColor" size={30} />,
+    material: <MaterialIcon className="text-warning" fill="currentColor" size={30} />,
+    coupon: <CouponIcon className="text-danger" fill="currentColor" size={30} />,
   };
 
   const menuItems = [
@@ -124,7 +128,7 @@ export default function Header() {
             <DropdownItem
               style={{ color: "#11181C" }}
               key="materials"
-              startContent={icons.scale}
+              startContent={icons.material}
               as={Link}
               href="/material"
             >
@@ -136,11 +140,11 @@ export default function Header() {
               key="collection_centers"
               startContent={icons.store}
               as={Link}
-              href="/CC"
+              href="/collection-center"
             >
               Collection Centers
             </DropdownItem>
-            <DropdownItem key="coupons" startContent={icons.flash}>
+            <DropdownItem key="coupons" startContent={icons.coupon}>
               Coupons
             </DropdownItem>
             <DropdownItem
@@ -164,7 +168,7 @@ export default function Header() {
             <DropdownItem
               style={{ color: "#11181C" }}
               key="table_material"
-              startContent={icons.scale}
+              startContent={icons.material}
               as={Link}
               href="/table-material"
             >

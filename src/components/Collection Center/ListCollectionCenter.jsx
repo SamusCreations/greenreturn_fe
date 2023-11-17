@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -10,7 +9,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import CCService from "../../services/CollectionCenterService";
-import { Store } from "../../assets/Icons";
+import { HomeIcon } from "../../assets/Icons";
 
 export function ListCollectionCenter() {
   //Resultado de consumo del API, respuesta
@@ -49,12 +48,12 @@ export function ListCollectionCenter() {
       <div className="font-bold text-4xl py-8">
         <h1 className="uppercase">Collection Centers</h1>
       </div>
-      <Grid container sx={{ p: 2 }} spacing={3}>
+      <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-3">
         {data &&
           data.map(
             (item) => (
               (
-                <Grid item xs={4} key={item.id_collection_center}>
+                <div key={item.id_collection_center} className="p-2 sm:p-0">
                   <Card className="w-full h-[300px] col-span-12 sm:col-span-5">
                     <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
                       <p className="text-sm text-black uppercase font-bold">
@@ -66,14 +65,14 @@ export function ListCollectionCenter() {
                     </CardHeader>
 
                     <CardBody className="overflow-visible p-0 mx-auto">
-                      <Store
+                      <HomeIcon
                         className="flex justify-center z-0 mx-auto my-auto max-w-xs max-h-xs  object-cover text-primary"
                         fill="currentColor"
                         size={225}
                       />
                     </CardBody>
                     <CardFooter className="absolute bottom-0 z-10 justify-between">
-                      <Link to={`/CC/${item.id_collection_center}`}>
+                      <Link to={`/collection-center/${item.id_collection_center}`}>
                         <Button
                           className="text-tiny"
                           color="primary"
@@ -85,11 +84,11 @@ export function ListCollectionCenter() {
                       </Link>
                     </CardFooter>
                   </Card>
-                </Grid>
+                </div>
               )
             )
           )}
-      </Grid>
+      </div>
     </div>
   );
 }

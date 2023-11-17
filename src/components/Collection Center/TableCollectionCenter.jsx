@@ -16,6 +16,7 @@ import {
   Tooltip,
   Link,
   Spinner,
+  Chip,
 } from "@nextui-org/react";
 import {
   PlusIcon,
@@ -32,6 +33,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "admin_name",
   "address",
   "telephone",
+  "active",
   "actions",
 ];
 
@@ -42,6 +44,7 @@ function capitalize(str) {
 const columns = [
   { name: "ID", uid: "id_collection_center", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
+  { name: "ADMIN", uid: "admin_name", sortable: true },
   { name: "PROVINCE ID", uid: "id_province" },
   { name: "CANTON ID", uid: "id_canton" },
   { name: "DISTRICT ID", uid: "id_district" },
@@ -49,11 +52,10 @@ const columns = [
   { name: "TELEPHONE", uid: "telephone" },
   { name: "SCHEDULE", uid: "schedule" },
   { name: "ADMIN ID", uid: "id_user" },
-  { name: "STATUS", uid: "active" },
   { name: "PROVINCE", uid: "province_name", sortable: true },
   { name: "CANTON", uid: "canton_name", sortable: true },
   { name: "DISTRICT", uid: "district_name", sortable: true },
-  { name: "ADMIN", uid: "admin_name", sortable: true },
+  { name: "STATUS", uid: "active", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
 
@@ -144,6 +146,17 @@ export default function TableCollectionCenter() {
     switch (columnKey) {
       case "address":
         return `${item.address}, ${item.district_name}, ${item.canton_name}, ${item.province_name}`;
+      case "active":
+        return (
+          <Chip
+            className="capitalize"
+            color={item.active == 1? "primary" : "danger"}
+            size="sm"
+            variant="flat"
+          >
+            {item.active == 1? "Active" : "Paused"}
+          </Chip>
+        );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
