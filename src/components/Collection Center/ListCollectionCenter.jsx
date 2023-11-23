@@ -54,7 +54,7 @@ export function ListCollectionCenter() {
             (item) => (
               (
                 <div key={item.id_collection_center} className="p-2 sm:p-0">
-                  <Card className="w-full h-[300px] col-span-12 sm:col-span-5">
+                  <Card className="w-full h-[300px] col-span-12 sm:col-span-5 animate-appearance-in">
                     <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
                       <p className="text-sm text-black uppercase font-bold">
                         {item.name}

@@ -50,7 +50,7 @@ export function DetailCollectionCenter() {
           <div className="flex flex-col sm:flex-row">
             <div className="flex-1">
               <HomeIcon
-                className="text-primary mx-auto"
+                className="text-primary mx-auto animate-appearance-in"
                 fill="currentColor"
                 size={300}
               />
@@ -80,14 +80,14 @@ export function DetailCollectionCenter() {
             </div>
           </div>
         )}
-        <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-4">
+        <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-4 py-4">
           {data.materials.map((item, index) => (
             <Link
               to={`/material/${item.id_material}`}
               key={index}
               className="p-2 sm:p-0"
             >
-              <Card shadow="sm" key={index} isPressable className="w-full">
+              <Card shadow="sm" key={index} isPressable className="w-full animate-appearance-in">
                 <CardBody
                   className="overflow-visible p-0 rounded-xl w-full"
                   style={{ backgroundColor: item.color_value }}
@@ -97,7 +97,7 @@ export function DetailCollectionCenter() {
                     radius="lg"
                     width="100%"
                     alt={item.name}
-                    className="w-full object-cover h-[140px]"
+                    className="w-full object-cover"
                     src={item.image_url}
                   />
                 </CardBody>

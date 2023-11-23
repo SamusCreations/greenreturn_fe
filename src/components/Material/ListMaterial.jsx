@@ -44,7 +44,7 @@ export function ListMaterial() {
       <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-4">
         {data.map((item, index) => (
           <Link to={`/material/${item.id_material}`} key={index} className="p-2 sm:p-0">
-            <Card shadow="sm" key={index} isPressable className="w-full">
+            <Card shadow="sm" key={index} isPressable className="w-full animate-appearance-in">
               <CardBody
                 className="overflow-visible p-0 rounded-xl w-full"
                 style={{ backgroundColor: item.color_value }}
@@ -54,7 +54,7 @@ export function ListMaterial() {
                   radius="lg"
                   width="100%"
                   alt={item.name}
-                  className="w-full object-cover h-[140px]"
+                  className="w-full object-cover"
                   src={item.image_url}
                 />
               </CardBody>

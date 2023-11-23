@@ -47,7 +47,7 @@ export function DetailMaterial() {
         {data && (
           <div className="flex flex-col sm:flex-row">
             <div className="flex-1 w-full">
-              <Card shadow="sm" className="w-1/2 mx-auto my-auto">
+              <Card shadow="sm" className="w-1/2 mx-auto my-auto animate-appearance-in">
                 <CardBody
                   className="overflow-visible p-0 rounded-xl w-full"
                   style={{ backgroundColor: data.color.value }}
@@ -57,7 +57,7 @@ export function DetailMaterial() {
                     radius="lg"
                     width="100%"
                     alt={data.name}
-                    className="w-full object-cover h-[140px]"
+                    className="w-full object-cover"
                     src={data.image_url}
                   />
                 </CardBody>
