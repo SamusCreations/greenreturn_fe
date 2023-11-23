@@ -22,7 +22,7 @@ class MaterialService {
   }
 
   updateMaterial(Material) {
-    return axios.put(BASE_URL, Material);
+    return axios.post(BASE_URL + "/updateMaterial/", Material);
   }
   
   getImages() {

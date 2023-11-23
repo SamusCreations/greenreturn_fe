@@ -63,7 +63,9 @@ export function UpdateMaterial() {
       .number()
       .typeError("Measurement unit is required")
       .required("Measurement unit is required"),
-      fileToUpload: yup.mixed().test('required', 'Image required', function (value) {
+    fileToUpload: yup
+      .mixed()
+      .test("required", "Image required", function (value) {
         return value instanceof File || (value && value[0] instanceof File);
       }),
   });
@@ -74,7 +76,7 @@ export function UpdateMaterial() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setValue('fileToUpload', reader.result);
+        setValue("fileToUpload", reader.result);
       };
       reader.readAsDataURL(file);
       console.log(file);
@@ -88,10 +90,10 @@ export function UpdateMaterial() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      id_color: "",
-      id_measurement: "",
+      name: '',
+      description: '',
+      id_color: '',
+      id_measurement: '',
       unit_cost: 0,
       fileToUpload: '',
     },
@@ -114,16 +116,15 @@ export function UpdateMaterial() {
         Object.entries(DataForm).forEach(([key, value]) => {
           dataToSubmit.append(key, value);
         });
-
-        
-        dataToSubmit.set('fileToUpload', DataForm.fileToUpload);
+        dataToSubmit.append("_method", "put");
+        dataToSubmit.set("fileToUpload", DataForm.fileToUpload);
         MaterialService.updateMaterial(dataToSubmit)
           .then((response) => {
             console.log(response);
             setError(response.error);
             //Respuesta al usuario de creación
             if (response.data.results != null) {
-              toast.success('Updated successfully', {
+              toast.success("Updated successfully", {
                 duration: 4000,
                 position: "top-center",
               });
@@ -198,7 +199,9 @@ export function UpdateMaterial() {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit, onError)} 
+       method="POST"
+       encType="multipart/form-data">
         <div className="flex flex-col">
           <div className="py-8">
             <h1 className="font-bold text-4xl uppercase">Update material</h1>
@@ -245,27 +248,6 @@ export function UpdateMaterial() {
                   placeholder="Enter a description for the material (Min. 15 characters)"
                   disableAutosize
                   disableAnimation
-                />
-              )}
-            />
-          </div>
-
-          <div className="m-2">
-            <Controller
-              name="image_url"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  id="image_url"
-                  label="Image"
-                  isInvalid={Boolean(errors.image_url)}
-                  errorMessage={
-                    errors.image_url ? errors.image_url.message : " "
-                  }
-                  isRequired
-                  labelPlacement="outside"
-                  placeholder="Enter image URL"
                 />
               )}
             />
@@ -370,13 +352,10 @@ export function UpdateMaterial() {
                       control={control}
                       render={({ field }) => (
                         <>
-                        <UploadFile 
-                        field={field}  onSubmit={handleFileChange}
-                        
-                        
-                        />
-                         
-                          
+                          <UploadFile
+                            field={field}
+                            onSubmit={handleFileChange}
+                          />
                         </>
                       )}
                     />
