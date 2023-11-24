@@ -32,7 +32,7 @@ export function SelectCanton({
       items={data}
       label="Canton"
       placeholder="Select a canton"
-      selectedKeys={field.value}
+      selectedKeys={field.value ? [field.value] : []}
       isInvalid={isInvalid}
       errorMessage={errorMessage}
       isRequired

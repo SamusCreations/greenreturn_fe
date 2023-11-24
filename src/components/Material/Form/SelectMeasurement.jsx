@@ -17,7 +17,7 @@ export function SelectMeasurement({ field, data, isInvalid, errorMessage }) {
           items={data}
           label="Measurements"
           placeholder="Select a measurement unit"
-          selectedKeys={field.value}
+          selectedKeys={field.value ? [field.value] : []}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired

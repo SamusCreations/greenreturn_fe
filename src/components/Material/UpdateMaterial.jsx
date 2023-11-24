@@ -10,7 +10,7 @@ import { SelectMeasurement } from "./Form/SelectMeasurement";
 import { SelectColor } from "./Form/SelectColor";
 import MaterialService from "../../services/MaterialService";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
-import UploadFile from "./Form/uploadFile";
+import {UploadFile} from "./Form/uploadFile";
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function UpdateMaterial() {
@@ -90,12 +90,12 @@ export function UpdateMaterial() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: '',
-      description: '',
-      id_color: '',
-      id_measurement: '',
+      name: "",
+      description: "",
+      id_color: "",
+      id_measurement: "",
       unit_cost: 0,
-      fileToUpload: '',
+      fileToUpload: "",
     },
     values,
     // Asignación de validaciones
@@ -199,9 +199,11 @@ export function UpdateMaterial() {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit, onError)} 
-       method="POST"
-       encType="multipart/form-data">
+      <form
+        onSubmit={handleSubmit(onSubmit, onError)}
+        method="POST"
+        encType="multipart/form-data"
+      >
         <div className="flex flex-col">
           <div className="py-8">
             <h1 className="font-bold text-4xl uppercase">Update material</h1>
@@ -332,39 +334,16 @@ export function UpdateMaterial() {
             )}
           </div>
 
-          <div className="col-span-full">
-            <label
-              htmlFor="cover-photo"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Cover photo
-            </label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-              <div className="text-center">
-                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                  >
-                    <span>Upload a file</span>
-                    <Controller
-                      name="fileToUpload"
-                      control={control}
-                      render={({ field }) => (
-                        <>
-                          <UploadFile
-                            field={field}
-                            onSubmit={handleFileChange}
-                          />
-                        </>
-                      )}
-                    />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs leading-5 text-gray-600">PNG 5MB</p>
-              </div>
-            </div>
+          <div className="m-2">
+            <Controller
+              name="fileToUpload"
+              control={control}
+              render={({ field }) => (
+                <>
+                  <UploadFile field={field} onSubmit={handleFileChange} image_url={values?.image_url}/>
+                </>
+              )}
+            />
           </div>
 
           <div className="flex justify-center items-center m-6 border-t">
