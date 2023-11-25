@@ -22,7 +22,7 @@ export function SelectProvince({ field, data, isInvalid, errorMessage, onChange 
           items={data}
           label="Province"
           placeholder="Select a province"
-          selectedKeys={field.value}
+          selectedKeys={field.value ? [field.value] : []}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired

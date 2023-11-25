@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import MaterialService from "../../services/MaterialService";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
+import fallback from "../../assets/fallback.png";
 
 export function ListMaterial() {
   //Resultado de consumo del API, respuesta
@@ -38,33 +39,50 @@ export function ListMaterial() {
 
   return (
     <div>
-      <div className="font-bold text-4xl py-8">
+      <div className="font-bold text-4xl py-8 mx-2">
         <h1 className="uppercase">Materials</h1>
       </div>
-      <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-4">
-        {data.map((item, index) => (
-          <Link to={`/material/${item.id_material}`} key={index} className="p-2 sm:p-0">
-            <Card shadow="sm" key={index} isPressable className="w-full">
-              <CardBody
-                className="overflow-visible p-0 rounded-xl w-full"
-                style={{ backgroundColor: item.color_value }}
+      {!data && (
+        <div className="text-center ">
+          <p>Not available yet</p>
+        </div>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+        {data &&
+          data.map((item, index) => (
+            <Link
+              to={`/material/${item.id_material}`}
+              key={index}
+              className="p-2 sm:p-0 max-w-[300px] mx-auto"
+            >
+              <Card
+                shadow="sm"
+                key={index}
+                isPressable
+                className="w-full animate-appearance-in"
               >
-                <Image
-                  shadow="sm"
-                  radius="lg"
-                  width="100%"
-                  alt={item.name}
-                  className="w-full object-cover h-[140px]"
-                  src={item.image_url}
-                />
-              </CardBody>
-              <CardFooter className="text-small justify-between">
-                <b>{item.name}</b>
-                <p className="text-default-500">{item.unit_cost} Ecocoins</p>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
+                <CardBody
+                  className="overflow-visible p-0 rounded-xl"
+                  style={{ backgroundColor: item.color_value }}
+                >
+                  <Image
+                    shadow="sm"
+                    radius="lg"
+                    alt={item.name}
+                    src={item.image_url}
+                    className="mx-auto w-full object-cover"
+                    fallbackSrc={fallback}
+                    isBlurred
+                    isZoomed
+                  />
+                </CardBody>
+                <CardFooter className="text-small justify-between">
+                  <b>{item.name}</b>
+                  <p className="text-default-500">{item.unit_cost} Ecocoins</p>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
       </div>
     </div>
   );

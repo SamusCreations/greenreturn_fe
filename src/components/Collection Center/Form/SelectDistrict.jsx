@@ -34,7 +34,7 @@ export function SelectDistrict({
           items={data}
           label="District"
           placeholder="Select a district"
-          selectedKeys={field.value}
+          selectedKeys={field.value ? [field.value] : []}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired

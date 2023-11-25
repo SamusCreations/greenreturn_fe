@@ -17,15 +17,12 @@ import {
 } from "@nextui-org/react";
 import {
   ChevronDown,
-  Lock,
   Activity,
-  Flash,
-  Server,
   TagUser,
-  Scale,
   HomeIcon,
   MaterialIcon,
   CouponIcon,
+  SwapIcon,
 } from "../../assets/Icons.jsx";
 import logo from "../../assets/greenreturn_logo.png";
 
@@ -34,23 +31,26 @@ export default function Header() {
 
   const icons = {
     chevron: <ChevronDown fill="currentColor" size={16} />,
-    scale: <Scale className="text-warning" fill="currentColor" size={30} />,
-    lock: <Lock className="text-success" fill="currentColor" size={30} />,
     activity: (
       <Activity className="text-secondary" fill="currentColor" size={30} />
     ),
-    flash: <Flash className="text-primary" fill="currentColor" size={30} />,
-    server: <Server className="text-success" fill="currentColor" size={30} />,
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
     store: <HomeIcon className="text-primary" fill="currentColor" size={30} />,
-    material: <MaterialIcon className="text-warning" fill="currentColor" size={30} />,
-    coupon: <CouponIcon className="text-danger" fill="currentColor" size={30} />,
+    material: (
+      <MaterialIcon className="text-warning" fill="currentColor" size={30} />
+    ),
+    coupon: (
+      <CouponIcon className="text-danger" fill="currentColor" size={30} />
+    ),
+    exchange: (
+      <SwapIcon className="text-danger" fill="currentColor" size={30} />
+    ),
   };
 
   const menuItems = [
     { label: "Home", route: "/" },
     { label: "Materials", route: "/material" },
-    { label: "Collection Centers", route: "/CC" },
+    { label: "Collection Centers", route: "/collection-center" },
     { label: "Coupons", route: "/coupons" },
     { label: "User History", route: "/user-history" },
     { label: "Collection C. History", route: "/cc-history" },
@@ -182,6 +182,15 @@ export default function Header() {
               href="/table-collection-center"
             >
               Collection Center Table
+            </DropdownItem>
+            <DropdownItem
+              style={{ color: "#11181C" }}
+              key="material_exchange"
+              startContent={icons.exchange}
+              as={Link}
+              href="/material-exchange"
+            >
+              Material Exchange
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

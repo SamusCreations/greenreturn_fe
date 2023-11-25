@@ -3,7 +3,7 @@ import logo from "../../assets/greenreturn_logo.png";
 
 export function Footer() {
   return (
-    <footer className="flex flex-col mx-auto  w-full max-w-container px-4 sm:px-6 lg:px-8 justify-center md:justify-between">
+    <footer className="flex flex-col mx-auto  w-full max-w-container px-4 sm:px-6 lg:px-8 justify-center md:justify-between mt-2">
       <div className="flex flex-col border-t borderslate-900/5 items-center">
         <Image
           width={200}

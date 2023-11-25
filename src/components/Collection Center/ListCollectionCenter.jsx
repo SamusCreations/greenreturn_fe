@@ -45,49 +45,50 @@ export function ListCollectionCenter() {
 
   return (
     <div>
-      <div className="font-bold text-4xl py-8">
+      <div className="font-bold text-4xl py-8 mx-2">
         <h1 className="uppercase">Collection Centers</h1>
       </div>
+      {!data && (
+        <div className="text-center ">
+          <p>Not available yet</p>
+        </div>
+      )}
       <div className="sm:gap-2 grid grid-cols-1 sm:grid-cols-3">
         {data &&
-          data.map(
-            (item) => (
-              (
-                <div key={item.id_collection_center} className="p-2 sm:p-0">
-                  <Card className="w-full h-[300px] col-span-12 sm:col-span-5">
-                    <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
-                      <p className="text-sm text-black uppercase font-bold">
-                        {item.name}
-                      </p>
-                      <h4 className="text-black font-light text-sm">
-                        {item.address}
-                      </h4>
-                    </CardHeader>
+          data.map((item) => (
+            <div key={item.id_collection_center} className="p-2 sm:p-0">
+              <Card className="w-full h-[300px] col-span-12 sm:col-span-5 animate-appearance-in">
+                <CardHeader className="absolute z-10 top-1 flex-col items-start mb-10">
+                  <p className="text-sm text-black uppercase font-bold">
+                    {item.name}
+                  </p>
+                  <h4 className="text-black font-light text-sm">
+                    {item.address}
+                  </h4>
+                </CardHeader>
 
-                    <CardBody className="overflow-visible p-0 mx-auto">
-                      <HomeIcon
-                        className="flex justify-center z-0 mx-auto my-auto max-w-xs max-h-xs  object-cover text-primary"
-                        fill="currentColor"
-                        size={225}
-                      />
-                    </CardBody>
-                    <CardFooter className="absolute bottom-0 z-10 justify-between">
-                      <Link to={`/collection-center/${item.id_collection_center}`}>
-                        <Button
-                          className="text-tiny"
-                          color="primary"
-                          radius="sm"
-                          size="sm"
-                        >
-                          View More
-                        </Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                </div>
-              )
-            )
-          )}
+                <CardBody className="overflow-visible p-0 mx-auto">
+                  <HomeIcon
+                    className="flex justify-center z-0 mx-auto my-auto max-w-xs max-h-xs  object-cover text-primary"
+                    fill="currentColor"
+                    size={225}
+                  />
+                </CardBody>
+                <CardFooter className="absolute bottom-0 z-10 justify-between">
+                  <Link to={`/collection-center/${item.id_collection_center}`}>
+                    <Button
+                      className="text-tiny"
+                      color="primary"
+                      radius="sm"
+                      size="sm"
+                    >
+                      View More
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
       </div>
     </div>
   );

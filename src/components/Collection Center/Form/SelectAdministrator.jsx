@@ -34,7 +34,7 @@ export function SelectAdministrator({ field, data, isInvalid, errorMessage }) {
               </div>
             ));
           }}
-          selectedKeys={field.value}
+          selectedKeys={field.value ? [field.value] : []}
           isInvalid={isInvalid}
           errorMessage={errorMessage}
           isRequired
