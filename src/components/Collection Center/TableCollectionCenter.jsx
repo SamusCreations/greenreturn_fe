@@ -150,11 +150,11 @@ export default function TableCollectionCenter() {
         return (
           <Chip
             className="capitalize"
-            color={item.active == 1? "primary" : "danger"}
+            color={item.active == 1 ? "primary" : "danger"}
             size="sm"
             variant="flat"
           >
-            {item.active == 1? "Active" : "Paused"}
+            {item.active == 1 ? "Active" : "Paused"}
           </Chip>
         );
       case "actions":
@@ -164,7 +164,7 @@ export default function TableCollectionCenter() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-collection-center/${item.id_collection_center}`}
+              href={`/table-collection-center/update/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
@@ -177,7 +177,7 @@ export default function TableCollectionCenter() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-collection-center/${item.id_collection_center}`}
+              href={`/table-collection-center/update/${item.id_collection_center}`}
               isIconOnly
             >
               <Tooltip content="Edit" closeDelay={0}>
@@ -280,7 +280,7 @@ export default function TableCollectionCenter() {
               color="primary"
               endContent={<PlusIcon />}
               as={Link}
-              href={`/create-collection-center`}
+              href={`/table-collection-center/create`}
             >
               Add New
             </Button>

@@ -155,7 +155,7 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-material/${item.id_material}`}
+              href={`/table-material/update/${item.id_material}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
@@ -168,7 +168,7 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/update-material/${item.id_material}`}
+              href={`/table-material/update/${item.id_material}`}
               isIconOnly
             >
               <Tooltip content="Edit" closeDelay={0}>
@@ -267,8 +267,12 @@ export default function TableMaterial() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />} as={Link} 
-              href={`/create-material`}>
+            <Button
+              color="primary"
+              endContent={<PlusIcon />}
+              as={Link}
+              href={`/table-material/create`}
+            >
               Add New
             </Button>
           </div>

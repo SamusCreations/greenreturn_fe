@@ -17,7 +17,9 @@ import { UpdateMaterial } from "./components/Material/UpdateMaterial";
 import TableCollectionCenter from "./components/Collection Center/TableCollectionCenter";
 import { CreateCollectionCenter } from "./components/Collection Center/CreateCollectionCenter";
 import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
-import { MaterialExchange } from "./components/Material/MaterialExchange";
+import { CreateMaterialExchange } from "./components/Material Exchange/CreateMaterialExchange";
+import { UpdateMaterialExchange } from "./components/Material Exchange/UpdateMaterialExchange";
+import { TableMaterialExchange } from "./components/Material Exchange/TableMaterialExchange";
 
 
 const router = createBrowserRouter([
@@ -66,11 +68,11 @@ const router = createBrowserRouter([
     element: <TableMaterial />,
   },
   {
-    path: "/create-material",
+    path: "/table-material/create",
     element: <CreateMaterial />,
   },
   {
-    path: "/update-material/:id",
+    path: "/table-material/update/:id",
     element: <UpdateMaterial />,
   },
   {
@@ -78,16 +80,24 @@ const router = createBrowserRouter([
     element: <TableCollectionCenter />,
   },
   {
-    path: "/create-collection-center",
+    path: "/table-collection-center/create",
     element: <CreateCollectionCenter />,
   },
   {
-    path: "/update-collection-center/:id",
+    path: "/table-collection-center/update/:id",
     element: <UpdateCollectionCenter />,
   },
   {
-    path: "/material-exchange",
-    element: <MaterialExchange />,
+    path: "/table-material-exchange",
+    element: <TableMaterialExchange />,
+  },
+  {
+    path: "/table-material-exchange/create",
+    element: <CreateMaterialExchange />,
+  },
+  {
+    path: "/table-material-exchange/update/:id",
+    element: <UpdateMaterialExchange />,
   },
 ]);
 
