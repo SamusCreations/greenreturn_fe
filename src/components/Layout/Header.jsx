@@ -219,7 +219,7 @@ export default function Header() {
           <Button
             as={Link}
             color="primary"
-            href="#"
+            href="/login"
             variant="bordered"
             className="font-medium text-base max-h-8"
             radius="sm"
@@ -231,7 +231,7 @@ export default function Header() {
           <Button
             as={Link}
             color="primary"
-            href="#"
+            href="/signup"
             variant="solid"
             className="font-medium text-base max-h-8"
             radius="sm"

@@ -20,7 +20,9 @@ import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCol
 import { CreateMaterialExchange } from "./components/Material Exchange/CreateMaterialExchange";
 import { UpdateMaterialExchange } from "./components/Material Exchange/UpdateMaterialExchange";
 import { TableMaterialExchange } from "./components/Material Exchange/TableMaterialExchange";
-
+import Login from "./components/User/Login";
+import Signup from "./components/User/Signup";
+import UserProvider from "./components/User/UserProvider";
 
 const router = createBrowserRouter([
   {
@@ -99,14 +101,24 @@ const router = createBrowserRouter([
     path: "/table-material-exchange/update/:id",
     element: <UpdateMaterialExchange />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
 ]);
 
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Layout>
-        <RouterProvider router={router} />  
-      </Layout>
+      <UserProvider>
+        <Layout>
+          <RouterProvider router={router} />
+        </Layout>
+      </UserProvider>
     </div>
   );
 }

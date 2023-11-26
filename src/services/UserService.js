@@ -15,7 +15,9 @@ class UserService {
 
   //localhost:81/greenreturn_api/user/getAvailableAdministrators/1
   getAvailableAdministrators(id_collection_center) {
-    return axios.get(BASE_URL + "/getAvailableAdministrators/" + id_collection_center);
+    return axios.get(
+      BASE_URL + "/getAvailableAdministrators/" + id_collection_center
+    );
   }
 
   createUser(User) {
@@ -24,6 +26,10 @@ class UserService {
 
   updateUser(User) {
     return axios.put(BASE_URL, User);
+  }
+
+  loginUser(User) {
+    return axios.post(BASE_URL + "/login/", User);
   }
 }
 export default new UserService();
