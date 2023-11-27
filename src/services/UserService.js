@@ -24,6 +24,10 @@ class UserService {
     return axios.post(BASE_URL, User);
   }
 
+  signupUser(User) {
+    return axios.post(BASE_URL + "/createForm/", User);
+  }
+
   updateUser(User) {
     return axios.put(BASE_URL, User);
   }
