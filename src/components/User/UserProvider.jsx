@@ -17,6 +17,7 @@ export default function UserProvider(props) {
     setUser(null);
     localStorage.removeItem("user");
   };
+
   const decodeToken = () => {
     if (user) {
       const decodedToken = jwtDecode(user);
@@ -26,24 +27,27 @@ export default function UserProvider(props) {
     }
   };
 
-  //allowedRoles=['Administrador','Usuario']
-  const autorize = ({ allowedRoles }) => {
+  //allowedRoles=[1, 2]
+  const authorize = ({ allowedRoles }) => {
     const userData = decodeToken();
     if (userData && allowedRoles) {
       console.log(
-        userData && userData.role && allowedRoles.includes(userData.role.name)
+        userData && userData.role && allowedRoles.includes(userData.role)
       );
-      return (
-        userData && userData.role && allowedRoles.includes(userData.role.name)
-      );
+      console.log(userData);
+      return userData && userData.role && allowedRoles.includes(userData.role);
     }
     return false;
   };
 
-  UserProvider.propTypes = { children: PropTypes.node.isRequired };
+  UserProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
+  
+
   return (
     <UserContext.Provider
-      value={{ user, saveUser, clearUser, autorize, decodeToken }}
+      value={{ user, saveUser, clearUser, authorize, decodeToken }}
     >
       {props.children}
     </UserContext.Provider>
