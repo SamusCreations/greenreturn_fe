@@ -188,7 +188,7 @@ export default function Header() {
               key="material_exchange"
               startContent={icons.exchange}
               as={Link}
-              href="/material-exchange"
+              href="/table-material-exchange/create"
             >
               Material Exchange
             </DropdownItem>

@@ -25,5 +25,9 @@ class UserService {
   updateUser(User) {
     return axios.put(BASE_URL, User);
   }
+
+  getUserByRole(id_role){
+    return axios.get(BASE_URL + "/getUserByRole/" + id_role);
+  }
 }
 export default new UserService();
