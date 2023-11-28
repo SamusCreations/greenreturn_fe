@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -25,8 +25,15 @@ import {
   SwapIcon,
 } from "../../assets/Icons.jsx";
 import logo from "../../assets/greenreturn_logo.png";
+import { UserContext } from "../../context/UserContext.js";
 
 export default function Header() {
+  const { user, decodeToken, authorize } = useContext(UserContext);
+  const [userData, setUserData] = useState(decodeToken());
+  useEffect(() => {
+    setUserData(decodeToken());
+  }, [user]);
+
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const icons = {
@@ -147,15 +154,17 @@ export default function Header() {
             <DropdownItem key="coupons" startContent={icons.coupon}>
               Coupons
             </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="user_history"
-              startContent={icons.activity}
-              as={Link}
-              href="/user-history"
-            >
-              User History
-            </DropdownItem>
+            {user && authorize({ allowedRoles: ["Admin"] }) && (
+              <DropdownItem
+                style={{ color: "#11181C" }}
+                key="user_history"
+                startContent={icons.activity}
+                as={Link}
+                href="/user-history"
+              >
+                User History
+              </DropdownItem>
+            )}
             <DropdownItem
               style={{ color: "#11181C" }}
               key="cc_history"
@@ -192,6 +201,8 @@ export default function Header() {
             >
               Material Exchange
             </DropdownItem>
+
+            {/*  )} */}
           </DropdownMenu>
         </Dropdown>
         <NavbarItem>
@@ -219,7 +230,7 @@ export default function Header() {
           <Button
             as={Link}
             color="primary"
-            href="#"
+            href="/login"
             variant="bordered"
             className="font-medium text-base max-h-8"
             radius="sm"
@@ -231,7 +242,7 @@ export default function Header() {
           <Button
             as={Link}
             color="primary"
-            href="#"
+            href="/signup"
             variant="solid"
             className="font-medium text-base max-h-8"
             radius="sm"
