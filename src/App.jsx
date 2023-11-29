@@ -18,11 +18,13 @@ import TableCollectionCenter from "./components/Collection Center/TableCollectio
 import { CreateCollectionCenter } from "./components/Collection Center/CreateCollectionCenter";
 import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
 import { CreateMaterialExchange } from "./components/Material Exchange/CreateMaterialExchange";
-import { UpdateMaterialExchange } from "./components/Material Exchange/UpdateMaterialExchange";
 import { TableMaterialExchange } from "./components/Material Exchange/TableMaterialExchange";
 import Login from "./components/User/Login";
 import Signup from "./components/User/Signup";
 import UserProvider from "./components/User/UserProvider";
+import { Logout } from "./components/User/Logout";
+import { Auth } from "./components/User/Auth";
+import Unauthorized from "./components/User/Unauthorized";
 
 const router = createBrowserRouter([
   {
@@ -38,20 +40,8 @@ const router = createBrowserRouter([
     element: <ListMaterial />,
   },
   {
-    path: "/user-history",
-    element: <HistoryUser />,
-  },
-  {
-    path: "/cc-history",
-    element: <HistoryCollectionCenter />,
-  },
-  {
     path: "/material/:id",
     element: <DetailMaterial />,
-  },
-  {
-    path: "/history-detail/:id",
-    element: <DetailHistory />,
   },
   {
     path: "/collection-center",
@@ -62,52 +52,80 @@ const router = createBrowserRouter([
     element: <DetailCollectionCenter />,
   },
   {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/table-material",
-    element: <TableMaterial />,
-  },
-  {
-    path: "/table-material/create",
-    element: <CreateMaterial />,
-  },
-  {
-    path: "/table-material/update/:id",
-    element: <UpdateMaterial />,
-  },
-  {
-    path: "/table-collection-center",
-    element: <TableCollectionCenter />,
-  },
-  {
-    path: "/table-collection-center/create",
-    element: <CreateCollectionCenter />,
-  },
-  {
-    path: "/table-collection-center/update/:id",
-    element: <UpdateCollectionCenter />,
-  },
-  {
-    path: "/table-material-exchange",
-    element: <TableMaterialExchange />,
-  },
-  {
-    path: "/table-material-exchange/create",
-    element: <CreateMaterialExchange />,
-  },
-  {
-    path: "/table-material-exchange/update/:id",
-    element: <UpdateMaterialExchange />,
-  },
-  {
     path: "/login",
     element: <Login />,
   },
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
+  },
+  {
+    path:'/unauthorized',
+    element: <Unauthorized />
+  },
+  {
+    path: "/",
+    element: <Auth allowedRoles={["Admin"]} />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/table-material",
+        element: <TableMaterial />,
+      },
+      {
+        path: "/table-material/create",
+        element: <CreateMaterial />,
+      },
+      {
+        path: "/table-material/update/:id",
+        element: <UpdateMaterial />,
+      },
+      {
+        path: "/table-collection-center",
+        element: <TableCollectionCenter />,
+      },
+      {
+        path: "/table-collection-center/create",
+        element: <CreateCollectionCenter />,
+      },
+      {
+        path: "/table-collection-center/update/:id",
+        element: <UpdateCollectionCenter />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <Auth allowedRoles={["Admin", "CC_Admin"]} />,
+    children: [
+      {
+        path: "/user-history",
+        element: <HistoryUser />,
+      },
+      {
+        path: "/cc-history",
+        element: <HistoryCollectionCenter />,
+      },
+      {
+        path: "/history-detail/:id",
+        element: <DetailHistory />,
+      },
+      {
+        path: "/table-material-exchange",
+        element: <TableMaterialExchange />,
+      },
+      {
+        path: "/table-material-exchange/create",
+        element: <CreateMaterialExchange />,
+      },
+    ],
   },
 ]);
 

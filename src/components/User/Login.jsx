@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
 import favicon from "../../assets/greenreturn_favicon.png";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,6 +21,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { saveUser } = useContext(UserContext);
   const [isVisible, setIsVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -36,6 +37,7 @@ export default function Login() {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     // Valores iniciales
@@ -47,12 +49,27 @@ export default function Login() {
     resolver: yupResolver(loginSchema),
   });
 
-  // Valores de formulario
+  useEffect(() => {
+    const rememberedUser = localStorage.getItem("rememberedUser");
+
+    if (rememberedUser) {
+      const parsedUser = JSON.parse(rememberedUser);
+
+      // Precargar datos en el formulario
+      setValue("email", parsedUser.email);
+      setValue("password", parsedUser.password);
+      setRememberMe(true); // También podrías actualizar el estado de rememberMe si es necesario
+    }
+  }, [setValue]);
 
   const [error, setError] = useState("");
   // Accion submit
   const onSubmit = (DataForm) => {
     try {
+      if (rememberMe) {
+        // Almacenar datos en localStorage
+        localStorage.setItem("rememberedUser", JSON.stringify(DataForm));
+      }
       UserService.loginUser(DataForm)
         .then((response) => {
           console.log(response);
@@ -166,7 +183,20 @@ export default function Login() {
                 )}
               />
               <div className="flex justify-between my-2">
-                <Checkbox>
+                <Checkbox
+                  isSelected={rememberMe}
+                  onChange={() => {
+                    const newValue = !rememberMe;
+
+                    setRememberMe(newValue);
+                    setValue("rememberMe", newValue);
+
+                    if (!newValue) {
+                      // Si el checkbox se deselecciona, elimina los datos del localStorage
+                      localStorage.removeItem("rememberedUser");
+                    }
+                  }}
+                >
                   <p className="font-normal text-sm">Remember me</p>
                 </Checkbox>
                 <Link to="#">
