@@ -164,21 +164,46 @@ export function CreateMaterialExchange() {
   }, []);
 
   const watchDetail = watch("details");
-
+  const watchTotal = watch("total");
+  
   //On change para realizar los calculos
   const handleInputChange = (index, name, value) => {
     //asignar valor en el formulario al control indicado
+
     setValue(name, value);
     //Obtienes todos los valores del formulario
+
+    if (watchDetail[index].quantity == 0) {
+      removeDetail(index);
+    }
     const valores = getValues();
-    console.log(valores.details[index]);
-    let total = "Exchanges: ";
-    valores.details.map((item) => {
+    console.log(valores);
+    console.log(watchTotal);
+    //console.log(watchDetail[index].id_material)
+    const material = dataCm.find(
+      (material) => material.id_material === watchDetail[index].id_material
+    );
+    let total = 0;
+    //console.log(dataCm.find(material => material.id_material === watchDetail[index].id_material))
+    console.log(material.unit_cost);
+    //console.log(valores.details[index]);
+    setValue(
+      `details.${index}.subtotal`,
+      material.unit_cost * watchDetail[index].quantity
+    );
+    valores.details.map((item, index) => {
       //Acordarse castear o convertir a número
-      total += `${item.quantity} `;
+      total += watchDetail[index].subtotal;
     });
-    setValue("subtotal", total);
+
+    
+    setValue(`details.${index}.unit_cost`, material.unit_cost);
+    setValue("total", total );
   };
+
+
+  
+  
 
   // useFieldArray:
   // relaciones de muchos a muchos, con más campos además
@@ -189,10 +214,12 @@ export function CreateMaterialExchange() {
   });
 
   const removeDetail = (index) => {
+    
     if (fields.length === 1) {
       return;
-    }
-    remove(index);
+    } 
+    remove(index)
+    
   };
 
   const addNewDetail = () => {
@@ -203,8 +230,6 @@ export function CreateMaterialExchange() {
       subtotal: "",
     });
   };
-
-  
 
   if (!loadedCc || !loadedUser || !loadedCm)
     return (
@@ -263,24 +288,27 @@ export function CreateMaterialExchange() {
               Select a Material:
             </h2>
             {fields.map((field, index) => (
-              <div key={field.id}>
+              <div key={index}>
                 <Controller
                   name={`details.${index}.id_material`}
                   control={control}
-                  key={index}
+                  field={field}
                   render={({ field }) => (
                     <SelectAvailableMaterials
                       field={field}
                       data={dataCm}
                       control={control}
+                      key={index}
                       Index={index}
                       isInvalid={Boolean(errors.id_material)}
+                      onRemove={removeDetail}
                       onInputChange={handleInputChange}
                       errorMessage={
                         errors.details &&
                         errors.details[index]?.id_material?.message
                       }
                       onChange={(e) =>
+                        
                         setValue(
                           `details${index}.id_material`,
                           e.target.value,
@@ -288,20 +316,40 @@ export function CreateMaterialExchange() {
                             shouldValidate: true,
                           }
                         )
-                      }
+                       
+                   }
                     />
                   )}
                 />
+                <div className="flex flex-row">
+                <h2 className="text-1xl font-extrabold">Unit Cost: </h2>
+                                
+                  <p key={index}>{watchDetail[index].unit_cost}</p>
+               
+                </div>    
+                <div className="flex flex-row">
+                <h2 className="text-1xl font-extrabold">Subtotal: </h2>
+                                
+                  <p key={index}>{watchDetail[index].subtotal}</p>
+               
+                </div>                
                 <Button color="primary" onClick={removeDetail}>
                   Remove Material
                 </Button>
               </div>
             ))}
-
+              
             <br />
             <Button color="primary" onClick={addNewDetail}>
               Add Material
             </Button>
+            
+                <div className="flex flex-row">
+                <h2 className="text-1xl font-extrabold">Total: </h2>
+                                 
+                  <p >{watchTotal}</p>
+                
+                </div>
 
             <div className="flex justify-center items-center m-6 border-t">
               <Button
