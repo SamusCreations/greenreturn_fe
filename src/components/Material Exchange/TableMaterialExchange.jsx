@@ -22,16 +22,14 @@ import {
   SearchIcon,
   ChevronDownIcon,
   EyeIcon,
-  EditIcon,
-  DeleteIcon,
 } from "../../assets/Icons";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "date_created",
-  "id_user",
-  "id_collection_center",
-  "unit_cost",
+  "user_name",
+  "cc_name",
+  "total",
   "actions",
 ];
 
@@ -43,7 +41,9 @@ const columns = [
   { name: "Date Created", uid: "date_created", sortable: true },
   { name: "ID", uid: "id_exchange", sortable: true },
   { name: "User ID", uid: "id_user", sortable: true },
+  { name: "User", uid: "user_name", sortable: true },
   { name: "Collection Center ID", uid: "id_collection_center", sortable: true },
+  { name: "Collection Center", uid: "cc_name", sortable: true },
   { name: "Total", uid: "total", sortable: true },
   { name: "Actions", uid: "actions" },
 ];
@@ -56,8 +56,8 @@ export function TableMaterialExchange() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "id_material",
-    direction: "ascending",
+    column: "date_created",
+    direction: "descending",
   });
   const [page, setPage] = React.useState(1);
 
@@ -103,7 +103,9 @@ export function TableMaterialExchange() {
 
     if (hasSearchFilter) {
       filteredExchanges = filteredExchanges.filter((material_exchange) =>
-        material_exchange.date_created.toLowerCase().includes(filterValue.toLowerCase())
+        material_exchange.date_created
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
       );
     }
 
@@ -133,16 +135,10 @@ export function TableMaterialExchange() {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "color_name":
-        return (
-          <div className="flex">
-            <div
-              className="w-5 h-5 rounded-full mx-1"
-              style={{ backgroundColor: item.color_value }}
-            />
-            {item.color_name}
-          </div>
-        );
+      case "user_name":
+        return `${item.user_name} ${item.user_surname}`;
+      case "date_created":
+        return new Date(item.date_created).toLocaleString();
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -150,39 +146,12 @@ export function TableMaterialExchange() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/table-material-exchange/update/${item.id_exchange}`}
+              href={`/history-detail/${item.id_exchange}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
                 <span className="text-lg text-default-400 cursor-pointer">
                   <EyeIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`/table-material-exchange/update/${item.id_exchange}`}
-              isIconOnly
-            >
-              <Tooltip content="Edit" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer">
-                  <EditIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              color="danger"
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`#`}
-              isIconOnly
-            >
-              <Tooltip color="danger" content="Delete" closeDelay={0}>
-                <span className="text-lg text-danger cursor-pointer">
-                  <DeleteIcon />
                 </span>
               </Tooltip>
             </Button>
@@ -230,15 +199,15 @@ export function TableMaterialExchange() {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by date..."
+            className="w-full sm:max-w-[25%]"
             type="date"
+            placeholder="Search by date..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
-          
+
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -276,7 +245,7 @@ export function TableMaterialExchange() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {data.length} materials
+            Total {data.length}
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -392,5 +361,4 @@ export function TableMaterialExchange() {
       </Table>
     </div>
   );
-  }
-  
+}

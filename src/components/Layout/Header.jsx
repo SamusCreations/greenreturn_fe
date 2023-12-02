@@ -157,28 +157,6 @@ export default function Header() {
             {user && authorize({ allowedRoles: ["Admin"] }) && (
               <DropdownItem
                 style={{ color: "#11181C" }}
-                key="user_history"
-                startContent={icons.activity}
-                as={Link}
-                href="/user-history"
-              >
-                User History
-              </DropdownItem>
-            )}
-            {user && authorize({ allowedRoles: ["Admin"] }) && (
-              <DropdownItem
-                style={{ color: "#11181C" }}
-                key="cc_history"
-                startContent={icons.activity}
-                as={Link}
-                href="/cc-history"
-              >
-                Collection Center History
-              </DropdownItem>
-            )}
-            {user && authorize({ allowedRoles: ["Admin"] }) && (
-              <DropdownItem
-                style={{ color: "#11181C" }}
                 key="table_material"
                 startContent={icons.material}
                 as={Link}
@@ -204,9 +182,9 @@ export default function Header() {
                 key="material_exchange"
                 startContent={icons.exchange}
                 as={Link}
-                href="/table-material-exchange/create"
+                href="/table-material-exchange"
               >
-                Material Exchange
+                Material Exchange Table
               </DropdownItem>
             )}
           </DropdownMenu>
