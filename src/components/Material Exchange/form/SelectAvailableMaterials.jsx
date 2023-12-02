@@ -29,7 +29,10 @@ export function SelectAvailableMaterials({
   onRemove,
 }) {
   return (
-    <section key={Index} className="flex justify-between items-center w-[40%] py-1">
+    <section
+      key={Index}
+      className="flex justify-between items-center w-[40%] py-1"
+    >
       <>
         <>
           <Select
