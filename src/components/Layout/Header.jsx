@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -25,8 +25,15 @@ import {
   SwapIcon,
 } from "../../assets/Icons.jsx";
 import logo from "../../assets/greenreturn_logo.png";
+import { UserContext } from "../../context/UserContext.js";
 
 export default function Header() {
+  const { user, decodeToken, authorize } = useContext(UserContext);
+  const [userData, setUserData] = useState(decodeToken());
+  useEffect(() => {
+    setUserData(decodeToken());
+  }, [user]);
+
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const icons = {
@@ -147,51 +154,39 @@ export default function Header() {
             <DropdownItem key="coupons" startContent={icons.coupon}>
               Coupons
             </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="user_history"
-              startContent={icons.activity}
-              as={Link}
-              href="/user-history"
-            >
-              User History
-            </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="cc_history"
-              startContent={icons.activity}
-              as={Link}
-              href="/cc-history"
-            >
-              Collection Center History
-            </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="table_material"
-              startContent={icons.material}
-              as={Link}
-              href="/table-material"
-            >
-              Material Table
-            </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="table_collection_center"
-              startContent={icons.store}
-              as={Link}
-              href="/table-collection-center"
-            >
-              Collection Center Table
-            </DropdownItem>
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="material_exchange"
-              startContent={icons.exchange}
-              as={Link}
-              href="/material-exchange"
-            >
-              Material Exchange
-            </DropdownItem>
+            {user && authorize({ allowedRoles: ["Admin"] }) && (
+              <DropdownItem
+                style={{ color: "#11181C" }}
+                key="table_material"
+                startContent={icons.material}
+                as={Link}
+                href="/table-material"
+              >
+                Material Table
+              </DropdownItem>
+            )}
+            {user && authorize({ allowedRoles: ["Admin"] }) && (
+              <DropdownItem
+                style={{ color: "#11181C" }}
+                key="table_collection_center"
+                startContent={icons.store}
+                as={Link}
+                href="/table-collection-center"
+              >
+                Collection Center Table
+              </DropdownItem>
+            )}
+            {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
+              <DropdownItem
+                style={{ color: "#11181C" }}
+                key="material_exchange"
+                startContent={icons.exchange}
+                as={Link}
+                href="/table-material-exchange"
+              >
+                Material Exchange Table
+              </DropdownItem>
+            )}
           </DropdownMenu>
         </Dropdown>
         <NavbarItem>
@@ -204,42 +199,62 @@ export default function Header() {
             Contact Us
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link
-            color="foreground"
-            href="/dashboard"
-            className="font-medium text-base"
-          >
-            Dashboard
-          </Link>
-        </NavbarItem>
+        {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
+          <NavbarItem>
+            <Link
+              color="foreground"
+              href="/dashboard"
+              className="font-medium text-base"
+            >
+              Dashboard
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
-      <NavbarContent justify="center" className="hidden lg:flex">
-        <NavbarItem>
-          <Button
-            as={Link}
-            color="primary"
-            href="#"
-            variant="bordered"
-            className="font-medium text-base max-h-8"
-            radius="sm"
-          >
-            Login
-          </Button>
-        </NavbarItem>
-        <NavbarItem>
-          <Button
-            as={Link}
-            color="primary"
-            href="#"
-            variant="solid"
-            className="font-medium text-base max-h-8"
-            radius="sm"
-          >
-            Sign Up
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+      {!userData && (
+        <NavbarContent justify="center" className="hidden lg:flex">
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="primary"
+              href="/login"
+              variant="bordered"
+              className="font-medium text-base max-h-8"
+              radius="sm"
+            >
+              Login
+            </Button>
+          </NavbarItem>
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="primary"
+              href="/signup"
+              variant="solid"
+              className="font-medium text-base max-h-8"
+              radius="sm"
+            >
+              Sign Up
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
+      {userData && (
+        <NavbarContent justify="center" className="hidden lg:flex">
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="primary"
+              href="/logout"
+              variant="bordered"
+              className="font-medium text-base max-h-8"
+              radius="sm"
+            >
+              Log out
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.label}-${index}`}>

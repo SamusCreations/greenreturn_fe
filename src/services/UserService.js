@@ -15,15 +15,29 @@ class UserService {
 
   //localhost:81/greenreturn_api/user/getAvailableAdministrators/1
   getAvailableAdministrators(id_collection_center) {
-    return axios.get(BASE_URL + "/getAvailableAdministrators/" + id_collection_center);
+    return axios.get(
+      BASE_URL + "/getAvailableAdministrators/" + id_collection_center
+    );
   }
 
   createUser(User) {
     return axios.post(BASE_URL, User);
   }
 
+  signupUser(User) {
+    return axios.post(BASE_URL + "/createForm/", User);
+  }
+
   updateUser(User) {
     return axios.put(BASE_URL, User);
+  }
+
+  loginUser(User) {
+    return axios.post(BASE_URL + "/login/", User);
+  }
+
+  getUserByRole(id_role){
+    return axios.get(BASE_URL + "/getUserByRole/" + id_role);
   }
 }
 export default new UserService();

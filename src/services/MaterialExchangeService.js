@@ -1,11 +1,15 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL + "material_exchange";
 //localhost:81/greenreturn_api/material_exchange/
-class MaterialService {
+class MaterialExchangeService {
   //Definición para Llamar al API y obtener el listado de material_exchange
   //localhost:81/greenreturn_api/material_exchange
   getMaterialExchange() {
     return axios.get(BASE_URL);
+  }
+
+  createMaterialExchange(MaterialExchange) {
+    return axios.post(BASE_URL, MaterialExchange);
   }
 
   //localhost:81/greenreturn_api/material_exchange/1
@@ -23,4 +27,4 @@ class MaterialService {
     );
   }
 }
-export default new MaterialService();
+export default new MaterialExchangeService();

@@ -20,5 +20,9 @@ class CollectionCenterService {
   updateCollectionCenter(CollectionCenter) {
     return axios.put(BASE_URL, CollectionCenter);
   }
+
+  getCollectionByCcId(collection_center_id) {
+    return axios.get(BASE_URL + "/getColletionByCcId/" + collection_center_id)
+  }
 }
 export default new CollectionCenterService();

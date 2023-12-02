@@ -65,7 +65,7 @@ export function DetailHistory() {
   return (
     <div className="flex flex-col">
       <div className="font-bold text-4xl py-8">
-        <h1>Detail</h1>
+        <h1 className="uppercase">Exchange Details</h1>
       </div>
       <div className="flex">
         <div className="flex-1">
@@ -85,15 +85,20 @@ export function DetailHistory() {
           </p>
           <p className="py-1">
             <span className="font-bold">Telephone Number:</span>{" "}
-            {data.user.telephone}
+            {data.user.telephone ? data.user.telephone : "No information"}
           </p>
           <p className="py-1">
             <span className="font-bold">Address:</span>{" "}
-            {data.user.district.name}, {data.user.canton.name},{" "}
-            {data.user.province.name}
+            {data.user &&
+            data.user.district &&
+            data.user.canton &&
+            data.user.province
+              ? `${data.user.district.name}, ${data.user.canton.name}, ${data.user.province.name}`
+              : "No information"}
           </p>
           <p className="py-1">
-            <span className="font-bold">Street:</span> {data.user.address}
+            <span className="font-bold">Street:</span>{" "}
+            {data.user.address ? data.user.address : "No information"}
           </p>
         </div>
         <div className="flex-1">
@@ -112,34 +117,45 @@ export function DetailHistory() {
             <span className="font-bold">Telephone:</span>{" "}
             {data.collection_center.telephone}
           </p>
-          <p className="py-2 pt-8">
+          <p className="py-1">
+            <span className="font-bold">Administrator:</span>{" "}
+            {data.collection_center.administrator.name}{" "}
+            {data.collection_center.administrator.surname}
+          </p>
+          <p className="py-1">
             <span className="font-bold uppercase">Date</span>
           </p>
-          <p className="py-1 ">
-            {data.date_created}
-          </p>
+          <p>{new Date(data.date_created).toLocaleString()}</p>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center py-4">
-        <Table aria-label="Example table with dynamic content">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={data.details}>
-            {(item) => (
-              <TableRow key={item.id_material}>
-                {(columnKey) => (
-                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+      <div>
+        <p className="py-2">
+          <span className="font-bold uppercase">Materials</span>
+        </p>
+        <div className="flex flex-col justify-center items-center py-4">
+          <Table aria-label="materials">
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn key={column.key}>{column.label}</TableColumn>
+              )}
+            </TableHeader>
+            <TableBody items={data.details}>
+              {(item) => (
+                <TableRow key={item.id_material}>
+                  {(columnKey) => (
+                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-      <div className="flex flex-col items-end py-4">
-        <p><span className="font-bold">Total:</span> {data.total} ecocoins</p>
+      <div className="flex flex-col items-end py-4 border-t borderslate-900/5">
+        <p>
+          <span className="font-bold uppercase">Total:</span> {data.total}{" "}
+          ecocoins
+        </p>
       </div>
     </div>
   );

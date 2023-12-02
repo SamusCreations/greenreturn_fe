@@ -22,16 +22,14 @@ import {
   SearchIcon,
   ChevronDownIcon,
   EyeIcon,
-  EditIcon,
-  DeleteIcon,
 } from "../../assets/Icons";
-import MaterialService from "../../services/MaterialService";
+import MaterialExchangeService from "../../services/MaterialExchangeService";
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "name",
-  "color_name",
-  "measurement_name",
-  "unit_cost",
+  "date_created",
+  "user_name",
+  "cc_name",
+  "total",
   "actions",
 ];
 
@@ -40,20 +38,17 @@ function capitalize(str) {
 }
 
 const columns = [
-  { name: "ID", uid: "id_material", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "DESCRIPTION", uid: "description" },
-  { name: "COLOR ID", uid: "id_color", sortable: true },
-  { name: "COLOR", uid: "color_name" },
-  { name: "COLOR VALUE", uid: "color_value" },
-  { name: "MEASUREMENT ID", uid: "id_measurement", sortable: true },
-  { name: "MEASUREMENT", uid: "measurement_name" },
-  { name: "MEASUREMENT VALUE", uid: "measurement_value" },
-  { name: "PRICE", uid: "unit_cost", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Date Created", uid: "date_created", sortable: true },
+  { name: "ID", uid: "id_exchange", sortable: true },
+  { name: "User ID", uid: "id_user", sortable: true },
+  { name: "User", uid: "user_name", sortable: true },
+  { name: "Collection Center ID", uid: "id_collection_center", sortable: true },
+  { name: "Collection Center", uid: "cc_name", sortable: true },
+  { name: "Total", uid: "total", sortable: true },
+  { name: "Actions", uid: "actions" },
 ];
 
-export default function TableMaterial() {
+export function TableMaterialExchange() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -61,8 +56,8 @@ export default function TableMaterial() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "id_material",
-    direction: "ascending",
+    column: "date_created",
+    direction: "descending",
   });
   const [page, setPage] = React.useState(1);
 
@@ -75,7 +70,7 @@ export default function TableMaterial() {
 
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    MaterialService.getMaterials()
+    MaterialExchangeService.getMaterialExchange()
       .then((response) => {
         const results = response.data.results;
 
@@ -104,15 +99,17 @@ export default function TableMaterial() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...data];
+    let filteredExchanges = [...data];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredExchanges = filteredExchanges.filter((material_exchange) =>
+        material_exchange.date_created
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredUsers;
+    return filteredExchanges;
   }, [data, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -138,16 +135,10 @@ export default function TableMaterial() {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "color_name":
-        return (
-          <div className="flex">
-            <div
-              className="w-5 h-5 rounded-full mx-1"
-              style={{ backgroundColor: item.color_value }}
-            />
-            {item.color_name}
-          </div>
-        );
+      case "user_name":
+        return `${item.user_name} ${item.user_surname}`;
+      case "date_created":
+        return new Date(item.date_created).toLocaleString();
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -155,39 +146,12 @@ export default function TableMaterial() {
               size="sm"
               variant="light"
               as={Link}
-              href={`/table-material/update/${item.id_material}`}
+              href={`/history-detail/${item.id_exchange}`}
               isIconOnly
             >
               <Tooltip content="Details" closeDelay={0}>
                 <span className="text-lg text-default-400 cursor-pointer">
                   <EyeIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`/table-material/update/${item.id_material}`}
-              isIconOnly
-            >
-              <Tooltip content="Edit" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer">
-                  <EditIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              color="danger"
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`#`}
-              isIconOnly
-            >
-              <Tooltip color="danger" content="Delete" closeDelay={0}>
-                <span className="text-lg text-danger cursor-pointer">
-                  <DeleteIcon />
                 </span>
               </Tooltip>
             </Button>
@@ -235,13 +199,15 @@ export default function TableMaterial() {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            className="w-full sm:max-w-[25%]"
+            type="date"
+            placeholder="Search by date..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
+
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -271,7 +237,7 @@ export default function TableMaterial() {
               color="primary"
               endContent={<PlusIcon />}
               as={Link}
-              href={`/table-material/create`}
+              href={`/table-material-exchange/create`}
             >
               Add New
             </Button>
@@ -279,7 +245,7 @@ export default function TableMaterial() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {data.length} materials
+            Total {data.length}
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -354,7 +320,7 @@ export default function TableMaterial() {
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">Materials</h1>
+        <h1 className="uppercase">Material Exchange</h1>
       </div>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -385,7 +351,7 @@ export default function TableMaterial() {
         </TableHeader>
         <TableBody emptyContent={"No data found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id_material}>
+            <TableRow key={item.id_exchange}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
