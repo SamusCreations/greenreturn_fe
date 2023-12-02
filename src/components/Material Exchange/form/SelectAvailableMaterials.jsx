@@ -88,6 +88,9 @@ export function SelectAvailableMaterials({
                   Index={Index}
                   label="Select a quantity"
                   className="pt-unit-1"
+                  name={`details.${Index}.quantity`}
+                  isInvalid={isInvalid}
+                  errorMessage={errorMessage}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value === "0") {
