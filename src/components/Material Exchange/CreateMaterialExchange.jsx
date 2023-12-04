@@ -82,6 +82,11 @@ export function CreateMaterialExchange() {
                 duration: 4000,
                 position: "top-center",
               });
+              const object = {
+                id_user: response.data.results.id_user,
+                coin: response.data.results.total,
+              };
+              UserService.addCoins(object);
               // Redireccion a la tabla
               return navigate("/table-material-exchange");
             }

@@ -25,6 +25,10 @@ import UserProvider from "./components/User/UserProvider";
 import { Logout } from "./components/User/Logout";
 import { Auth } from "./components/User/Auth";
 import Unauthorized from "./components/User/Unauthorized";
+import { UserSettings } from "./components/User/UserSettings";
+import UserProfile from "./components/User/UserProfile";
+import { UpdateUserProfile } from "./components/User/UpdateUserProfile";
+import UserWallet from "./components/User/UserWallet";
 
 const router = createBrowserRouter([
   {
@@ -64,8 +68,8 @@ const router = createBrowserRouter([
     element: <Logout />,
   },
   {
-    path:'/unauthorized',
-    element: <Unauthorized />
+    path: "/unauthorized",
+    element: <Unauthorized />,
   },
   {
     path: "/",
@@ -77,6 +81,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/table-material",
+        element: <TableMaterial />,
+      },
+      {
+        path: "/dashboard/table-material",
         element: <TableMaterial />,
       },
       {
@@ -124,6 +132,28 @@ const router = createBrowserRouter([
       {
         path: "/table-material-exchange/create",
         element: <CreateMaterialExchange />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <Auth allowedRoles={["Admin", "CC_Admin", "User"]} />,
+    children: [
+      {
+        path: "/user/settings/:id",
+        element: <UserSettings />,
+      },
+      {
+        path: "/user/profile/:id",
+        element: <UserProfile />,
+      },
+      {
+        path: "/user/profile/edit/:id",
+        element: <UpdateUserProfile />,
+      },
+      {
+        path: "/user/wallet/:id",
+        element: <UserWallet />,
       },
     ],
   },

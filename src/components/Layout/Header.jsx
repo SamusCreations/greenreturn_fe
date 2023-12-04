@@ -14,6 +14,8 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Image,
+  Avatar,
+  AvatarIcon,
 } from "@nextui-org/react";
 import {
   ChevronDown,
@@ -212,7 +214,7 @@ export default function Header() {
         )}
       </NavbarContent>
       {!userData && (
-        <NavbarContent justify="center" className="hidden lg:flex">
+        <NavbarContent justify="center" className="hidden md:flex">
           <NavbarItem>
             <Button
               as={Link}
@@ -240,19 +242,57 @@ export default function Header() {
         </NavbarContent>
       )}
       {userData && (
-        <NavbarContent justify="center" className="hidden lg:flex">
-          <NavbarItem>
-            <Button
-              as={Link}
-              color="primary"
-              href="/logout"
-              variant="bordered"
-              className="font-medium text-base max-h-8"
-              radius="sm"
-            >
-              Log out
-            </Button>
-          </NavbarItem>
+        <NavbarContent justify="center" className="hidden md:flex">
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                icon={<AvatarIcon />}
+                classNames={{
+                  base: "bg-gradient-to-br from-[#1D9634] to-[#ECECEC]",
+                  icon: "text-black/80",
+                }}
+                isBordered
+                isFocusable
+                color="primary"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem
+                key="profile"
+                className="h-14 gap-2"
+                as={Link}
+                href={`/user/profile/${userData.id_user}`}
+              >
+                <p className="font-semibold" style={{ color: "#11181C" }}>Signed in as</p>
+                <p className="font-semibold" style={{ color: "#11181C" }}>{userData.email}</p>
+              </DropdownItem>
+              <DropdownItem
+                key="wallet"
+                as={Link}
+                href={`/user/wallet/${userData.id_user}`}
+                style={{ color: "#11181C" }}
+              >
+                Wallet
+              </DropdownItem>
+              <DropdownItem
+                key="change-password"
+                as={Link}
+                href={`/user/change-password/${userData.id_user}`}
+                style={{ color: "#11181C" }}
+              >
+                Change Password
+              </DropdownItem>
+              <DropdownItem
+                key="logout"
+                color="danger"
+                as={Link}
+                href="/logout"
+                className="text-danger"
+              >
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarContent>
       )}
       <NavbarMenu>

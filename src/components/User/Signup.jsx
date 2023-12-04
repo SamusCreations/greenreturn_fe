@@ -48,6 +48,7 @@ export default function Signup() {
       email: "",
       password: "",
       id_role: 3,
+      coin: 0,
       active: 1,
     },
     // Asignación de validaciones
