@@ -10,7 +10,8 @@ import UserService from "../../services/UserService";
 import { Spinner } from "@nextui-org/spinner";
 import { SelectUser } from "./form/SelectUser";
 import { SelectAvailableMaterials } from "./form/SelectAvailableMaterials";
-import { Button } from "@nextui-org/react";
+import { Button, Tooltip } from "@nextui-org/react";
+import { DeleteIcon, PlusIcon } from "../../assets/Icons";
 
 export function CreateMaterialExchange() {
   const navigate = useNavigate();
@@ -26,8 +27,14 @@ export function CreateMaterialExchange() {
       .required("Collection Center is required"),
     details: yup.array().of(
       yup.object().shape({
-        id_material: yup.number().required("Material is required"),
-        quantity: yup.number().required("Quantity is required"),
+        id_material: yup
+          .number()
+          .typeError("Material is required")
+          .required("Material is required"),
+        quantity: yup
+          .number()
+          .required("Quantity is required")
+          .typeError("Quantity is required"),
       })
     ),
   });
@@ -75,6 +82,11 @@ export function CreateMaterialExchange() {
                 duration: 4000,
                 position: "top-center",
               });
+              const object = {
+                id_user: response.data.results.id_user,
+                coin: response.data.results.total,
+              };
+              UserService.addCoins(object);
               // Redireccion a la tabla
               return navigate("/table-material-exchange");
             }
@@ -165,7 +177,7 @@ export function CreateMaterialExchange() {
 
   const watchDetail = watch("details");
   const watchTotal = watch("total");
-  
+
   //On change para realizar los calculos
   const handleInputChange = (index, name, value) => {
     //asignar valor en el formulario al control indicado
@@ -177,8 +189,6 @@ export function CreateMaterialExchange() {
       removeDetail(index);
     }
     const valores = getValues();
-    console.log(valores);
-    console.log(watchTotal);
     //console.log(watchDetail[index].id_material)
     const material = dataCm.find(
       (material) => material.id_material === watchDetail[index].id_material
@@ -196,14 +206,33 @@ export function CreateMaterialExchange() {
       total += watchDetail[index].subtotal;
     });
 
-    
     setValue(`details.${index}.unit_cost`, material.unit_cost);
-    setValue("total", total );
+    setValue("total", total);
   };
 
+  const [dataSelectedUser, setDataSelectedUser] = useState({});
+  const [loadedSelectedUser, setLoadedSelectedUser] = useState(false);
 
-  
-  
+  const handleSelectionUser = (e) => {
+    setValue("id_user", e.target.value, {
+      shouldValidate: true,
+    });
+
+    UserService.getUserById(e.target.value)
+      .then((response) => {
+        console.log(response);
+        setDataSelectedUser(response.data.results);
+        setLoadedSelectedUser(true);
+      })
+      .catch((error) => {
+        if (error instanceof SyntaxError) {
+          console.log(error);
+          setError(error);
+          setLoadedSelectedUser(false);
+          throw new Error("Invalid response from server");
+        }
+      });
+  };
 
   // useFieldArray:
   // relaciones de muchos a muchos, con más campos además
@@ -214,12 +243,10 @@ export function CreateMaterialExchange() {
   });
 
   const removeDetail = (index) => {
-    
     if (fields.length === 1) {
       return;
-    } 
-    remove(index)
-    
+    }
+    remove(index);
   };
 
   const addNewDetail = () => {
@@ -242,116 +269,215 @@ export function CreateMaterialExchange() {
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="flex flex-col">
-          <div className="py-8">
-            <h1 className="font-bold text-4xl uppercase">
-              Create material exchange
-            </h1>
-            <p className="text-sm">
-              This information will be displayed publicly so be careful what you
-              write.
-            </p>
-            <div className="flex flex-row">
-              <h2>Collection Center</h2>
-              <p>: {dataCc.name} </p>
+          <div>
+            <div className="py-8">
+              <h1 className="font-bold text-4xl uppercase">
+                Create material exchange
+              </h1>
             </div>
-            <div className="flex flex-row">
-              <h2>Date</h2>
-              <p>: {new Date().toLocaleDateString()} </p>
-            </div>
-            <div className="flex flex-col">
-              <h2 className="text-2xl font-extrabold dark:text-white">
-                Select an User:
-              </h2>
-
-              <Controller
-                name="id_user"
-                control={control}
-                render={({ field }) => (
-                  <SelectUser
-                    field={field}
-                    data={dataUser}
-                    isInvalid={Boolean(errors.id_user)}
-                    errorMessage={
-                      errors.id_color ? errors.id_color.message : " "
-                    }
-                    onChange={(e) =>
-                      setValue("id_user", e.target.value, {
-                        shouldValidate: true,
-                      })
-                    }
+            <div className="flex">
+              <div className="flex-1">
+                <p className="py-2">
+                  <span className="font-bold uppercase">Bill to</span>
+                </p>
+                <div className="max-w-[66%] flex justify-center items-center">
+                  <p className="pr-1">
+                    <span className="font-bold">Customer:</span>
+                  </p>
+                  <Controller
+                    name="id_user"
+                    control={control}
+                    render={({ field }) => (
+                      <SelectUser
+                        field={field}
+                        data={dataUser}
+                        isInvalid={Boolean(errors.id_user)}
+                        errorMessage={
+                          errors.id_user ? errors.id_user.message : " "
+                        }
+                        onChange={handleSelectionUser}
+                      />
+                    )}
                   />
-                )}
-              />
-            </div>
-            <br />
-            <h2 className="text-2xl font-extrabold dark:text-white">
-              Select a Material:
-            </h2>
-            {fields.map((field, index) => (
-              <div key={index}>
-                <Controller
-                  name={`details.${index}.id_material`}
-                  control={control}
-                  field={field}
-                  render={({ field }) => (
-                    <SelectAvailableMaterials
-                      field={field}
-                      data={dataCm}
-                      control={control}
-                      key={index}
-                      Index={index}
-                      isInvalid={Boolean(errors.id_material)}
-                      onRemove={removeDetail}
-                      onInputChange={handleInputChange}
-                      errorMessage={
-                        errors.details &&
-                        errors.details[index]?.id_material?.message
-                      }
-                      onChange={(e) =>
-                        
-                        setValue(
-                          `details${index}.id_material`,
-                          e.target.value,
-                          {
-                            shouldValidate: true,
-                          }
-                        )
-                       
-                   }
-                    />
-                  )}
-                />
-                <div className="flex flex-row">
-                <h2 className="text-1xl font-extrabold">Unit Cost: </h2>
-                                
-                  <p key={index}>{watchDetail[index].unit_cost}</p>
-               
-                </div>    
-                <div className="flex flex-row">
-                <h2 className="text-1xl font-extrabold">Subtotal: </h2>
-                                
-                  <p key={index}>{watchDetail[index].subtotal}</p>
-               
-                </div>                
-                <Button color="primary" onClick={removeDetail}>
-                  Remove Material
-                </Button>
-              </div>
-            ))}
-              
-            <br />
-            <Button color="primary" onClick={addNewDetail}>
-              Add Material
-            </Button>
-            
-                <div className="flex flex-row">
-                <h2 className="text-1xl font-extrabold">Total: </h2>
-                                 
-                  <p >{watchTotal}</p>
-                
                 </div>
+                <p className="py-1">
+                  <span className="font-bold">Identification:</span>{" "}
+                  {loadedSelectedUser && dataSelectedUser
+                    ? dataSelectedUser.identification
+                    : "No information"}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Email Address:</span>{" "}
+                  {loadedSelectedUser && dataSelectedUser
+                    ? dataSelectedUser.email
+                    : "No information"}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Telephone Number:</span>{" "}
+                  {loadedSelectedUser &&
+                  dataSelectedUser &&
+                  dataSelectedUser.telephone
+                    ? dataSelectedUser.telephone
+                    : "No information"}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Address:</span>{" "}
+                  {loadedSelectedUser &&
+                  dataSelectedUser &&
+                  dataSelectedUser.district &&
+                  dataSelectedUser.canton &&
+                  dataSelectedUser.province
+                    ? `${dataSelectedUser.district.name}, ${dataSelectedUser.canton.name}, ${dataSelectedUser.province.name}`
+                    : "No information"}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Street:</span>{" "}
+                  {loadedSelectedUser &&
+                  dataSelectedUser &&
+                  dataSelectedUser.address
+                    ? dataSelectedUser.address
+                    : "No information"}
+                </p>
+              </div>
+              <div className="flex-1">
+                <p className="py-2">
+                  <span className="font-bold uppercase">Exchanged at</span>
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Collection Center:</span>{" "}
+                  {dataCc.name}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Address:</span> {dataCc.address}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Telephone:</span>{" "}
+                  {dataCc.telephone}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold">Administrator:</span>{" "}
+                  {dataCc.administrator.name} {dataCc.administrator.surname}
+                </p>
+                <p className="py-1">
+                  <span className="font-bold uppercase">Date</span>
+                </p>
+                <p>{new Date().toLocaleString()}</p>
+              </div>
+            </div>
 
-            <div className="flex justify-center items-center m-6 border-t">
+            <div className="py-2">
+              <div className="flex items-center justify-between">
+                <p className="py-2">
+                  <span className="font-bold uppercase">Materials</span>
+                </p>
+                <Tooltip color="primary" content="Add" closeDelay={0}>
+                  <span className="text-primary cursor-pointer">
+                    <Button
+                      color="primary"
+                      size="sm"
+                      variant="light"
+                      onClick={addNewDetail}
+                      isIconOnly
+                    >
+                      <PlusIcon />
+                    </Button>
+                  </span>
+                </Tooltip>
+              </div>
+              <div className="border-t borderslate-900/5">
+                {fields.map((field, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center"
+                  >
+                    <Controller
+                      name={`details.${index}.id_material`}
+                      control={control}
+                      field={field}
+                      render={({ field }) => (
+                        <SelectAvailableMaterials
+                          field={field}
+                          data={dataCm}
+                          control={control}
+                          key={index}
+                          Index={index}
+                          isInvalid={
+                            errors?.details
+                              ? Boolean(errors?.details[index]?.id_material)
+                              : false
+                          }
+                          isInvalidQty={
+                            errors?.details
+                              ? Boolean(errors?.details[index]?.quantity)
+                              : false
+                          }
+                          onRemove={removeDetail}
+                          onInputChange={handleInputChange}
+                          errorMessage={
+                            errors?.details &&
+                            errors?.details[index]?.id_material
+                              ? errors?.details[index]?.id_material?.message
+                              : " "
+                          }
+                          errorMessageQty={
+                            errors?.details && errors?.details[index]?.quantity
+                              ? errors?.details[index]?.quantity?.message
+                              : " "
+                          }
+                          onChange={(e) =>
+                            setValue(
+                              `details${index}.id_material`,
+                              e.target.value,
+                              {
+                                shouldValidate: true,
+                              }
+                            )
+                          }
+                        />
+                      )}
+                    />
+                    <div className="flex flex-row">
+                      <h2 className="text-1xl font-extrabold uppercase pr-1">
+                        Price:{" "}
+                      </h2>
+                      <p key={index}>{watchDetail[index].unit_cost}</p>
+                    </div>
+                    <div className="flex flex-row">
+                      <h2 className="text-1xl font-extrabold uppercase pr-1">
+                        Amount:
+                      </h2>
+                      <p key={index}>
+                        {isNaN(watchDetail[index]?.subtotal)
+                          ? 0
+                          : watchDetail[index]?.subtotal}
+                      </p>
+                    </div>
+                    <Tooltip color="danger" content="Delete" closeDelay={0}>
+                      <span className="text-danger cursor-pointer">
+                        <Button
+                          color="danger"
+                          size="sm"
+                          variant="light"
+                          onClick={removeDetail}
+                          isIconOnly
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end border-t borderslate-900/5">
+              <h2 className="text-1xl  pr-1 py-2">
+                <span className="font-bold uppercase">Total:</span>{" "}
+                {watchTotal ? watchTotal : 0} ecocoins
+              </h2>
+            </div>
+
+            <div className="flex justify-center items-center m-6">
               <Button
                 type="submit"
                 color="primary"

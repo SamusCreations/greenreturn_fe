@@ -6,7 +6,9 @@ SelectAvailableMaterials.propTypes = {
   data: PropTypes.array,
   field: PropTypes.object,
   isInvalid: PropTypes.bool,
+  isInvalidQty: PropTypes.bool,
   errorMessage: PropTypes.string,
+  errorMessageQty: PropTypes.string,
   onInputChange: PropTypes.func,
   Index: PropTypes.number,
   control: PropTypes.object,
@@ -18,14 +20,19 @@ export function SelectAvailableMaterials({
   field,
   data,
   isInvalid,
+  isInvalidQty,
   errorMessage,
+  errorMessageQty,
   onInputChange,
   Index,
   control,
   onRemove,
 }) {
   return (
-    <section key={Index}>
+    <section
+      key={Index}
+      className="flex justify-between items-center w-[40%] py-1"
+    >
       <>
         <>
           <Select
@@ -33,6 +40,7 @@ export function SelectAvailableMaterials({
             items={data}
             field={field}
             value={field.value}
+            label="Item"
             onChange={(e) =>
               onInputChange(
                 Index,
@@ -41,11 +49,7 @@ export function SelectAvailableMaterials({
               )
             }
             name={`details.${Index}.id_material`}
-            label="material"
-            placeholder="Select an material to assign exchange"
-            classNames={{
-              listboxWrapper: "max-h-[400px]",
-            }}
+            placeholder="Select a material"
             renderValue={(items) => {
               return items.map((item) => (
                 <div key={item.key} className="flex items-center gap-2">
@@ -62,7 +66,9 @@ export function SelectAvailableMaterials({
             isInvalid={isInvalid}
             errorMessage={errorMessage}
             isRequired
-            labelPlacement="outside"
+            aria-label="select a material"
+            variant="underlined"
+            className="max-w-[50%]"
           >
             {(material) => (
               <SelectItem key={material.id_material} textValue={material.name}>
@@ -86,16 +92,17 @@ export function SelectAvailableMaterials({
                   {...field}
                   type="number"
                   Index={Index}
-                  label="Select a quantity"
-                  className="pt-unit-1"
-                  name={`details.${Index}.quantity`}
-                  isInvalid={isInvalid}
-                  errorMessage={errorMessage}
+                  label="QTY"
+                  placeholder="Enter a quantity"
+                  className="max-w-[25%]"
+                  variant="underlined"
+                  isRequired
+                  isInvalid={isInvalidQty}
+                  errorMessage={errorMessageQty}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value === "0") {
-                      onRemove(Index)
-
+                      onRemove(Index);
                     } else {
                       onInputChange(Index, `details.${Index}.quantity`, value);
                     }
@@ -104,11 +111,6 @@ export function SelectAvailableMaterials({
               )}
             />
           )}
-          {/* {field.value && (
-            <Controller>
-
-            </Controller>
-          )} */}
         </>
       </>
     </section>

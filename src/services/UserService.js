@@ -36,8 +36,16 @@ class UserService {
     return axios.post(BASE_URL + "/login/", User);
   }
 
-  getUserByRole(id_role){
+  getUserByRole(id_role) {
     return axios.get(BASE_URL + "/getUserByRole/" + id_role);
+  }
+
+  addCoins(User) {
+    return axios.post(BASE_URL + "/addCoins/", User);
+  }
+
+  getUserWallet(id_user) {
+    return axios.get(BASE_URL + "/getWallet/" + id_user);
   }
 }
 export default new UserService();
