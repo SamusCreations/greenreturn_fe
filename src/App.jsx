@@ -19,12 +19,16 @@ import { CreateCollectionCenter } from "./components/Collection Center/CreateCol
 import { UpdateCollectionCenter } from "./components/Collection Center/UpdateCollectionCenter";
 import { CreateMaterialExchange } from "./components/Material Exchange/CreateMaterialExchange";
 import { TableMaterialExchange } from "./components/Material Exchange/TableMaterialExchange";
+import TableCoupon from "./components/Coupon/TableCoupon";
 import Login from "./components/User/Login";
 import Signup from "./components/User/Signup";
 import UserProvider from "./components/User/UserProvider";
 import { Logout } from "./components/User/Logout";
 import { Auth } from "./components/User/Auth";
 import Unauthorized from "./components/User/Unauthorized";
+import { CreateCoupon } from "./components/Coupon/CreateCoupon";
+import { UpdateCoupon } from "./components/Coupon/UpdateCoupon";
+
 
 const router = createBrowserRouter([
   {
@@ -98,6 +102,18 @@ const router = createBrowserRouter([
       {
         path: "/table-collection-center/update/:id",
         element: <UpdateCollectionCenter />,
+      },
+      {
+        path: "/table-coupon",
+        element: <TableCoupon />
+      },
+      {
+        path: "/table-coupon/create",
+        element: <CreateCoupon />,
+      },
+      {
+        path: "/table-coupon/update/:id",
+        element: <UpdateCoupon />,
       },
     ],
   },

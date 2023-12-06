@@ -151,7 +151,11 @@ export default function Header() {
             >
               Collection Centers
             </DropdownItem>
-            <DropdownItem key="coupons" startContent={icons.coupon}>
+            <DropdownItem key="coupons"
+             startContent={icons.coupon}
+             as={Link}
+             href="/table-coupon"
+             >
               Coupons
             </DropdownItem>
             {user && authorize({ allowedRoles: ["Admin"] }) && (
