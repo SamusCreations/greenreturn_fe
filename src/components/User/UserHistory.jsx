@@ -16,50 +16,32 @@ import {
   Tooltip,
   Link,
   Spinner,
-  Chip,
 } from "@nextui-org/react";
 import {
-  PlusIcon,
   SearchIcon,
   ChevronDownIcon,
   EyeIcon,
-  EditIcon,
-  DeleteIcon,
 } from "../../assets/Icons";
-import CollectionCenterService from "../../services/CollectionCenterService";
+import MaterialExchangeService from "../../services/MaterialExchangeService";
+import { useParams } from "react-router-dom";
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "name",
-  "admin_name",
-  "address",
-  "telephone",
-  "active",
-  "actions",
-];
+const INITIAL_VISIBLE_COLUMNS = ["date_created", "cc_name", "total", "actions"];
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 const columns = [
-  { name: "ID", uid: "id_collection_center", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "ADMIN", uid: "admin_name", sortable: true },
-  { name: "PROVINCE ID", uid: "id_province" },
-  { name: "CANTON ID", uid: "id_canton" },
-  { name: "DISTRICT ID", uid: "id_district" },
-  { name: "ADDRESS", uid: "address" },
-  { name: "TELEPHONE", uid: "telephone" },
-  { name: "SCHEDULE", uid: "schedule" },
-  { name: "ADMIN ID", uid: "id_user" },
-  { name: "PROVINCE", uid: "province_name", sortable: true },
-  { name: "CANTON", uid: "canton_name", sortable: true },
-  { name: "DISTRICT", uid: "district_name", sortable: true },
-  { name: "STATUS", uid: "active", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Date Created", uid: "date_created", sortable: true },
+  { name: "ID", uid: "id_exchange", sortable: true },
+  { name: "User ID", uid: "id_user", sortable: true },
+  { name: "Collection Center ID", uid: "id_collection_center", sortable: true },
+  { name: "Collection Center", uid: "cc_name", sortable: true },
+  { name: "Total", uid: "total", sortable: true },
+  { name: "Actions", uid: "actions" },
 ];
 
-export default function TableCollectionCenter() {
+export function UserHistory() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -67,8 +49,8 @@ export default function TableCollectionCenter() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "id_collection_center",
-    direction: "ascending",
+    column: "date_created",
+    direction: "descending",
   });
   const [page, setPage] = React.useState(1);
 
@@ -78,10 +60,12 @@ export default function TableCollectionCenter() {
   const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
+  const routeParams = useParams();
 
+  const id = routeParams.id || null;
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    CollectionCenterService.getCollectionCenter()
+    MaterialExchangeService.getUserHistory(id)
       .then((response) => {
         const results = response.data.results;
 
@@ -110,15 +94,17 @@ export default function TableCollectionCenter() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...data];
+    let filteredExchanges = [...data];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredExchanges = filteredExchanges.filter((material_exchange) =>
+        material_exchange.date_created
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredUsers;
+    return filteredExchanges;
   }, [data, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -144,19 +130,10 @@ export default function TableCollectionCenter() {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "address":
-        return `${item.address}, ${item.district_name}, ${item.canton_name}, ${item.province_name}`;
-      case "active":
-        return (
-          <Chip
-            className="capitalize"
-            color={item.active == 1 ? "primary" : "danger"}
-            size="sm"
-            variant="flat"
-          >
-            {item.active == 1 ? "Active" : "Paused"}
-          </Chip>
-        );
+      case "user_name":
+        return `${item.user_name} ${item.user_surname}`;
+      case "date_created":
+        return new Date(item.date_created).toLocaleString();
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -166,37 +143,10 @@ export default function TableCollectionCenter() {
                   size="sm"
                   variant="light"
                   as={Link}
-                  href={`/table-collection-center/update/${item.id_collection_center}`}
+                  href={`/user/history/details/${item.id_exchange}`}
                   isIconOnly
                 >
                   <EyeIcon />
-                </Button>
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit" closeDelay={0}>
-              <span className="text-lg text-default-400 cursor-pointer">
-                <Button
-                  size="sm"
-                  variant="light"
-                  as={Link}
-                  href={`/table-collection-center/update/${item.id_collection_center}`}
-                  isIconOnly
-                >
-                  <EditIcon />
-                </Button>
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete" closeDelay={0}>
-              <span className="text-lg text-danger cursor-pointer">
-                <Button
-                  color="danger"
-                  size="sm"
-                  variant="light"
-                  as={Link}
-                  href={`#`}
-                  isIconOnly
-                >
-                  <DeleteIcon />
                 </Button>
               </span>
             </Tooltip>
@@ -244,13 +194,15 @@ export default function TableCollectionCenter() {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            className="w-full sm:max-w-[25%]"
+            type="date"
+            placeholder="Search by date..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
+
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -276,19 +228,11 @@ export default function TableCollectionCenter() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
-              color="primary"
-              endContent={<PlusIcon />}
-              as={Link}
-              href={`/table-collection-center/create`}
-            >
-              Add New
-            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {data.length} collection centers
+            Total {data.length}
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -363,7 +307,7 @@ export default function TableCollectionCenter() {
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">collection centers</h1>
+        <h1 className="uppercase">Material Exchange History</h1>
       </div>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -394,7 +338,7 @@ export default function TableCollectionCenter() {
         </TableHeader>
         <TableBody emptyContent={"No data found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id_collection_center}>
+            <TableRow key={item.id_exchange}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

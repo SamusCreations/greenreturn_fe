@@ -24,6 +24,7 @@ import {
   EyeIcon,
 } from "../../assets/Icons";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
+import { useParams } from "react-router-dom";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "date_created",
@@ -49,6 +50,9 @@ const columns = [
 ];
 
 export function TableMaterialExchange() {
+  const routeParams = useParams();
+  const idUser = routeParams.id || null;
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -142,19 +146,19 @@ export function TableMaterialExchange() {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`/history-detail/${item.id_exchange}`}
-              isIconOnly
-            >
-              <Tooltip content="Details" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer">
+            <Tooltip content="Details" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer">
+                <Button
+                  size="sm"
+                  variant="light"
+                  as={Link}
+                  href={`/table-material-exchange/details/${item.id_exchange}`}
+                  isIconOnly
+                >
                   <EyeIcon />
-                </span>
-              </Tooltip>
-            </Button>
+                </Button>
+              </span>
+            </Tooltip>
           </div>
         );
       default:
@@ -237,7 +241,7 @@ export function TableMaterialExchange() {
               color="primary"
               endContent={<PlusIcon />}
               as={Link}
-              href={`/table-material-exchange/create`}
+              href={`/table-material-exchange/${idUser}/create/`}
             >
               Add New
             </Button>

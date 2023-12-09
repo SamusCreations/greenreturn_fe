@@ -27,6 +27,10 @@ class UserService {
   signupUser(User) {
     return axios.post(BASE_URL + "/createForm/", User);
   }
+  
+  changePassword(User) {
+    return axios.post(BASE_URL + "/changePassword/", User);
+  }
 
   updateUser(User) {
     return axios.put(BASE_URL, User);
