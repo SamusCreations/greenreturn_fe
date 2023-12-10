@@ -20,7 +20,6 @@ export function UpdateUserProfile() {
   const routeParams = useParams();
 
   const id = routeParams.id || null;
-  console.log(id);
   //Valores a precargar en el formulario, vienen del API
   const [values, setUser] = useState(null);
   //Obtener la pelicula del API

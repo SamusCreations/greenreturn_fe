@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
 import CollectionCenterService from "../../services/CollectionCenterService";
@@ -15,6 +15,8 @@ import { DeleteIcon, PlusIcon } from "../../assets/Icons";
 
 export function CreateMaterialExchange() {
   const navigate = useNavigate();
+  const routeParams = useParams();
+  const idUser = routeParams.id || null;
 
   const materialExchangeSchema = yup.object({
     id_user: yup
@@ -88,7 +90,7 @@ export function CreateMaterialExchange() {
               };
               UserService.addCoins(object);
               // Redireccion a la tabla
-              return navigate("/table-material-exchange");
+              return navigate(`/table-material-exchange/${idUser}`);
             }
           })
           .catch((error) => {
@@ -118,7 +120,7 @@ export function CreateMaterialExchange() {
   const [loadedCc, setloadedCc] = useState(false);
   useEffect(() => {
     //Llamar al API y obtener una pelicula
-    CollectionCenterService.getCollectionCenterById(1)
+    CollectionCenterService.getCollectionCenterByUser(idUser)
       .then((response) => {
         setDataCc(response.data.results);
         console.log(response.data);
@@ -154,27 +156,6 @@ export function CreateMaterialExchange() {
       });
   }, []);
 
-  const [dataCm, setDataCm] = useState(null);
-
-  //Booleano para establecer sí se ha recibido respuesta
-  const [loadedCm, setloadedCm] = useState(false);
-  useEffect(() => {
-    //Llamar al API y obtener una pelicula
-    CollectionCenterService.getCollectionByCcId(1)
-      .then((response) => {
-        setDataCm(response.data.results);
-        console.log(response.data);
-        console.log(response.data.id_color);
-        setError(response.error);
-        setloadedCm(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error);
-        throw new Error("Respuesta no válida del servidor");
-      });
-  }, []);
-
   const watchDetail = watch("details");
   const watchTotal = watch("total");
 
@@ -190,7 +171,7 @@ export function CreateMaterialExchange() {
     }
     const valores = getValues();
     //console.log(watchDetail[index].id_material)
-    const material = dataCm.find(
+    const material = dataCc.materials.find(
       (material) => material.id_material === watchDetail[index].id_material
     );
     let total = 0;
@@ -258,7 +239,7 @@ export function CreateMaterialExchange() {
     });
   };
 
-  if (!loadedCc || !loadedUser || !loadedCm)
+  if (!loadedCc || !loadedUser)
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
         <Spinner />
@@ -397,7 +378,7 @@ export function CreateMaterialExchange() {
                       render={({ field }) => (
                         <SelectAvailableMaterials
                           field={field}
-                          data={dataCm}
+                          data={dataCc.materials}
                           control={control}
                           key={index}
                           Index={index}
@@ -461,7 +442,7 @@ export function CreateMaterialExchange() {
                           onClick={removeDetail}
                           isIconOnly
                         >
-                          <DeleteIcon />
+                          <DeleteIcon/>
                         </Button>
                       </span>
                     </Tooltip>

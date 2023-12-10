@@ -9,8 +9,12 @@ class CollectionCenterService {
   }
 
   //localhost:81/greenreturn_api/collection_center/1
-  getCollectionCenterById(collection_center_id) {
-    return axios.get(BASE_URL + "/" + collection_center_id);
+  getCollectionCenterById(id_collection_center) {
+    return axios.get(BASE_URL + "/" + id_collection_center);
+  }
+
+  getCollectionCenterByUser(id_user) {
+    return axios.get(BASE_URL + "/getByUser/" + id_user);
   }
 
   createCollectionCenter(CollectionCenter) {
@@ -19,10 +23,6 @@ class CollectionCenterService {
 
   updateCollectionCenter(CollectionCenter) {
     return axios.put(BASE_URL, CollectionCenter);
-  }
-
-  getCollectionByCcId(collection_center_id) {
-    return axios.get(BASE_URL + "/getColletionByCcId/" + collection_center_id)
   }
 }
 export default new CollectionCenterService();

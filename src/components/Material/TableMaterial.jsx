@@ -151,46 +151,46 @@ export default function TableMaterial() {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`/table-material/update/${item.id_material}`}
-              isIconOnly
-            >
-              <Tooltip content="Details" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer">
+            <Tooltip content="Details" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer">
+                <Button
+                  size="sm"
+                  variant="light"
+                  as={Link}
+                  href={`/table-material/update/${item.id_material}`}
+                  isIconOnly
+                >
                   <EyeIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`/table-material/update/${item.id_material}`}
-              isIconOnly
-            >
-              <Tooltip content="Edit" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer">
+                </Button>
+              </span>
+            </Tooltip>
+            <Tooltip content="Edit" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer">
+                <Button
+                  size="sm"
+                  variant="light"
+                  as={Link}
+                  href={`/table-material/update/${item.id_material}`}
+                  isIconOnly
+                >
                   <EditIcon />
-                </span>
-              </Tooltip>
-            </Button>
-            <Button
-              color="danger"
-              size="sm"
-              variant="light"
-              as={Link}
-              href={`#`}
-              isIconOnly
-            >
-              <Tooltip color="danger" content="Delete" closeDelay={0}>
-                <span className="text-lg text-danger cursor-pointer">
+                </Button>
+              </span>
+            </Tooltip>
+            <Tooltip color="danger" content="Delete" closeDelay={0}>
+              <span className="text-lg text-danger cursor-pointer">
+                <Button
+                  color="danger"
+                  size="sm"
+                  variant="light"
+                  as={Link}
+                  href={`#`}
+                  isIconOnly
+                >
                   <DeleteIcon />
-                </span>
-              </Tooltip>
-            </Button>
+                </Button>
+              </span>
+            </Tooltip>
           </div>
         );
       default:

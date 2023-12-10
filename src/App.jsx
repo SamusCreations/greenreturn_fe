@@ -6,7 +6,7 @@ import { PageNotFound } from "./components/Home/PageNotFound";
 import { ListMaterial } from "./components/Material/ListMaterial";
 import { DetailMaterial } from "./components/Material/DetailMaterial";
 import { ListCollectionCenter } from "./components/Collection Center/ListCollectionCenter";
-import HistoryUser from "./components/History/HistoryUser";
+import { UserHistory } from "./components/User/UserHistory";
 import HistoryCollectionCenter from "./components/History/HistoryCollectionCenter";
 import { DetailHistory } from "./components/History/DetailHistory";
 import { DetailCollectionCenter } from "./components/Collection Center/DetailCollectionCenter";
@@ -28,13 +28,12 @@ import { Auth } from "./components/User/Auth";
 import Unauthorized from "./components/User/Unauthorized";
 import { CreateCoupon } from "./components/Coupon/CreateCoupon";
 import { UpdateCoupon } from "./components/Coupon/UpdateCoupon";
-
-import { UserSettings } from "./components/User/UserSettings";
 import UserProfile from "./components/User/UserProfile";
 import { UpdateUserProfile } from "./components/User/UpdateUserProfile";
 import UserWallet from "./components/User/UserWallet";
 import { CouponExchangeList } from "./components/Coupon Exchange/CouponExchangeList";
 import { CouponExchange } from "./components/Coupon Exchange/CouponExchange";
+import { UpdateUserPassword } from "./components/User/UpdateUserPassword";
 
 const router = createBrowserRouter([
   {
@@ -115,7 +114,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/table-coupon",
-        element: <TableCoupon />
+        element: <TableCoupon />,
       },
       {
         path: "/table-coupon/create",
@@ -129,27 +128,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Auth allowedRoles={["Admin", "CC_Admin"]} />,
+    element: <Auth allowedRoles={["CC_Admin"]} />,
     children: [
-      {
-        path: "/user-history",
-        element: <HistoryUser />,
-      },
       {
         path: "/cc-history",
         element: <HistoryCollectionCenter />,
       },
       {
-        path: "/history-detail/:id",
-        element: <DetailHistory />,
-      },
-      {
-        path: "/table-material-exchange",
+        path: "/table-material-exchange/:id",
         element: <TableMaterialExchange />,
       },
       {
-        path: "/table-material-exchange/create",
+        path: "/table-material-exchange/:id/create",
         element: <CreateMaterialExchange />,
+      },
+      {
+        path: "/table-material-exchange/details/:id",
+        element: <DetailHistory />,
       },
     ],
   },
@@ -157,10 +152,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <Auth allowedRoles={["Admin", "CC_Admin", "User"]} />,
     children: [
-      {
-        path: "/user/settings/:id",
-        element: <UserSettings />,
-      },
       {
         path: "/user/profile/:id",
         element: <UserProfile />,
@@ -170,8 +161,23 @@ const router = createBrowserRouter([
         element: <UpdateUserProfile />,
       },
       {
+        path: "/user/password/:id",
+        element: <UpdateUserPassword />,
+      },
+    ],
+  },
+  
+  {
+    path: "/",
+    element: <Auth allowedRoles={["User"]} />,
+    children: [
+      {
         path: "/user/wallet/:id",
         element: <UserWallet />,
+      },
+      {
+        path: "/user/history/:id",
+        element: <UserHistory />,
       },
       {
         path: "/coupon-list",
@@ -181,9 +187,15 @@ const router = createBrowserRouter([
         path: "/coupon-list/:id",
         element: <CouponExchange />,
       },
+      {
+        path: "/user/history/details/:id",
+        element: <DetailHistory />,
+      },
     ],
   },
 ]);
+  
+
 
 export default function App() {
   return (

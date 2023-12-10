@@ -195,13 +195,13 @@ export default function Header() {
                 Collection Center Table
               </DropdownItem>
             )}
-            {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
+            {user && authorize({ allowedRoles: ["CC_Admin"] }) && userData && (
               <DropdownItem
                 style={{ color: "#11181C" }}
                 key="material_exchange"
                 startContent={icons.exchange}
                 as={Link}
-                href="/table-material-exchange"
+                href={`/table-material-exchange/${userData.id_user}`}
               >
                 Material Exchange Table
               </DropdownItem>
@@ -218,17 +218,6 @@ export default function Header() {
             Contact Us
           </Link>
         </NavbarItem>
-        {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
-          <NavbarItem>
-            <Link
-              color="foreground"
-              href="/dashboard"
-              className="font-medium text-base"
-            >
-              Dashboard
-            </Link>
-          </NavbarItem>
-        )}
       </NavbarContent>
       {!userData && (
         <NavbarContent justify="center" className="hidden md:flex">
@@ -280,21 +269,47 @@ export default function Header() {
                 as={Link}
                 href={`/user/profile/${userData.id_user}`}
               >
-                <p className="font-semibold" style={{ color: "#11181C" }}>Signed in as</p>
-                <p className="font-semibold" style={{ color: "#11181C" }}>{userData.email}</p>
+                <p className="font-semibold" style={{ color: "#11181C" }}>
+                  Signed in as
+                </p>
+                <p className="font-semibold" style={{ color: "#11181C" }}>
+                  {userData.email}
+                </p>
               </DropdownItem>
-              <DropdownItem
-                key="wallet"
-                as={Link}
-                href={`/user/wallet/${userData.id_user}`}
-                style={{ color: "#11181C" }}
-              >
-                Wallet
-              </DropdownItem>
+              {user && authorize({ allowedRoles: ["User"] }) && (
+                <DropdownItem
+                  key="wallet"
+                  as={Link}
+                  href={`/user/wallet/${userData.id_user}`}
+                  style={{ color: "#11181C" }}
+                >
+                  Wallet
+                </DropdownItem>
+              )}
+              {user && authorize({ allowedRoles: ["User"] }) && (
+                <DropdownItem
+                  key="history"
+                  as={Link}
+                  href={`/user/history/${userData.id_user}`}
+                  style={{ color: "#11181C" }}
+                >
+                  History
+                </DropdownItem>
+              )}
+              {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
+                <DropdownItem
+                  key="dashboard"
+                  as={Link}
+                  href={`/dashboard/`}
+                  style={{ color: "#11181C" }}
+                >
+                  Dashboard
+                </DropdownItem>
+              )}
               <DropdownItem
                 key="change-password"
                 as={Link}
-                href={`/user/change-password/${userData.id_user}`}
+                href={`/user/password/${userData.id_user}`}
                 style={{ color: "#11181C" }}
               >
                 Change Password
