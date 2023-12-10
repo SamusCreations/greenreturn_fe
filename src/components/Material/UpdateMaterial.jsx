@@ -16,6 +16,7 @@ import {UploadFile} from "./Form/uploadFile";
 export function UpdateMaterial() {
   const navigate = useNavigate();
   const routeParams = useParams();
+  const [errorshown, setErrorShown] = useState(false)
 
   const id = routeParams.id || null;
   //Valores a precargar en el formulario, vienen del API
@@ -65,8 +66,21 @@ export function UpdateMaterial() {
       .required("Measurement unit is required"),
     fileToUpload: yup
       .mixed()
+      .test("fileToUpload", "File to upload is required", function (value) {       
+        return value && value.length > 0; 
+      })
       .test("required", "Image required", function (value) {
+        if(value === '' && errorshown==false){
+          toast.error("Image required", {
+            duration: 2000,
+            position: "bottom-center",
+          });
+          setErrorShown(true)
+        } else if(errorshown == true){
+          console.log("Image required")
+        }
         return value instanceof File || (value && value[0] instanceof File);
+        
       }),
   });
 
@@ -144,6 +158,10 @@ export function UpdateMaterial() {
       //Capturar error
     }
   };
+
+  const setErrorFalse =(  ) => {
+    setErrorShown(false)
+  }
 
   // Si ocurre error al realizar el submit
   const onError = (errors, e) => console.log(errors, e);
@@ -353,6 +371,7 @@ export function UpdateMaterial() {
               variant="shadow"
               radius="sm"
               className="uppercase font-medium text-2xl m-4"
+              onClick={setErrorFalse}
             >
               Save
             </Button>

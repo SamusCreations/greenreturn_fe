@@ -33,6 +33,8 @@ import { UserSettings } from "./components/User/UserSettings";
 import UserProfile from "./components/User/UserProfile";
 import { UpdateUserProfile } from "./components/User/UpdateUserProfile";
 import UserWallet from "./components/User/UserWallet";
+import { CouponExchangeList } from "./components/Coupon Exchange/CouponExchangeList";
+import { CouponExchange } from "./components/Coupon Exchange/CouponExchange";
 
 const router = createBrowserRouter([
   {
@@ -170,6 +172,14 @@ const router = createBrowserRouter([
       {
         path: "/user/wallet/:id",
         element: <UserWallet />,
+      },
+      {
+        path: "/coupon-list",
+        element: <CouponExchangeList />,
+      },
+      {
+        path: "/coupon-list/:id",
+        element: <CouponExchange />,
       },
     ],
   },

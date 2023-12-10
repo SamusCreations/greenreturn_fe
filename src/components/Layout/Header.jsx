@@ -153,13 +153,26 @@ export default function Header() {
             >
               Collection Centers
             </DropdownItem>
-            <DropdownItem key="coupons"
+            
+            {user && authorize({ allowedRoles: ["Admin"] }) && (
+             <DropdownItem key="coupons"
              startContent={icons.coupon}
              as={Link}
              href="/table-coupon"
              >
               Coupons
             </DropdownItem>
+            )}
+            {user && authorize({ allowedRoles: ["Admin"] }) && (
+             <DropdownItem key="coupon-exchange"
+             startContent={icons.coupon}
+             as={Link}
+             href="/coupon-list"           
+             >
+              Redeem Coupons 
+            </DropdownItem>
+            
+            )}
             {user && authorize({ allowedRoles: ["Admin"] }) && (
               <DropdownItem
                 style={{ color: "#11181C" }}
