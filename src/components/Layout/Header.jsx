@@ -163,7 +163,7 @@ export default function Header() {
               Coupons
             </DropdownItem>
             )}
-            {user && authorize({ allowedRoles: ["Admin"] }) && (
+            {user && authorize({ allowedRoles: ["User"] }) && (
              <DropdownItem key="coupon-exchange"
              startContent={icons.coupon}
              as={Link}
