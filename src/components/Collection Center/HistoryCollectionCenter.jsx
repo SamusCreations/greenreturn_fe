@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -17,31 +17,39 @@ import {
   Link,
   Spinner,
 } from "@nextui-org/react";
-import {
-  SearchIcon,
-  ChevronDownIcon,
-  EyeIcon,
-} from "../../assets/Icons";
+import { SearchIcon, ChevronDownIcon, EyeIcon } from "../../assets/Icons";
 import MaterialExchangeService from "../../services/MaterialExchangeService";
-import { useParams } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
-const INITIAL_VISIBLE_COLUMNS = ["date_created", "cc_name", "total", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "date_created",
+  "user_name",
+  "total",
+  "actions",
+];
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 const columns = [
-  { name: "Date Created", uid: "date_created", sortable: true },
+  { name: "DATE CREATED", uid: "date_created", sortable: true },
   { name: "ID", uid: "id_exchange", sortable: true },
-  { name: "User ID", uid: "id_user", sortable: true },
-  { name: "Collection Center ID", uid: "id_collection_center", sortable: true },
-  { name: "Collection Center", uid: "cc_name", sortable: true },
-  { name: "Total", uid: "total", sortable: true },
-  { name: "Actions", uid: "actions" },
+  { name: "USER ID", uid: "id_user", sortable: true },
+  { name: "USER NAME", uid: "user_name", sortable: true },
+  { name: "COLLECTION CENTER ID", uid: "id_collection_center", sortable: true },
+  { name: "COLLECTION CENTER", uid: "name", sortable: true },
+  { name: "TOTAL", uid: "total", sortable: true },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
-export function UserHistory() {
+export function HistoryCollectionCenter() {
+  const { user, decodeToken } = useContext(UserContext);
+  const [userData, setUserData] = useState(decodeToken());
+  useEffect(() => {
+    setUserData(decodeToken());
+  }, [user]);
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -60,12 +68,10 @@ export function UserHistory() {
   const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
-  const routeParams = useParams();
 
-  const id = routeParams.id || null;
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    MaterialExchangeService.getUserHistory(id)
+    MaterialExchangeService.getCollectionCenterHistory(userData.id_user)
       .then((response) => {
         const results = response.data.results;
 
@@ -141,7 +147,7 @@ export function UserHistory() {
                   size="sm"
                   variant="light"
                   as={Link}
-                  href={`/user/history/details/${item.id_exchange}`}
+                  href={`/collection-center/history/details/${item.id_exchange}`}
                   isIconOnly
                 >
                   <EyeIcon />

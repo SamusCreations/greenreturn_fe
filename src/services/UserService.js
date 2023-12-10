@@ -51,5 +51,9 @@ class UserService {
   getUserWallet(id_user) {
     return axios.get(BASE_URL + "/getWallet/" + id_user);
   }
+
+  disableUser(User) {
+    return axios.post(BASE_URL + "/disable/", User);
+  }
 }
 export default new UserService();

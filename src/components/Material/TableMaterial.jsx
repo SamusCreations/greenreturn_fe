@@ -23,7 +23,6 @@ import {
   ChevronDownIcon,
   EyeIcon,
   EditIcon,
-  DeleteIcon,
 } from "../../assets/Icons";
 import MaterialService from "../../services/MaterialService";
 
@@ -157,7 +156,7 @@ export default function TableMaterial() {
                   size="sm"
                   variant="light"
                   as={Link}
-                  href={`/table-material/update/${item.id_material}`}
+                  href={`/material/${item.id_material}`}
                   isIconOnly
                 >
                   <EyeIcon />
@@ -174,20 +173,6 @@ export default function TableMaterial() {
                   isIconOnly
                 >
                   <EditIcon />
-                </Button>
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete" closeDelay={0}>
-              <span className="text-lg text-danger cursor-pointer">
-                <Button
-                  color="danger"
-                  size="sm"
-                  variant="light"
-                  as={Link}
-                  href={`#`}
-                  isIconOnly
-                >
-                  <DeleteIcon />
                 </Button>
               </span>
             </Tooltip>
