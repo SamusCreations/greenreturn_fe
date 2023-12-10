@@ -296,6 +296,16 @@ export default function Header() {
                   History
                 </DropdownItem>
               )}
+              {user && authorize({ allowedRoles: ["CC_Admin"] }) && (
+                <DropdownItem
+                  key="collection-center-history"
+                  as={Link}
+                  href={`/collection-center/history`}
+                  style={{ color: "#11181C" }}
+                >
+                  Collection Center History
+                </DropdownItem>
+              )}
               {user && authorize({ allowedRoles: ["Admin", "CC_Admin"] }) && (
                 <DropdownItem
                   key="dashboard"

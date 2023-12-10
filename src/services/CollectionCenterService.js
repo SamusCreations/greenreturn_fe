@@ -24,5 +24,9 @@ class CollectionCenterService {
   updateCollectionCenter(CollectionCenter) {
     return axios.put(BASE_URL, CollectionCenter);
   }
+
+  disableCollectionCenter(CollectionCenter) {
+    return axios.post(BASE_URL + "/disable/", CollectionCenter);
+  }
 }
 export default new CollectionCenterService();

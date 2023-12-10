@@ -7,8 +7,8 @@ import { ListMaterial } from "./components/Material/ListMaterial";
 import { DetailMaterial } from "./components/Material/DetailMaterial";
 import { ListCollectionCenter } from "./components/Collection Center/ListCollectionCenter";
 import { UserHistory } from "./components/User/UserHistory";
-import HistoryCollectionCenter from "./components/History/HistoryCollectionCenter";
-import { DetailHistory } from "./components/History/DetailHistory";
+import { HistoryCollectionCenter } from "./components/Collection Center/HistoryCollectionCenter";
+import { DetailMaterialExchange } from "./components/Material Exchange/DetailMaterialExchange";
 import { DetailCollectionCenter } from "./components/Collection Center/DetailCollectionCenter";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TableMaterial from "./components/Material/TableMaterial";
@@ -34,6 +34,9 @@ import UserWallet from "./components/User/UserWallet";
 import { CouponExchangeList } from "./components/Coupon Exchange/CouponExchangeList";
 import { CouponExchange } from "./components/Coupon Exchange/CouponExchange";
 import { UpdateUserPassword } from "./components/User/UpdateUserPassword";
+import TableUser from "./components/User/TableUser";
+import { UpdateUser } from "./components/User/UpdateUser";
+import { CreateUser } from "./components/User/CreateUser";
 
 const router = createBrowserRouter([
   {
@@ -81,10 +84,6 @@ const router = createBrowserRouter([
     element: <Auth allowedRoles={["Admin"]} />,
     children: [
       {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-      {
         path: "/table-material",
         element: <TableMaterial />,
       },
@@ -124,6 +123,18 @@ const router = createBrowserRouter([
         path: "/table-coupon/update/:id",
         element: <UpdateCoupon />,
       },
+      {
+        path: "/table-user",
+        element: <TableUser />,
+      },
+      {
+        path: "/table-user/create",
+        element: <CreateUser />,
+      },
+      {
+        path: "/table-user/update/:id",
+        element: <UpdateUser />,
+      },
     ],
   },
   {
@@ -131,8 +142,12 @@ const router = createBrowserRouter([
     element: <Auth allowedRoles={["CC_Admin"]} />,
     children: [
       {
-        path: "/cc-history",
+        path: "/collection-center/history",
         element: <HistoryCollectionCenter />,
+      },
+      {
+        path: "/collection-center/history/details/:id",
+        element: <DetailMaterialExchange />,
       },
       {
         path: "/table-material-exchange/:id",
@@ -144,7 +159,17 @@ const router = createBrowserRouter([
       },
       {
         path: "/table-material-exchange/details/:id",
-        element: <DetailHistory />,
+        element: <DetailMaterialExchange />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <Auth allowedRoles={["Admin", "CC_Admin"]} />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
       },
     ],
   },
@@ -189,7 +214,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/history/details/:id",
-        element: <DetailHistory />,
+        element: <DetailMaterialExchange />,
       },
     ],
   },

@@ -114,19 +114,26 @@ export function CreateMaterialExchange() {
 
   const onError = (errors, e) => console.log(errors, e);
   //Resultado de consumo del API, respuesta
-  const [dataCc, setDataCc] = useState(null);
+  const [dataCollectionCenter, setDataCollectionCenter] = useState(null);
 
   //Booleano para establecer sí se ha recibido respuesta
-  const [loadedCc, setloadedCc] = useState(false);
+  const [loadedCollectionCenter, setloadedCollectionCenter] = useState(false);
+
   useEffect(() => {
     //Llamar al API y obtener una pelicula
     CollectionCenterService.getCollectionCenterByUser(idUser)
       .then((response) => {
-        setDataCc(response.data.results);
+        setDataCollectionCenter(response.data.results);
         console.log(response.data);
-        console.log(response.data.id_color);
+        if (response.data.results?.active == "0") {
+          toast.error("Collection Center Disabled", {
+            duration: 4000,
+            position: "top-center",
+          });
+          return navigate(`/table-material-exchange/${idUser}`);
+        }
         setError(response.error);
-        setloadedCc(true);
+        setloadedCollectionCenter(true);
       })
       .catch((error) => {
         console.log(error);
@@ -171,7 +178,7 @@ export function CreateMaterialExchange() {
     }
     const valores = getValues();
     //console.log(watchDetail[index].id_material)
-    const material = dataCc.materials.find(
+    const material = dataCollectionCenter.materials.find(
       (material) => material.id_material === watchDetail[index].id_material
     );
     let total = 0;
@@ -239,7 +246,7 @@ export function CreateMaterialExchange() {
     });
   };
 
-  if (!loadedCc || !loadedUser)
+  if (!loadedCollectionCenter || !loadedUser)
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
         <Spinner />
@@ -326,18 +333,20 @@ export function CreateMaterialExchange() {
                 </p>
                 <p className="py-1">
                   <span className="font-bold">Collection Center:</span>{" "}
-                  {dataCc.name}
+                  {dataCollectionCenter.name}
                 </p>
                 <p className="py-1">
-                  <span className="font-bold">Address:</span> {dataCc.address}
+                  <span className="font-bold">Address:</span>{" "}
+                  {dataCollectionCenter.address}
                 </p>
                 <p className="py-1">
                   <span className="font-bold">Telephone:</span>{" "}
-                  {dataCc.telephone}
+                  {dataCollectionCenter.telephone}
                 </p>
                 <p className="py-1">
                   <span className="font-bold">Administrator:</span>{" "}
-                  {dataCc.administrator.name} {dataCc.administrator.surname}
+                  {dataCollectionCenter.administrator.name}{" "}
+                  {dataCollectionCenter.administrator.surname}
                 </p>
                 <p className="py-1">
                   <span className="font-bold uppercase">Date</span>
@@ -378,7 +387,7 @@ export function CreateMaterialExchange() {
                       render={({ field }) => (
                         <SelectAvailableMaterials
                           field={field}
-                          data={dataCc.materials}
+                          data={dataCollectionCenter.materials}
                           control={control}
                           key={index}
                           Index={index}
@@ -442,7 +451,7 @@ export function CreateMaterialExchange() {
                           onClick={removeDetail}
                           isIconOnly
                         >
-                          <DeleteIcon/>
+                          <DeleteIcon />
                         </Button>
                       </span>
                     </Tooltip>

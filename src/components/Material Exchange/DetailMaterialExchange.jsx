@@ -31,7 +31,7 @@ const columns = [
   },
 ];
 
-export function DetailHistory() {
+export function DetailMaterialExchange() {
   const routeParams = useParams();
   //Resultado de consumo del API, respuesta
   const [data, setData] = useState(null);

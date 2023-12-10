@@ -33,6 +33,11 @@ export default function Signup() {
       .string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters"),
+    confirmPassword: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Must be at least 8 characters long")
+      .oneOf([yup.ref("password"), null], "Passwords must match"),
   });
 
   const {
@@ -47,6 +52,7 @@ export default function Signup() {
       surname: "",
       email: "",
       password: "",
+      confirmPassword: "",
       id_role: 3,
       coin: 0,
       active: 1,
@@ -201,6 +207,41 @@ export default function Signup() {
                     isInvalid={Boolean(errors.password)}
                     errorMessage={
                       errors.password ? errors.password.message : " "
+                    }
+                    endContent={
+                      <button
+                        className="focus:outline-none"
+                        type="button"
+                        onClick={toggleVisibility}
+                      >
+                        {isVisible ? (
+                          <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                          <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                      </button>
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="confirmPassword"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    id="confirmPassword"
+                    isRequired
+                    label="Confirm Password"
+                    placeholder="Enter your password to confirm"
+                    type={isVisible ? "text" : "password"}
+                    labelPlacement="outside"
+                    className="my-2"
+                    isInvalid={Boolean(errors.confirmPassword)}
+                    errorMessage={
+                      errors.confirmPassword
+                        ? errors.confirmPassword.message
+                        : " "
                     }
                     endContent={
                       <button

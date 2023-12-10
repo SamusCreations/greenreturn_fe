@@ -16,32 +16,47 @@ import {
   Tooltip,
   Link,
   Spinner,
+  Chip,
 } from "@nextui-org/react";
 import {
+  PlusIcon,
   SearchIcon,
   ChevronDownIcon,
-  EyeIcon,
+  EditIcon,
 } from "../../assets/Icons";
-import MaterialExchangeService from "../../services/MaterialExchangeService";
-import { useParams } from "react-router-dom";
+import UserService from "../../services/UserService";
+import ModalUser from "./ModalUser";
 
-const INITIAL_VISIBLE_COLUMNS = ["date_created", "cc_name", "total", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "email",
+  "address",
+  "telephone",
+  "active",
+  "actions",
+];
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 const columns = [
-  { name: "Date Created", uid: "date_created", sortable: true },
-  { name: "ID", uid: "id_exchange", sortable: true },
-  { name: "User ID", uid: "id_user", sortable: true },
-  { name: "Collection Center ID", uid: "id_collection_center", sortable: true },
-  { name: "Collection Center", uid: "cc_name", sortable: true },
-  { name: "Total", uid: "total", sortable: true },
-  { name: "Actions", uid: "actions" },
+  { name: "ID", uid: "id_user", sortable: true },
+  { name: "NAME", uid: "name", sortable: true },
+  { name: "SURNAME", uid: "surname", sortable: true },
+  { name: "PROVINCE ID", uid: "id_province" },
+  { name: "CANTON ID", uid: "id_canton" },
+  { name: "DISTRICT ID", uid: "id_district" },
+  { name: "ADDRESS", uid: "address" },
+  { name: "TELEPHONE", uid: "telephone" },
+  { name: "PROVINCE", uid: "province_name", sortable: true },
+  { name: "CANTON", uid: "canton_name", sortable: true },
+  { name: "DISTRICT", uid: "district_name", sortable: true },
+  { name: "STATUS", uid: "active", sortable: true },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
-export function UserHistory() {
+export default function TableUser() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -49,8 +64,8 @@ export function UserHistory() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "date_created",
-    direction: "descending",
+    column: "id_user",
+    direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
@@ -60,12 +75,10 @@ export function UserHistory() {
   const [error, setError] = useState("");
   //Booleano para establecer sí se ha recibido respuesta
   const [loaded, setLoaded] = useState(false);
-  const routeParams = useParams();
 
-  const id = routeParams.id || null;
   useEffect(() => {
     //Llamar al API y obtener la lista de materiales
-    MaterialExchangeService.getUserHistory(id)
+    UserService.getUser()
       .then((response) => {
         const results = response.data.results;
 
@@ -94,17 +107,15 @@ export function UserHistory() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredExchanges = [...data];
+    let filteredUsers = [...data];
 
     if (hasSearchFilter) {
-      filteredExchanges = filteredExchanges.filter((material_exchange) =>
-        material_exchange.date_created
-          .toLowerCase()
-          .includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((user) =>
+        user.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredExchanges;
+    return filteredUsers;
   }, [data, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -130,24 +141,42 @@ export function UserHistory() {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "date_created":
-        return new Date(item.date_created).toLocaleString();
+      case "name":
+        return `${item.name} ${item.surname}`;
+      case "address":
+        return `${item.address}, ${item.district_name}, ${item.canton_name}, ${item.province_name}`;
+      case "active":
+        return (
+          <Chip
+            className="capitalize"
+            color={item.active == 1 ? "primary" : "danger"}
+            size="sm"
+            variant="flat"
+          >
+            {item.active == 1 ? "Active" : "Paused"}
+          </Chip>
+        );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Details" closeDelay={0}>
+            <Tooltip content="Edit" closeDelay={0}>
               <span className="text-lg text-default-400 cursor-pointer">
                 <Button
                   size="sm"
                   variant="light"
                   as={Link}
-                  href={`/user/history/details/${item.id_exchange}`}
+                  href={`/table-user/update/${item.id_user}`}
                   isIconOnly
                 >
-                  <EyeIcon />
+                  <EditIcon />
                 </Button>
               </span>
             </Tooltip>
+            <div>
+              <ModalUser
+                item={item}
+              />
+            </div>
           </div>
         );
       default:
@@ -192,15 +221,13 @@ export function UserHistory() {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[25%]"
-            type="date"
-            placeholder="Search by date..."
+            className="w-full sm:max-w-[44%]"
+            placeholder="Search by name..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
-
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -226,11 +253,19 @@ export function UserHistory() {
                 ))}
               </DropdownMenu>
             </Dropdown>
+            <Button
+              color="primary"
+              endContent={<PlusIcon />}
+              as={Link}
+              href={`/table-user/create`}
+            >
+              Add New
+            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {data.length}
+            Total {data.length} users
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -305,7 +340,7 @@ export function UserHistory() {
   return (
     <div>
       <div className="font-bold text-4xl py-8">
-        <h1 className="uppercase">Material Exchange History</h1>
+        <h1 className="uppercase">users</h1>
       </div>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -336,7 +371,7 @@ export function UserHistory() {
         </TableHeader>
         <TableBody emptyContent={"No data found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id_exchange}>
+            <TableRow key={item.id_user}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

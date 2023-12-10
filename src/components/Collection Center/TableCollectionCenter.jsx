@@ -24,9 +24,9 @@ import {
   ChevronDownIcon,
   EyeIcon,
   EditIcon,
-  DeleteIcon,
 } from "../../assets/Icons";
 import CollectionCenterService from "../../services/CollectionCenterService";
+import ModalCollectionCenter from "./ModalCollectionCenter";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
@@ -166,7 +166,7 @@ export default function TableCollectionCenter() {
                   size="sm"
                   variant="light"
                   as={Link}
-                  href={`/table-collection-center/update/${item.id_collection_center}`}
+                  href={`/collection-center/${item.id_collection_center}`}
                   isIconOnly
                 >
                   <EyeIcon />
@@ -186,20 +186,11 @@ export default function TableCollectionCenter() {
                 </Button>
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete" closeDelay={0}>
-              <span className="text-lg text-danger cursor-pointer">
-                <Button
-                  color="danger"
-                  size="sm"
-                  variant="light"
-                  as={Link}
-                  href={`#`}
-                  isIconOnly
-                >
-                  <DeleteIcon />
-                </Button>
-              </span>
-            </Tooltip>
+            <div>
+              <ModalCollectionCenter
+                item={item}
+              />
+            </div>
           </div>
         );
       default:
