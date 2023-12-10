@@ -31,6 +31,8 @@ import { UpdateCoupon } from "./components/Coupon/UpdateCoupon";
 import UserProfile from "./components/User/UserProfile";
 import { UpdateUserProfile } from "./components/User/UpdateUserProfile";
 import UserWallet from "./components/User/UserWallet";
+import { CouponExchangeList } from "./components/Coupon Exchange/CouponExchangeList";
+import { CouponExchange } from "./components/Coupon Exchange/CouponExchange";
 import { UpdateUserPassword } from "./components/User/UpdateUserPassword";
 import TableUser from "./components/User/TableUser";
 import { UpdateUser } from "./components/User/UpdateUser";
@@ -189,6 +191,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  
   {
     path: "/",
     element: <Auth allowedRoles={["User"]} />,
@@ -202,12 +205,22 @@ const router = createBrowserRouter([
         element: <UserHistory />,
       },
       {
+        path: "/coupon-list",
+        element: <CouponExchangeList />,
+      },
+      {
+        path: "/coupon-list/:id",
+        element: <CouponExchange />,
+      },
+      {
         path: "/user/history/details/:id",
         element: <DetailMaterialExchange />,
       },
     ],
   },
 ]);
+  
+
 
 export default function App() {
   return (

@@ -14,6 +14,7 @@ import { SelectCategory } from "./form/SelectCategory";
 export function UpdateCoupon() {
   const navigate = useNavigate();
   const routeParams = useParams();
+  const [errorshown, setErrorShown] = useState(false)
 
   const id = routeParams.id || null;
   //Valores a precargar en el formulario, vienen del API
@@ -60,8 +61,8 @@ export function UpdateCoupon() {
     start_date: yup
       .date()
       .typeError("please enter a valid date")
-      .required()
-      .min(new Date(), "Date must be in the furure"),
+      .required(),
+
     end_date: yup
       .date()
       .typeError("please enter a valid date")
@@ -70,8 +71,17 @@ export function UpdateCoupon() {
     fileToUpload: yup
       .mixed()
       .test("required", "Image required", function (value) {
-        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
+        if(value === '' && errorshown==false){
+          toast.error("Image required", {
+            duration: 2000,
+            position: "bottom-center",
+          });
+          setErrorShown(true)
+        } else if(errorshown == true){
+          console.log("Image required")
+        }
         return value instanceof File || (value && value[0] instanceof File);
+        
       }),
   });
 
@@ -127,18 +137,18 @@ export function UpdateCoupon() {
         dataToSubmit.set("start_date", watchStartDate);
         dataToSubmit.set("end_date", watchEndDate);
         dataToSubmit.set("fileToUpload", DataForm.fileToUpload);
-        CouponService.UpdateCoupon(dataToSubmit)
+        CouponService.updateCoupon(dataToSubmit)
           .then((response) => {
             console.log(response);
             setError(response.error);
             //Respuesta al usuario de creación
-            if (response.data.results != null) {
+            if (response.data.results  && Object.keys(response.data.results).length > 0) {
               toast.success("Updated successfully", {
                 duration: 4000,
                 position: "top-center",
               });
               // Redireccion a la tabla
-              return navigate("/table-material");
+              return navigate("/table-coupon");
             }
           })
           .catch((error) => {
@@ -153,6 +163,9 @@ export function UpdateCoupon() {
       //Capturar error
     }
   };
+  const setErrorFalse =(  ) => {
+    setErrorShown(false)
+  }
   const watchStartDate = watch("start_date");
   const watchEndDate = watch("end_date");
   // Si ocurre error al realizar el submit
@@ -193,7 +206,7 @@ export function UpdateCoupon() {
       >
         <div className="flex flex-col">
           <div className="py-8">
-            <h1 className="font-bold text-4xl uppercase">Update material</h1>
+            <h1 className="font-bold text-4xl uppercase">Update Coupon</h1>
             <p className="text-sm">
               This information will be displayed publicly so be careful what you
               write.
@@ -213,7 +226,7 @@ export function UpdateCoupon() {
                   errorMessage={errors.name ? errors.name.message : " "}
                   isRequired
                   labelPlacement="outside"
-                  placeholder="Enter a name for the material"
+                  placeholder="Enter a name for the coupon"
                 />
               )}
             />
@@ -234,7 +247,7 @@ export function UpdateCoupon() {
                   }
                   isRequired
                   labelPlacement="outside"
-                  placeholder="Enter a description for the material (Min. 15 characters)"
+                  placeholder="Enter a description for the coupon (Min. 15 characters)"
                   disableAutosize
                   disableAnimation
                 />
@@ -358,6 +371,7 @@ export function UpdateCoupon() {
               variant="shadow"
               radius="sm"
               className="uppercase font-medium text-2xl m-4"
+              onClick={setErrorFalse}
             >
               Save
             </Button>

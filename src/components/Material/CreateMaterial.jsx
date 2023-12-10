@@ -15,6 +15,7 @@ import {UploadFile} from "./Form/uploadFile";
 
 export function CreateMaterial() {
   const navigate = useNavigate();
+  const [errorshown, setErrorShown] = useState(false)
 
   // Esquema de validación
   const materialSchema = yup.object({
@@ -41,9 +42,19 @@ export function CreateMaterial() {
       .required("Measurement unit is required"),
     fileToUpload: yup
       .mixed()
+      .required("File to upload is required")
       .test("required", "Image required", function (value) {
-        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
+        if(value === '' && errorshown==false){
+          toast.error("Image required", {
+            duration: 2000,
+            position: "bottom-center",
+          });
+          setErrorShown(true)
+        } else if(errorshown == true){
+          console.log("Image required")
+        }
         return value instanceof File || (value && value[0] instanceof File);
+        
       }),
   });
 
@@ -86,8 +97,15 @@ export function CreateMaterial() {
   const onSubmit = (DataForm) => {
     console.log("Formulario:");
     console.log(DataForm);
-
+    if (!DataForm.fileToUpload || DataForm.fileToUpload.length === 0) {
+      setError("fileToUpload", {
+        type: "manual",
+        message: "File to upload is required",
+      });
+      return;
+    }
     try {
+      
       if (materialSchema.isValid()) {
         const dataToSubmit = new FormData();
 
@@ -124,6 +142,10 @@ export function CreateMaterial() {
       //Capturar error
     }
   };
+
+  const setErrorFalse =(  ) => {
+    setErrorShown(false)
+  }
 
   // Si ocurre error al realizar el submit
   const onError = (errors, e) => console.log(errors, e);
@@ -320,7 +342,11 @@ export function CreateMaterial() {
               control={control}
               render={({ field }) => (
                 <>
-                  <UploadFile field={field} onSubmit={handleFileChange} />
+                  <UploadFile 
+                  field={field} 
+                  onSubmit={handleFileChange}
+                  />
+                  
                 </>
               )}
             />
@@ -333,6 +359,7 @@ export function CreateMaterial() {
               variant="shadow"
               radius="sm"
               className="uppercase font-medium text-2xl m-4"
+              onClick={setErrorFalse}
             >
               Save
             </Button>

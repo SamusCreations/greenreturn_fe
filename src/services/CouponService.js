@@ -8,6 +8,10 @@ class CouponService {
     return axios.get(BASE_URL);
   }
 
+  getAvailableCoupons() {
+    return axios.get(BASE_URL + /availableCoupons/ + 1);
+  }
+
   //localhost:81/greenreturn_api/Coupon/1
   getCouponById(CouponId) {
     return axios.get(BASE_URL + "/" + CouponId);

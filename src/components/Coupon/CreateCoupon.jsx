@@ -14,7 +14,7 @@ import { SelectCategory } from "./form/SelectCategory";
 
 export function CreateCoupon() {
   const navigate = useNavigate();
-
+  const [errorshown, setErrorShown] = useState(false)
   // Esquema de validación
   const couponSchema = yup.object({
     name: yup
@@ -37,8 +37,7 @@ export function CreateCoupon() {
     start_date: yup
       .date()
       .typeError("please enter a valid date")
-      .required()
-      .min(new Date(), "Date must be in the furure"),
+      .required(),
     end_date: yup
       .date()
       .typeError("please enter a valid date")
@@ -47,8 +46,17 @@ export function CreateCoupon() {
     fileToUpload: yup
       .mixed()
       .test("required", "Image required", function (value) {
-        // La siguiente condición verifica si el campo de imagen es un Blob o si es un archivo seleccionado
+        if(value === '' && errorshown==false){
+          toast.error("Image required", {
+            duration: 2000,
+            position: "bottom-center",
+          });
+          setErrorShown(true)
+        } else if(errorshown == true){
+          console.log("Image required")
+        }
         return value instanceof File || (value && value[0] instanceof File);
+        
       }),
   });
 
@@ -87,7 +95,7 @@ export function CreateCoupon() {
   });
 
   const [error, setError] = useState("");
-
+  
   // Accion submit
   const onSubmit = (DataForm) => {
     console.log("Formulario:");
@@ -131,6 +139,11 @@ export function CreateCoupon() {
       //Capturar error
     }
   };
+
+  const setErrorFalse =(  ) => {
+    setErrorShown(false)
+  }
+
 
   // Si ocurre error al realizar el submit
   const onError = (errors, e) => console.log(errors, e);
@@ -340,6 +353,7 @@ export function CreateCoupon() {
               variant="shadow"
               radius="sm"
               className="uppercase font-medium text-2xl m-4"
+              onClick={setErrorFalse}
             >
               Save
             </Button>
