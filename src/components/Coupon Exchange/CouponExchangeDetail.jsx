@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {  useParams } from "react-router-dom";
-import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
+import { Card, CardBody,  Image, Spinner } from "@nextui-org/react";
 import fallback from "../../assets/fallback.png";
 import CouponExchangeService from "../../services/CouponExchangeService";
 
