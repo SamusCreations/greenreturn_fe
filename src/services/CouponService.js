@@ -9,14 +9,13 @@ class CouponService {
   }
 
   getAvailableCoupons() {
-    return axios.get(BASE_URL + /availableCoupons/ + 1);
+    return axios.get(BASE_URL + "/availableCoupons/" + 1);
   }
 
   //localhost:81/greenreturn_api/Coupon/1
   getCouponById(CouponId) {
     return axios.get(BASE_URL + "/" + CouponId);
   }
-
 
   createCoupon(Coupon) {
     return axios.post(BASE_URL, Coupon);
@@ -26,5 +25,12 @@ class CouponService {
     return axios.post(BASE_URL + "/updateCoupon/", Coupon);
   }
 
+  getTotalExchanges() {
+    return axios.get(BASE_URL + "_exchange/getTotalExchanges/" + 1);
+  }
+
+  getTotalCoins() {
+    return axios.get(BASE_URL + "_exchange/getTotalCoins/" + 1);
+  }
 }
 export default new CouponService();

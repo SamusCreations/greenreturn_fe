@@ -31,10 +31,10 @@ export default function UserProvider(props) {
   const authorize = ({ allowedRoles }) => {
     const userData = decodeToken();
     if (userData && allowedRoles) {
-      console.log(
+/*       console.log(
         userData && userData.role && allowedRoles.includes(userData.role)
       );
-      console.log(userData);
+      console.log(userData); */
       return userData && userData.role && allowedRoles.includes(userData.role);
     }
     return false;

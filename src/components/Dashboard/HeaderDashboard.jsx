@@ -7,10 +7,10 @@ import favicon from "../../assets/greenreturn_favicon.png";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Material", href: "/table-material", current: false },
-  { name: "Collection Center", href: "#", current: false },
-  { name: "User", href: "#", current: false },
-  { name: "Reports", href: "#", current: false },
+  { name: "Materials", href: "/dashboard/table-material", current: false },
+  { name: "Collection Centers", href: "/dashboard/table-collection-center", current: false },
+  { name: "Coupons", href: "/dashboard/table-coupons", current: false },
+  { name: "Users", href: "/dashboard/table-user", current: false },
 ];
 const userNavigation = [
   { name: "Profile", href: "#", color: "primary" },
@@ -136,12 +136,12 @@ export default function HeaderDashboard() {
                                   allowedRoles: ["Admin", "CC_Admin"],
                                 }) && (
                                   <DropdownItem
-                                    key="dashboard"
+                                    key="home"
                                     as={Link}
-                                    href={`/dashboard/`}
+                                    href={`/`}
                                     style={{ color: "#11181C" }}
                                   >
-                                    Dashboard
+                                    Home
                                   </DropdownItem>
                                 )}
                               <DropdownItem

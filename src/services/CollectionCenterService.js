@@ -28,5 +28,21 @@ class CollectionCenterService {
   disableCollectionCenter(CollectionCenter) {
     return axios.post(BASE_URL + "/disable/", CollectionCenter);
   }
+
+  getMonthExchanges(idCollectionCenter) {
+    return axios.get(BASE_URL + "/getMonthExchanges/" + idCollectionCenter);
+  }
+
+  getCountByMaterial(idCollectionCenter) {
+    return axios.get(BASE_URL + "/getCountByMaterial/" + idCollectionCenter);
+  }
+
+  getTotalCoins(idCollectionCenter) {
+    return axios.get(BASE_URL + "/getTotalCoins/" + idCollectionCenter);
+  }
+
+  getCoinsByCollectionCenter() {
+    return axios.get(BASE_URL + "/getCoinsByCollectionCenter/" + 1);
+  }
 }
 export default new CollectionCenterService();
