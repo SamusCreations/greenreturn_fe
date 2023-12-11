@@ -154,15 +154,17 @@ export default function Header() {
               Collection Centers
             </DropdownItem>
 
-            <DropdownItem
-              style={{ color: "#11181C" }}
-              key="coupons"
-              startContent={icons.coupon}
-              as={Link}
-              href="/coupon-list"
-            >
-              Coupons
-            </DropdownItem>
+            {user && authorize({ allowedRoles: ["User"] }) && (
+              <DropdownItem
+                style={{ color: "#11181C" }}
+                key="coupons"
+                startContent={icons.coupon}
+                as={Link}
+                href="/coupon-list"
+              >
+                Coupons
+              </DropdownItem>
+            )}
 
             {user && authorize({ allowedRoles: ["Admin"] }) && (
               <DropdownItem
@@ -296,7 +298,17 @@ export default function Header() {
                   href={`/user/history/${userData.id_user}`}
                   style={{ color: "#11181C" }}
                 >
-                  History
+                  Material Exchange History
+                </DropdownItem>
+              )}
+              {user && authorize({ allowedRoles: ["User"] }) && (
+                <DropdownItem
+                  key="history"
+                  as={Link}
+                  href={`/coupon-history/`}
+                  style={{ color: "#11181C" }}
+                >
+                  Coupon Exchange History
                 </DropdownItem>
               )}
               {user && authorize({ allowedRoles: ["CC_Admin"] }) && (
