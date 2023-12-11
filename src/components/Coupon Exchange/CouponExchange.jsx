@@ -13,8 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 export function CouponExchange() {
-    
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { user, decodeToken } = useContext(UserContext);
   const [userData, setUserData] = useState(decodeToken());
   useEffect(() => {
@@ -33,7 +32,6 @@ export function CouponExchange() {
       .then((response) => {
         setData1(response.data.results);
         console.log(response.data);
-        console.log(response.data.id_color);
         setError1(response.error);
         setLoaded1(true);
       })
@@ -43,7 +41,6 @@ export function CouponExchange() {
         throw new Error("Respuesta no válida del servidor");
       });
   }, [userData]);
-
 
   const [data, setData] = useState(null);
   //Error del API
@@ -67,27 +64,21 @@ export function CouponExchange() {
       });
   }, [routeParams.id]);
 
-  console.log(routeParams);
   const CouponSchema = yup.object({
-    id_user: yup
-      .string(),
-    id_coupon: yup
-      .number(),
-    unit_cost: yup
-      .number(),
-      qr: yup
-      .string(),
+    id_user: yup.string(),
+    id_coupon: yup.number(),
+    unit_cost: yup.number(),
+    qr: yup.string(),
   });
 
   const {
-    
     formState: { errors },
   } = useForm({
     defaultValues: {
       id_coupon: "",
       id_user: "",
       unit_cost: "",
-        qr: "a"
+      qr: "a",
     },
     // Asignación de validaciones
     resolver: yupResolver(CouponSchema),
@@ -102,13 +93,13 @@ export function CouponExchange() {
           unit_cost: data.unit_cost,
           qr: "valor_de_qr", // Puedes establecer el valor de qr aquí
         };
-  
+
         CouponExchangeService.createCouponExchange(dataToSubmit)
           .then((response) => {
             // Manejo de la respuesta del servidor
             console.log(response);
             toast.success("Coupon exchange successful");
-            navigate("/table-collection-center");
+            navigate("/coupon-list");
           })
           .catch((error) => {
             // Manejo de errores al enviar la solicitud
@@ -122,7 +113,7 @@ export function CouponExchange() {
     }
   };
   //Resultado de consumo del API, respuesta
-  
+
   if (!loaded)
     return (
       <div className="flex w-full min-h-screen items-center justify-center">
@@ -169,13 +160,16 @@ export function CouponExchange() {
                 {data.unit_cost} ecocoins
               </p>
               <div className="flex flex-col justify-center items-center pt-10">
-                { parseInt(data.unit_cost)>parseInt(data1.coin) &&
-                <b >Not enough eco-coins to redeem this coupon.</b>
-                }
-                <Button 
-                isDisabled={parseInt(data.unit_cost)>parseInt(data1.coin)}
-                onClick={onSubmit}
-                color="primary">Redeem</Button>
+                {parseInt(data?.unit_cost) > parseInt(data1?.coin) && (
+                  <b>Not enough eco-coins to redeem this coupon.</b>
+                )}
+                <Button
+                  isDisabled={parseInt(data?.unit_cost) > parseInt(data1?.coin)}
+                  onClick={onSubmit}
+                  color="primary"
+                >
+                  Redeem
+                </Button>
               </div>
             </div>
           </div>

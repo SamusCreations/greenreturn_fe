@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { Button, Input, Spinner} from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import UserService from "../../services/UserService";
 import ProvinceService from "../../services/ProvinceService";
 import { SelectProvince } from "./Form/SelectProvince";
@@ -12,14 +12,19 @@ import CantonService from "../../services/CantonService";
 import { SelectCanton } from "./Form/SelectCanton";
 import DistrictService from "../../services/DistrictService";
 import { SelectDistrict } from "./Form/SelectDistrict";
+import { UserContext } from "../../context/UserContext";
 //https://www.npmjs.com/package/@hookform/resolvers
 
 export function UpdateUserProfile() {
   const navigate = useNavigate();
 
-  const routeParams = useParams();
+  const { user, decodeToken } = useContext(UserContext);
+  const [userData, setUserData] = useState(decodeToken());
+  useEffect(() => {
+    setUserData(decodeToken());
+  }, [user]);
 
-  const id = routeParams.id || null;
+  const id = userData.id_user || null;
   //Valores a precargar en el formulario, vienen del API
   const [values, setUser] = useState(null);
   //Obtener la pelicula del API

@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import MaterialService from "../../services/MaterialService";
 import { Link } from "react-router-dom";
-import { Card, CardBody, CardFooter, Image, Spinner, Input } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Image,
+  Spinner,
+  Input,
+} from "@nextui-org/react";
 import fallback from "../../assets/fallback.png";
-import { SearchIcon } from "../../assets/Icons";
+import { EcocoinIcon, SearchIcon } from "../../assets/Icons";
 
 export function ListMaterial() {
   // Resultado de consumo del API, respuesta
@@ -113,9 +120,13 @@ export function ListMaterial() {
                   isZoomed
                 />
               </CardBody>
-              <CardFooter className="text-small justify-between">
+              <CardFooter className=" text-small justify-between">
                 <b>{item.name}</b>
-                <p className="text-default-500">{item.unit_cost} Ecocoins</p>
+
+                <p className="flex flex-row items-center justify-end text-default-500">
+                  <EcocoinIcon size={24} />
+                  {item.unit_cost}
+                </p>
               </CardFooter>
             </Card>
           </Link>

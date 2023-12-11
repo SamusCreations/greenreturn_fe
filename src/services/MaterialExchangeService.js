@@ -21,10 +21,12 @@ class MaterialExchangeService {
     return axios.get(BASE_URL + "/getUserHistory/" + idUser);
   }
 
-  getCollectionCenterHistory(idCollectionCenter) {
-    return axios.get(
-      BASE_URL + "/getCollectionCenterHistory/" + idCollectionCenter
-    );
+  getCollectionCenterHistory(idUser) {
+    return axios.get(BASE_URL + "/getCollectionCenterHistory/" + idUser);
+  }
+
+  getTotalExchanges() {
+    return axios.get(BASE_URL + "/getTotalExchanges/" + 1);
   }
 }
 export default new MaterialExchangeService();
