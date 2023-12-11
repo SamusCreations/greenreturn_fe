@@ -173,6 +173,16 @@ export default function Header() {
             </DropdownItem>
             
             )}
+            {user && authorize({ allowedRoles: ["User"] }) && (
+             <DropdownItem key="coupon-exchange"
+             startContent={icons.coupon}
+             as={Link}
+             href="/coupon-history"           
+             >
+              Coupon Exchanche History 
+            </DropdownItem>
+            
+            )}
             {user && authorize({ allowedRoles: ["Admin"] }) && (
               <DropdownItem
                 style={{ color: "#11181C" }}

@@ -37,6 +37,8 @@ import { UpdateUserPassword } from "./components/User/UpdateUserPassword";
 import TableUser from "./components/User/TableUser";
 import { UpdateUser } from "./components/User/UpdateUser";
 import { CreateUser } from "./components/User/CreateUser";
+import { CouponExchangeHistory } from "./components/Coupon Exchange/CouponExchangeHistory";
+import { CouponExchangeDetail } from "./components/Coupon Exchange/CouponExchangeDetail";
 
 const router = createBrowserRouter([
   {
@@ -211,6 +213,14 @@ const router = createBrowserRouter([
       {
         path: "/coupon-list/:id",
         element: <CouponExchange />,
+      },
+      {
+        path: "/coupon-history/",
+        element: <CouponExchangeHistory />,
+      },
+      {
+        path: "/coupon-detail/:id",
+        element: <CouponExchangeDetail />,
       },
       {
         path: "/user/history/details/:id",

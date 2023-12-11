@@ -13,7 +13,7 @@ class CouponExchangeService {
   }
 
   getUserCouponExchangeHistory(userId) {
-    return axios.get(BASE_URL + "/userHistory/" + userId);
+    return axios.get(BASE_URL + "/getUserHistory/" + userId);
   }
 
   createCouponExchange(couponExchangeData) {
