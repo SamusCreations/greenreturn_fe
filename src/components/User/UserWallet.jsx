@@ -55,13 +55,13 @@ export default function UserWallet() {
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="font-bold leading-6 text-gray-900">Exchanged</dt>
             <dd className="mt-1 leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {data.exchanged}
+              {data.exchanged.exchanged}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="font-bold leading-6 text-gray-900">Total earned</dt>
             <dd className="mt-1 leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {Number(data.available) + Number(data.exchanged)}
+              {Number(data.available) + Number(data.exchanged.exchanged)}
             </dd>
           </div>
         </dl>
