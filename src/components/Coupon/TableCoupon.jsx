@@ -21,7 +21,6 @@ import {
   PlusIcon,
   SearchIcon,
   ChevronDownIcon,
-  EyeIcon,
   EditIcon,
   DeleteIcon,
 } from "../../assets/Icons";

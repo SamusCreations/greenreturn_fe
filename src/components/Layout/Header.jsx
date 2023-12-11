@@ -293,22 +293,22 @@ export default function Header() {
               )}
               {user && authorize({ allowedRoles: ["User"] }) && (
                 <DropdownItem
-                  key="history"
+                  key="material-history"
                   as={Link}
                   href={`/user/history/${userData.id_user}`}
                   style={{ color: "#11181C" }}
                 >
-                  Material Exchange History
+                  Material History
                 </DropdownItem>
               )}
               {user && authorize({ allowedRoles: ["User"] }) && (
                 <DropdownItem
-                  key="history"
+                  key="coupon-history"
                   as={Link}
                   href={`/coupon-history/`}
                   style={{ color: "#11181C" }}
                 >
-                  Coupon Exchange History
+                  Coupon History
                 </DropdownItem>
               )}
               {user && authorize({ allowedRoles: ["CC_Admin"] }) && (

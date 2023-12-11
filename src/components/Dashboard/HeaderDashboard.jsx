@@ -2,13 +2,26 @@ import { useContext, useEffect, useState } from "react";
 import { Disclosure, Menu } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserContext } from "../../context/UserContext";
-import { Avatar, AvatarIcon, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Link } from "@nextui-org/react";
+import {
+  Avatar,
+  AvatarIcon,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Image,
+  Link,
+} from "@nextui-org/react";
 import favicon from "../../assets/greenreturn_favicon.png";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
   { name: "Materials", href: "/dashboard/table-material", current: false },
-  { name: "Collection Centers", href: "/dashboard/table-collection-center", current: false },
+  {
+    name: "Collection Centers",
+    href: "/dashboard/table-collection-center",
+    current: false,
+  },
   { name: "Coupons", href: "/dashboard/table-coupons", current: false },
   { name: "Users", href: "/dashboard/table-user", current: false },
 ];
@@ -50,21 +63,16 @@ export default function HeaderDashboard() {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
+                        <a
+                          key="Dashboard"
+                          href="/dashboard"
+                          className={classNames(
+                            "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "rounded-md px-3 py-2 text-sm font-medium"
+                          )}
+                        >
+                          Dashboard
+                        </a>
                       </div>
                     </div>
                   </div>
